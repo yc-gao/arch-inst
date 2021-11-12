@@ -1,0 +1,166 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+script_dir="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
+script_name="$(basename "${BASH_SOURCE[0]}")"
+
+info() {
+    echo "Info: $*"
+}
+
+error() {
+    echo "Error: $*" >&2
+}
+
+die() {
+    error "Error: $*"
+    exit 1
+}
+
+__func_defered=()
+do_defer() {
+    local i
+    for ((i=${#__func_defered[@]}-1;i>=0;i--)); do
+        if ! eval "${__func_defered[i]}"; then
+            die "eval cmd failed, cmd: \"${__func_defered[i]}\""
+        fi
+    done
+}
+trap do_defer EXIT
+defer() {
+    __func_defered+=("$*")
+}
+
+opt_label="rootdisk"
+
+# snapshot [--base base_tag] tags...
+do_snapshot() {
+    local rootdisk_prefix="/mnt/${opt_label}"
+    local snapshot_prefix="${rootdisk_prefix}/snapshots"
+
+    local base_tag=
+    while (($#)); do
+        case "$1" in
+            --base)
+                base_tag="$2"
+                shift 2
+                ;;
+            *)
+                break
+                ;;
+        esac
+    done
+
+    if [[ -z "${base_tag}" ]]; then
+        base_tag="$(basename $(realpath "${rootdisk_prefix}/rootfs"))"
+    fi
+
+    local tags=("$@")
+    if [[ "${#tags[@]}" -eq 0 ]]; then
+        local branch version
+        IFS='.' read -r branch version <<<"${base_tag}"
+        tags+=("${branch}.$(date +%Y%m%d%H%M%S)")
+    fi
+
+    local tag
+    for tag in "${tags[@]}"; do
+        btrfs subvol snapshot "${snapshot_prefix}/${base_tag}" "${snapshot_prefix}/${tag}" || die "btrfs cannot snapshot '${base_tag}' to ${tag}"
+    done
+}
+
+# delete tags...
+do_delete() {
+    local rootdisk_prefix="/mnt/${opt_label}"
+    local snapshot_prefix="${rootdisk_prefix}/snapshots"
+
+    local tag
+    for tag in "$@"; do
+        btrfs subvol delete -R "${snapshot_prefix}/${tag}" || die "btrfs cannot delete subvol '${tag}'"
+    done
+}
+
+do_list() {
+    local rootdisk_prefix="/mnt/${opt_label}"
+    local snapshot_prefix="${rootdisk_prefix}/snapshots"
+
+    ls -lh "${snapshot_prefix}/"
+    ls -dlh "${rootdisk_prefix}/rootfs"
+}
+
+# checkout [--base base_tag] tag
+do_checkout() {
+    local rootdisk_prefix="/mnt/${opt_label}"
+    local snapshot_prefix="${rootdisk_prefix}/snapshots"
+
+    local base_tag=
+    while (($#)); do
+        case "$1" in
+            --base)
+                base_tag="$2"
+                shift 2
+                ;;
+            *)
+                break
+                ;;
+        esac
+    done
+
+    if [[ -z "${base_tag}" ]]; then
+        base_tag="$(basename $(realpath "${rootdisk_prefix}/rootfs"))"
+    fi
+
+    local tag="${1:-}"
+    if [[ -z "${tag}" ]]; then
+        local branch version
+        IFS='.' read -r branch version <<<"${base_tag}"
+        tag="${branch}.$(date +%Y%m%d%H%M%S)"
+    fi
+
+    if [[ ! -e "${snapshot_prefix}/${tag}" ]]; then
+        do_snapshot --base "${base_tag}" "${tag}"
+    fi
+
+    rm "${rootdisk_prefix}/rootfs"
+    ln -sfT "snapshots/${tag}" "${rootdisk_prefix}/rootfs"
+}
+
+main() {
+    while (($#)); do
+        case "$1" in
+            -L | --label)
+                opt_label="$2"
+                shift 2
+                ;;
+            *)
+                break
+                ;;
+        esac
+    done
+
+    mount --mkdir -L "${opt_label}" "/mnt/${opt_label}"
+    defer "umount /mnt/${opt_label}"
+
+    case "$1" in
+        snapshot)
+            shift
+            do_snapshot "$@"
+            ;;
+        delete)
+            shift
+            do_delete "$@"
+            ;;
+        list)
+            shift
+            do_list
+            ;;
+        checkout)
+            shift
+            do_checkout "$@"
+            ;;
+        *)
+            die "undefined command '$1'"
+            ;;
+    esac
+}
+
+main "$@"

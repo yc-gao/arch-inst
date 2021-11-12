@@ -1,0 +1,12 @@
+# xrandr --output `xrandr | grep ' connected' | cut -d ' ' -f1` --mode 2560x1440 --rate 144
+# autorandr -s main
+autorandr --change
+
+# Disable DPMS and prevent screen from blanking
+# xset s off -dpms
+
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS=@im=fcitx
+pgrep -x fcitx > /dev/null || fcitx -d
+

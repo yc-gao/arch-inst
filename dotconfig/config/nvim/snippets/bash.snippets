@@ -1,0 +1,47 @@
+snippet main
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    script_dir="\$(dirname "\$(realpath "\${BASH_SOURCE[0]}")")"
+    script_name="\$(basename "\${BASH_SOURCE[0]}")"
+
+    info() {
+        echo "Info: \$*"
+    }
+
+    error() {
+        echo "Error: \$*" >&2
+    }
+
+    die() {
+        error "Error: \$*"
+        exit 1
+    }
+
+    run_in() {
+        pushd "\$1"
+        shift
+        eval "\$@"
+        popd
+    }
+
+    __func_defered=()
+    do_defer() {
+        local i
+        for ((i=\${#__func_defered[@]}-1;i>=0;i--)); do
+            if ! eval "\${__func_defered[i]}"; then
+                die "eval cmd failed, cmd: \"\${__func_defered[i]}\""
+            fi
+        done
+    }
+    trap do_defer EXIT
+    defer() {
+        __func_defered+=("\$*")
+    }
+
+    main() {
+        $0
+    }
+
+    main "\$@"
+
