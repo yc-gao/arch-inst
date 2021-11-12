@@ -37,7 +37,7 @@ pacman -S --noconfirm docker
 systemctl enable docker
 usermod -aG docker xundaoxd
 
-pacman -S --noconfirm firefox ttf-dejavu wqy-zenhei wqy-microhei man-db man-pages
+pacman -S --noconfirm firefox ttf-dejavu wqy-zenhei wqy-microhei man-db man-pages fcitx-googlepinyin kcm-fcitx git ttf-fira-code
 
 echo 'set root password.'
 passwd
