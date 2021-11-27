@@ -33,6 +33,7 @@ sed -i 's/^# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
 pacman -S --noconfirm plasma kde-applications
 systemctl enable sddm
 systemctl enable NetworkManager
+systemctl enable bluetooth
 
 pacman -S --noconfirm docker
 systemctl enable docker
