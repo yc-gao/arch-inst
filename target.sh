@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 hostname='xundaoxd-pc'
 user="xundaoxd"

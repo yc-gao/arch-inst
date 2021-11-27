@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 systemctl stop reflector
 reflector --verbose --country China --protocol http --protocol https --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
