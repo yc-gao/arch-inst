@@ -27,13 +27,13 @@ grub-mkconfig -o /boot/grub/grub.cfg
 
 pacman -S --noconfirm nvidia alsa-utils alsa-firmware pulseaudio pulseaudio-alsa pulseaudio-bluetooth
 
-useradd -m -s /bin/zsh $user
-usermod -aG sudo $user
-
 pacman -S --noconfirm plasma kde-applications
 systemctl enable sddm
 systemctl enable NetworkManager
 systemctl enable bluetooth
+
+useradd -m -s /bin/zsh $user
+usermod -aG wheel $user
 
 pacman -S --noconfirm docker
 systemctl enable docker
