@@ -4,10 +4,11 @@ set -e
 # systemctl stop reflector
 # reflector --verbose --country China --protocol http --protocol https --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
 pacman -Syy
+pacman -S --noconfirm archlinux-keyring
 
 mount /dev/nvme0n1p2 /mnt
 mkdir -p /mnt/boot/efi
 mount /dev/nvme0n1p1 /mnt/boot/efi
 
-pacstrap /mnt base base-devel linux linux-firmware neovim zsh
+pacstrap /mnt base base-devel linux linux-firmware archlinux-keyring
 genfstab -U /mnt >> /mnt/etc/fstab

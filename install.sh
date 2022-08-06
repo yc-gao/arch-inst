@@ -21,28 +21,24 @@ EOF
 
 mkinitcpio -P
 
+useradd -m -s /bin/zsh $user
+usermod -aG wheel $user
+
 pacman -S --noconfirm grub efibootmgr
 grub-install --efi-directory=/boot/efi --recheck
 grub-mkconfig -o /boot/grub/grub.cfg
 
 pacman -S --noconfirm nvidia alsa-utils alsa-firmware pulseaudio pulseaudio-alsa pulseaudio-bluetooth
 
-pacman -S --noconfirm plasma kde-applications
+pacman -S --noconfirm plasma kde-applications fcitx-googlepinyin kcm-fcitx fcitx-googlepinyin
 systemctl enable sddm
 systemctl enable NetworkManager
 systemctl enable bluetooth
-
-useradd -m -s /bin/zsh $user
-usermod -aG wheel $user
-
-pacman -S --noconfirm docker
-systemctl enable docker
-usermod -aG docker xundaoxd
-
-pacman -S --noconfirm firefox ttf-dejavu wqy-zenhei wqy-microhei man-db man-pages fcitx-googlepinyin kcm-fcitx git ttf-fira-code
 
 echo 'set root password.'
 passwd
 
 echo "set $user password."
 passwd $user
+
+EDITOR=nvim visudo
