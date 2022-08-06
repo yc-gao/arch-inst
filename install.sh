@@ -35,6 +35,8 @@ systemctl enable sddm
 systemctl enable NetworkManager
 systemctl enable bluetooth
 
+pacman -S --noconfirm neovim git
+
 echo 'set root password.'
 passwd
 

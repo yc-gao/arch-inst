@@ -4,7 +4,7 @@ set -e
 pacman -Syy \
     && pacman -S --noconfirm ttf-fira-code ttf-dejavu wqy-zenhei wqy-microhei \
     man-db man-pages \
-    git firefox
+    firefox
 
 echo -e '[archlinuxcn]\nServer = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch' >> /etc/pacman.conf \
     && pacman -Syy \
