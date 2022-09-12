@@ -1,12 +1,7 @@
 #!/bin/bash
 set -e
 
-pacman -Syy \
-    && pacman -S --noconfirm ttf-fira-code ttf-dejavu wqy-zenhei wqy-microhei \
-    man-db man-pages \
-    firefox
-
-echo -e '[archlinuxcn]\nServer = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch' >> /etc/pacman.conf \
+echo -e '[archlinuxcn]\nServer = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch\n' >> /etc/pacman.conf \
     && pacman -Syy \
     && pacman -S --noconfirm archlinuxcn-keyring \
     && pacman -Syy \

@@ -6,23 +6,13 @@ user="xundaoxd"
 
 ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
-sed -i 's/^#en_US.UTF-8/en_US.UTF-8/;s/^#zh_CN.UTF-8/zh_CN.UTF-8/' /etc/locale.gen
-locale-gen
+echo -e 'en_US.UTF-8 UTF-8\nzh_CN.UTF-8 UTF-8' >> /etc/locale.gen
 echo 'LANG=en_US.UTF-8' > /etc/locale.conf
+locale-gen
 
-cat > /etc/hostname << EOF
-$hostname
-EOF
-cat >> /etc/hosts << EOF
-127.0.0.1   localhost
-::1         localhost
-127.0.0.1   $hostname.localdomain   $hostname
-EOF
+echo $hostname > /etc/hostname
 
 mkinitcpio -P
-
-useradd -m -s /bin/zsh $user
-usermod -aG wheel $user
 
 pacman -S --noconfirm grub efibootmgr
 grub-install --efi-directory=/boot/efi --recheck
@@ -30,12 +20,17 @@ grub-mkconfig -o /boot/grub/grub.cfg
 
 pacman -S --noconfirm nvidia alsa-utils alsa-firmware pulseaudio pulseaudio-alsa pulseaudio-bluetooth
 
-pacman -S --noconfirm plasma kde-applications fcitx-googlepinyin kcm-fcitx fcitx-googlepinyin
+pacman -S --noconfirm plasma kde-applications fcitx-googlepinyin kcm-fcitx
 systemctl enable sddm
 systemctl enable NetworkManager
 systemctl enable bluetooth
 
-pacman -S --noconfirm neovim git
+pacman -Syy
+pacman -S --noconfirm zsh git neovim
+
+useradd -m -s /bin/zsh $user
+usermod -aG wheel $user
+EDITOR=nvim visudo
 
 echo 'set root password.'
 passwd
@@ -43,4 +38,3 @@ passwd
 echo "set $user password."
 passwd $user
 
-EDITOR=nvim visudo
