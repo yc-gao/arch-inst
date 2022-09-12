@@ -7,7 +7,7 @@ set -e
 esp_partition=/dev/nvme0n1p1
 root_partition=/dev/nvme0n1p2
 
-mkfs.ext4 ${root_partition}
+mkfs.ext4 -F ${root_partition}
 mkfs.fat -F 32 ${esp_partition}
 
 mount ${root_partition} /mnt
