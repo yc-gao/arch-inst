@@ -26,7 +26,7 @@ systemctl enable NetworkManager
 systemctl enable bluetooth
 
 pacman -Syy
-pacman -S --noconfirm zsh git neovim
+pacman -S --noconfirm zsh git neovim python-pynvim
 
 useradd -m -s /bin/zsh $user
 usermod -aG wheel $user
