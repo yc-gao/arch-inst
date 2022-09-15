@@ -9,8 +9,9 @@ echo -e '[archlinuxcn]\nServer = https://mirrors.tuna.tsinghua.edu.cn/archlinuxc
     && pacman -Syy \
     && pacman -S --noconfirm yay
 
-pacman -Syy \
-    && pacman -S --noconfirm docker \
+pacman -S --noconfirm docker \
     && yay -S --noconfirm nvidia-container-toolkit \
     && systemctl enable docker \
     && usermod -aG docker xundaoxd
+
+pacman -S --noconfirm xclip obsidian code qemu-full
