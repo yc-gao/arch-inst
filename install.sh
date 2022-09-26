@@ -18,7 +18,7 @@ pacman -S --noconfirm grub efibootmgr
 grub-install --efi-directory=/boot/efi --recheck
 grub-mkconfig -o /boot/grub/grub.cfg
 
-pacman -S --noconfirm nvidia alsa-utils alsa-firmware pulseaudio pulseaudio-alsa pulseaudio-bluetooth
+pacman -S --noconfirm nvidia-lts alsa-utils alsa-firmware pulseaudio pulseaudio-alsa pulseaudio-bluetooth
 
 pacman -S --noconfirm plasma kde-applications fcitx-googlepinyin kcm-fcitx
 systemctl enable sddm

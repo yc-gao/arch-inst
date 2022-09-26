@@ -14,5 +14,5 @@ mount ${root_partition} /mnt
 mkdir -p /mnt/boot/efi
 mount ${esp_partition} /mnt/boot/efi
 
-pacstrap /mnt base base-devel linux linux-firmware
+pacstrap /mnt base base-devel linux-lts linux-firmware
 genfstab -U /mnt >> /mnt/etc/fstab
