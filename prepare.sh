@@ -16,3 +16,7 @@ mount ${esp_partition} /mnt/boot/efi
 
 pacstrap /mnt base base-devel linux-lts linux-firmware
 genfstab -U /mnt >> /mnt/etc/fstab
+
+cp install.sh /mnt/root/
+arch-chroot /mnt /root/install.sh
+
