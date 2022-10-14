@@ -19,4 +19,5 @@ genfstab -U /mnt >> /mnt/etc/fstab
 
 cp install.sh /mnt/root/
 arch-chroot /mnt /root/install.sh
+rm -rf  /mnt/root/install.sh
 
