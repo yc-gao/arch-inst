@@ -15,7 +15,6 @@ pacman -S --noconfirm docker \
 
 pacman -S --noconfirm xclip unzip
 
-pacman -S --noconfirm virt-manager qemu-full \
-    && sed -i 's/^#unix_sock_group/unix_sock_group/;s/^#unix_sock_rw_perms/unix_sock_rw_perms/;' /etc/libvirt/libvirtd.conf \
+pacman -S --noconfirm virt-manager dnsmasq qemu-full \
     && usermod -aG libvirt $USER
 
