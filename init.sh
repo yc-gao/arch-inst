@@ -9,12 +9,14 @@ echo -e '[archlinuxcn]\nServer = https://mirrors.tuna.tsinghua.edu.cn/archlinuxc
     && pacman -S --noconfirm yay
 
 pacman -S --noconfirm docker \
-    && yay -S --noconfirm nvidia-container-toolkit \
     && systemctl enable docker \
     && usermod -aG docker $USER
-
-pacman -S --noconfirm xclip unzip
+# yay -S --noconfirm nvidia-container-toolkit
 
 pacman -S --noconfirm virt-manager dnsmasq qemu-full \
+    && systemctl enable libvirtd \
     && usermod -aG libvirt $USER
+# config libvirt ref: https://wiki.archlinux.org/title/Virt-Manager
+
+pacman -S --noconfirm xclip unzip
 
