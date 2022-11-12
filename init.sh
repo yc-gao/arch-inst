@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+user="xundaoxd"
 
 pacman -S --noconfirm man-db man-pages
 
@@ -10,12 +11,12 @@ echo -e '[archlinuxcn]\nServer = https://mirrors.tuna.tsinghua.edu.cn/archlinuxc
 
 pacman -S --noconfirm docker \
     && systemctl enable docker \
-    && usermod -aG docker $USER
+    && usermod -aG docker $user
 # yay -S --noconfirm nvidia-container-toolkit
 
 pacman -S --noconfirm virt-manager dnsmasq qemu-full \
     && systemctl enable libvirtd \
-    && usermod -aG libvirt $USER
+    && usermod -aG libvirt $user
 # config libvirt ref: https://wiki.archlinux.org/title/Virt-Manager
 
 pacman -S --noconfirm xclip unzip
