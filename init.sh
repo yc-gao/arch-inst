@@ -19,5 +19,5 @@ pacman -S --noconfirm virt-manager dnsmasq qemu-full \
     && usermod -aG libvirt $user
 # config libvirt ref: https://wiki.archlinux.org/title/Virt-Manager
 
-pacman -S --noconfirm xclip unzip
+pacman -S --noconfirm xclip unzip ripgrep-all
 
