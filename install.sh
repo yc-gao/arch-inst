@@ -36,6 +36,8 @@ install() {
 
     echo $hostname > /etc/hostname
 
+    mkdir -p /etc/modprobe.d
+    echo "options hid_apple fnmode=0" >> /etc/modprobe.d/hid_apple.conf
     mkinitcpio -P
 
     pacman -S --noconfirm grub efibootmgr
