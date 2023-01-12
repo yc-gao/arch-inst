@@ -58,9 +58,6 @@ install() {
     usermod -aG wheel $user
     EDITOR=nvim visudo
 
-    echo 'set root password.'
-    passwd
-
     echo "set $user password."
     passwd $user
 }
