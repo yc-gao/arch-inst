@@ -18,7 +18,7 @@ prepare() {
     mkdir -p /mnt/boot/efi
     mount ${esp_partition} /mnt/boot/efi
 
-    pacstrap /mnt base base-devel linux-lts linux-firmware
+    pacstrap /mnt base base-devel linux linux-firmware
     genfstab -U /mnt >> /mnt/etc/fstab
 
     cp install.sh /mnt/root/
@@ -44,7 +44,7 @@ install() {
     grub-install --efi-directory=/boot/efi --recheck
     grub-mkconfig -o /boot/grub/grub.cfg
 
-    pacman -S --noconfirm nvidia-lts alsa-utils alsa-firmware pulseaudio pulseaudio-alsa pulseaudio-bluetooth
+    pacman -S --noconfirm nvidia alsa-utils alsa-firmware pulseaudio pulseaudio-alsa pulseaudio-bluetooth
 
     pacman -S --noconfirm plasma kde-applications fcitx-googlepinyin kcm-fcitx
     systemctl enable sddm
