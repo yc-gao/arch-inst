@@ -12,7 +12,7 @@ echo -e '[archlinuxcn]\nServer = https://mirrors.tuna.tsinghua.edu.cn/archlinuxc
 pacman -S --noconfirm docker \
     && systemctl enable docker \
     && usermod -aG docker $user \
-    && su - xundaoxd -c 'yay -S --noconfirm nvidia-container-toolkit'
+    && su - root -c 'yay -S --noconfirm nvidia-container-toolkit'
 
 pacman -S --noconfirm virt-manager dnsmasq qemu-full \
     && systemctl enable libvirtd \
