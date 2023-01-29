@@ -19,5 +19,5 @@ pacman -S --noconfirm virt-manager dnsmasq qemu-full \
     && usermod -aG libvirt $user \
     && sed -i '/^unix_sock_group/{s/#//}' /etc/libvirt/libvirtd.conf
 
-pacman -S --noconfirm xclip unzip ripgrep-all openbsd-netcat docker-compose
+pacman -S --noconfirm xclip unzip ripgrep-all openbsd-netcat docker-compose ctags cmake nodejs
 
