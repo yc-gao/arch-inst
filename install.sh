@@ -46,13 +46,13 @@ install() {
 
     pacman -S --noconfirm nvidia alsa-utils alsa-firmware pulseaudio pulseaudio-alsa pulseaudio-bluetooth
 
-    pacman -S --noconfirm plasma kde-applications fcitx-googlepinyin kcm-fcitx
+    pacman -S --noconfirm networkmanager sddm bspwm sxhkd polybar picom alacritty rofi feh ranger fcitx-im fcitx-googlepinyin fcitx-configtool
     systemctl enable sddm
     systemctl enable NetworkManager
+    systemctl enable sshd
     systemctl enable bluetooth
 
-    pacman -Syy
-    pacman -S --noconfirm zsh git neovim python-pynvim firefox openssh wget
+    pacman -S --noconfirm zsh git neovim python-pynvim firefox openssh wget okular
 
     useradd -m -s /bin/zsh $user
     usermod -aG wheel $user
@@ -60,6 +60,10 @@ install() {
 
     echo "set $user password."
     passwd $user
+
+    su - xundaoxd -c 'install -Dm755 /usr/share/doc/bspwm/examples/bspwmrc ~/.config/bspwm/bspwmrc'
+    su - xundaoxd -c 'install -Dm644 /usr/share/doc/bspwm/examples/sxhkdrc ~/.config/sxhkd/sxhkdrc'
+    su - xundaoxd -c 'sed -i "s/urxvt/alacritty/" ~/.config/sxhkd/sxhkdrc'
 }
 
 if [[ $# -eq 1 ]]; then
