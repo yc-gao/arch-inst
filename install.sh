@@ -44,15 +44,15 @@ install() {
     grub-install --efi-directory=/boot/efi --recheck
     grub-mkconfig -o /boot/grub/grub.cfg
 
-    pacman -S --noconfirm nvidia alsa-utils alsa-firmware pulseaudio pulseaudio-alsa pulseaudio-bluetooth
+    pacman -S --noconfirm nvidia alsa-utils alsa-firmware pulseaudio pulseaudio-alsa pulseaudio-bluetooth bluez bluez-utils openssh
+    systemctl enable bluetooth
+    systemctl enable sshd
 
-    pacman -S --noconfirm networkmanager sddm bspwm sxhkd polybar picom alacritty rofi feh ranger fcitx-im fcitx-googlepinyin fcitx-configtool
+    pacman -S --noconfirm networkmanager sddm bspwm sxhkd polybar picom alacritty rofi feh fcitx-im fcitx-googlepinyin fcitx-configtool
     systemctl enable sddm
     systemctl enable NetworkManager
-    systemctl enable sshd
-    systemctl enable bluetooth
 
-    pacman -S --noconfirm zsh git neovim python-pynvim firefox openssh wget okular
+    pacman -S --noconfirm zsh git neovim python-pynvim firefox openssh wget okular ranger
 
     useradd -m -s /bin/zsh $user
     usermod -aG wheel $user
