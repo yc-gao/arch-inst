@@ -48,11 +48,13 @@ install() {
     systemctl enable bluetooth
     systemctl enable sshd
 
-    pacman -S --noconfirm networkmanager sddm bspwm sxhkd polybar picom alacritty rofi feh fcitx-im fcitx-googlepinyin fcitx-configtool
+    pacman -S --noconfirm networkmanager \
+        xorg sddm bspwm sxhkd polybar picom xdo alacritty rofi feh ranger \
+        fcitx-im fcitx-googlepinyin fcitx-configtool \
+        zsh neovim xclip git unzip ripgrep-all ctags wget curl firefox okular \
+        polkit sudo man-db man-pages
     systemctl enable sddm
     systemctl enable NetworkManager
-
-    pacman -S --noconfirm zsh git neovim python-pynvim firefox openssh wget okular ranger
 
     useradd -m -s /bin/zsh $user
     usermod -aG wheel $user
