@@ -50,6 +50,7 @@ install() {
 
     pacman -S --noconfirm networkmanager \
         xorg sddm bspwm sxhkd polybar picom xdo alacritty rofi feh ranger \
+        notification-daemon \
         fcitx-im fcitx-googlepinyin fcitx-configtool \
         zsh neovim xclip git unzip ripgrep-all ctags wget curl firefox okular \
         polkit sudo man-db man-pages
