@@ -49,7 +49,7 @@ install() {
     systemctl enable sshd
 
     pacman -S --noconfirm networkmanager \
-        xorg sddm bspwm sxhkd i3lock xss-lock polybar picom xdo alacritty rofi feh ranger \
+        xorg xorg-xprop sddm bspwm sxhkd i3lock xss-lock polybar picom alacritty rofi feh ranger \
         notification-daemon \
         fcitx-im fcitx-googlepinyin fcitx-configtool \
         zsh neovim xclip git unzip ripgrep-all ctags wget curl firefox okular flameshot \
