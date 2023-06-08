@@ -27,6 +27,9 @@ EOF
     pacman -S --noconfirm docker docker-compose
     systemctl enable docker
     usermod -aG docker $user
+
+    pacman -S --noconfirm qemu-full
+    usermod -aG kvm $user
 }
 
 run_nonroot() {
