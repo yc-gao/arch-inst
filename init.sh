@@ -9,12 +9,11 @@ Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch
 EOF
     pacman -Syy
     pacman -S --noconfirm archlinuxcn-keyring
-    pacman -S --noconfirm yay
 
     pacman -S --noconfirm \
         fcitx-im fcitx-googlepinyin fcitx-configtool \
         firefox okular flameshot \
-        xclip ripgrep-all ctags wget curl openbsd-netcat
+        xclip ripgrep-all ctags wget curl openbsd-netcat yay
 
     pacman -S --noconfirm notification-daemon
     mkdir -p /usr/share/dbus-1/services
