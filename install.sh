@@ -19,8 +19,11 @@ prepare() {
     btrfs subvol create /mnt/@home
     btrfs subvol create /mnt/@snapshots
     umount -R /mnt
+
     mount -o subvol=@ $rootfs /mnt
+    mkdir -p /mnt/{home,mnt/snapshots}
     mount -o subvol=@home $rootfs /mnt/home
+    mount -o subvol=@snapshots $rootfs /mnt/mnt/snapshots
 
     for volume in "${volumes[@]}"; do
         IFS=: read -r -a info <<< "$volume"
@@ -29,17 +32,16 @@ prepare() {
         mount "${info[0]}" "${info[1]}"
     done
 
-    pacstrap /mnt base base-devel linux-lts linux-firmware
+    pacstrap /mnt base base-devel linux-lts linux-firmware btrfs-progs
     genfstab -U /mnt >> /mnt/etc/fstab
 
     cp install.sh /mnt/root/
     arch-chroot /mnt /root/install.sh install
     rm -rf  /mnt/root/install.sh
 
+    btrfs subvol snapshot /mnt /mnt/mnt/snapshots/@."$(date -d '@0' -Iseconds)"
+    btrfs subvol snapshot /mnt/home /mnt/mnt/snapshots/@home."$(date -d '@0' -Iseconds)"
     umount -R /mnt
-    mount $rootfs /mnt
-    btrfs subvol snapshot /mnt/@ /mnt/@snapshots/@."$(date -d '@0' -Iseconds)"
-    btrfs subvol snapshot /mnt/@home /mnt/@snapshots/@home."$(date -d '@0' -Iseconds)"
 }
 
 install() {
