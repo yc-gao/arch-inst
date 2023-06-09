@@ -23,12 +23,17 @@ Name=org.freedesktop.Notifications
 Exec=/usr/lib/notification-daemon-1.0/notification-daemon
 EOF
 
+    pacman -S --noconfirm docker docker-compose
+    systemctl enable docker
+    usermod -aG docker $user
+
     pacman -S --noconfirm qemu-full
     usermod -aG kvm $user
 }
 
 run_nonroot() {
     sudo "$0"
+    yay -S --noconfirm nvidia-container-toolkit
 }
 
 if [[ $USER == "$user" ]]; then
