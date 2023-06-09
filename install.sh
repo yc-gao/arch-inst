@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
+rootfs="/dev/nvme0n1p2"
 volumes=(
-    "/dev/nvme0n1p2:/mnt:ext4 -F"
     "/dev/nvme0n1p1:/mnt/boot/efi:fat -F 32"
 )
 
@@ -12,6 +12,15 @@ user="xundaoxd"
 prepare() {
     # systemctl stop reflector
     # reflector --verbose --country China --protocol http --protocol https --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
+
+    mkfs.btrfs -f -L rootfs $rootfs
+    mount $rootfs /mnt
+    btrfs subvol create /mnt/@
+    btrfs subvol create /mnt/@home
+    btrfs subvol create /mnt/@snapshots
+    umount -R /mnt
+    mount -o subvol=@ $rootfs /mnt
+    mount -o subvol=@home $rootfs /mnt/home
 
     for volume in "${volumes[@]}"; do
         IFS=: read -r -a info <<< "$volume"
@@ -26,7 +35,11 @@ prepare() {
     cp install.sh /mnt/root/
     arch-chroot /mnt /root/install.sh install
     rm -rf  /mnt/root/install.sh
+
     umount -R /mnt
+    mount $rootfs /mnt
+    btrfs subvol snapshot /mnt/@ /mnt/@snapshots/@."$(date -d '@0' -Iseconds)"
+    btrfs subvol snapshot /mnt/@home /mnt/@snapshots/@home."$(date -d '@0' -Iseconds)"
 }
 
 install() {
