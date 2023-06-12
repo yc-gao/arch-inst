@@ -39,8 +39,8 @@ prepare() {
     arch-chroot /mnt /root/install.sh install
     rm -rf  /mnt/root/install.sh
 
-    btrfs subvol snapshot -r /mnt /mnt/mnt/snapshots/@."$(date -d '@0' -Iseconds)"
-    btrfs subvol snapshot -r /mnt/home /mnt/mnt/snapshots/@home."$(date -d '@0' -Iseconds)"
+    btrfs subvol snapshot -r /mnt /mnt/mnt/snapshots/@/"$(date +%y%m%d%H%M%S)"
+    btrfs subvol snapshot -r /mnt/home /mnt/mnt/snapshots/@home/"$(date +%y%m%d%H%M%S)"
     umount -R /mnt
 }
 
