@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-rootfs="/dev/nvme0n1p2"
+rootdisk="/dev/nvme0n1p2"
 volumes=(
     "/dev/nvme0n1p1:/mnt/boot/efi:fat -F 32"
 )
@@ -13,17 +13,17 @@ prepare() {
     # systemctl stop reflector
     # reflector --verbose --country China --protocol http --protocol https --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
 
-    mkfs.btrfs -f -L rootfs $rootfs
-    mount $rootfs /mnt
+    mkfs.btrfs -f -L rootdisk $rootdisk
+    mount $rootdisk /mnt
     btrfs subvol create /mnt/@
     btrfs subvol create /mnt/@home
     btrfs subvol create /mnt/@snapshots
     umount -R /mnt
 
-    mount -o subvol=@ $rootfs /mnt
+    mount -o subvol=@ $rootdisk /mnt
     mkdir -p /mnt/{home,mnt/snapshots}
-    mount -o subvol=@home $rootfs /mnt/home
-    mount -o subvol=@snapshots $rootfs /mnt/mnt/snapshots
+    mount -o subvol=@home $rootdisk /mnt/home
+    mount -o subvol=@snapshots $rootdisk /mnt/mnt/snapshots
 
     for volume in "${volumes[@]}"; do
         IFS=: read -r -a info <<< "$volume"
