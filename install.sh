@@ -15,15 +15,15 @@ prepare() {
 
     mkfs.btrfs -f -L rootdisk $rootdisk
     mount $rootdisk /mnt
-    btrfs subvol create /mnt/@
+    btrfs subvol create /mnt/@root
     btrfs subvol create /mnt/@home
     btrfs subvol create /mnt/@snapshots
     umount -R /mnt
 
-    mount -o subvol=@ $rootdisk /mnt
+    mount -o subvol=/@root $rootdisk /mnt
     mkdir -p /mnt/{home,mnt/snapshots}
-    mount -o subvol=@home $rootdisk /mnt/home
-    mount -o subvol=@snapshots $rootdisk /mnt/mnt/snapshots
+    mount -o subvol=/@home $rootdisk /mnt/home
+    mount -o subvol=/@snapshots $rootdisk /mnt/mnt/snapshots
 
     for volume in "${volumes[@]}"; do
         IFS=: read -r -a info <<< "$volume"
@@ -39,8 +39,10 @@ prepare() {
     arch-chroot /mnt /root/install.sh install
     rm -rf  /mnt/root/install.sh
 
-    btrfs subvol snapshot -r /mnt /mnt/mnt/snapshots/@/"$(date +%y%m%d%H%M%S)"
-    btrfs subvol snapshot -r /mnt/home /mnt/mnt/snapshots/@home/"$(date +%y%m%d%H%M%S)"
+    timestamp=$(date -d @0 +%y%m%d%H%M%S)
+    mkdir -p /mnt/mnt/snapshots/"$timestamp"
+    btrfs subvol snapshot -r /mnt /mnt/mnt/snapshots/"$timestamp"/@root
+    btrfs subvol snapshot -r /mnt/home /mnt/mnt/snapshots/"$timestamp"/@home
     umount -R /mnt
 }
 
