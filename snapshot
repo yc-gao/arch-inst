@@ -1,0 +1,63 @@
+#!/bin/bash
+
+vol_prefix="${VOL_PREFIX:-/mnt}"
+snapshot_prefix="${SNAPSHOT_PREFIX:-/mnt/@snapshots}"
+
+vols=(@root @home)
+
+print_usage() {
+    cat <<EOF
+usage:
+    ${0##*/}                        snapshot volumes
+    ${0##*/} -r <timestamp>         rollback to specific timestamp
+EOF
+}
+
+snapshot() {
+    for v in "${vols[@]}"; do
+        [[ ! -e "$vol_prefix/$v" ]] && echo "volume $v does not exist" && exit 1
+    done
+
+    tm=$(date +%y%m%d%H%M%S)
+    mkdir -p "$snapshot_prefix/$tm"
+    for v in "${vols[@]}"; do
+        btrfs subvol snapshot -r "$vol_prefix/$v" "$snapshot_prefix/$tm/$v"
+    done
+}
+
+rollback() {
+    tm="$1"
+    [[ ! -e $snapshot_prefix/$tm ]] && echo "snapshot $tm does not exist" && exit 1
+    for v in "${vols[@]}"; do
+        [[ ! -e $snapshot_prefix/$tm/$v ]] && echo "snapshot $tm/$v does not exist" && exit 1
+    done
+
+    for v in "${vols[@]}"; do
+        [[ -e "$vol_prefix/$v" ]] && btrfs subvol delete "$vol_prefix/$v"
+        btrfs subvol snapshot "$snapshot_prefix/$tm/$v" "$vol_prefix/$v"
+    done
+}
+
+main() {
+    if (($# == 0)); then
+        snapshot
+        exit 0
+    fi
+    if (($# == 2)) && [[ $1 == '-r' ]]; then
+        rollback "$2"
+        exit 0
+    fi
+    case $1 in
+        -h | --help)
+            print_usage
+            exit 0
+            ;;
+        *)
+            print_usage
+            exit 1
+        ;;
+    esac
+}
+
+main "$@"
+
