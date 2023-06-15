@@ -8,20 +8,21 @@ vols=(@root @home)
 print_usage() {
     cat <<EOF
 usage:
-    ${0##*/}                        snapshot volumes
+    ${0##*/} [label]                snapshot volumes
     ${0##*/} -r <timestamp>         rollback to specific timestamp
 EOF
 }
 
 snapshot() {
+    tm="$1"
     for v in "${vols[@]}"; do
         [[ ! -e "$vol_prefix/$v" ]] && echo "volume $v does not exist" && exit 1
     done
 
-    tm=$(date +%y%m%d%H%M%S)
+    [[ -z "$tm" ]] && tm=$(date +%y%m%d%H%M%S)
     mkdir -p "$snapshot_prefix/$tm"
     for v in "${vols[@]}"; do
-        btrfs subvol snapshot -r "$vol_prefix/$v" "$snapshot_prefix/$tm/$v"
+        btrfs subvol snapshot "$vol_prefix/$v" "$snapshot_prefix/$tm/$v"
     done
 }
 
@@ -39,24 +40,24 @@ rollback() {
 }
 
 main() {
-    if (($# == 0)); then
-        snapshot
+    if (($# <= 1)) && [[ $1 != '-r' ]]; then
+        snapshot $1
         exit 0
-    fi
-    if (($# == 2)) && [[ $1 == '-r' ]]; then
+    elif (($# == 2)) && [[ $1 == '-r' ]]; then
         rollback "$2"
         exit 0
-    fi
-    case $1 in
-        -h | --help)
-            print_usage
-            exit 0
+    else
+        case $1 in
+            -h | --help)
+                print_usage
+                exit 0
+                ;;
+            *)
+                print_usage
+                exit 1
             ;;
-        *)
-            print_usage
-            exit 1
-        ;;
-    esac
+        esac
+    fi
 }
 
 main "$@"

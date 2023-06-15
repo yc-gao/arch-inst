@@ -1,13 +1,27 @@
 #!/bin/bash
 set -e
 
-rootdisk="/dev/nvme0n1p2"
-volumes=(
-    "/dev/nvme0n1p1:/mnt/boot/efi:fat -F 32"
-)
-
 hostname='xundaoxd-pc'
 user="xundaoxd"
+
+rootdisk="/dev/nvme0n1p2"
+
+# disk : mount point : mount options : format options
+volumes=(
+    "$rootdisk:/mnt:-o subvol=/@root:"
+    "$rootdisk:/mnt/home:-o subvol=/@home:"
+    "$rootdisk:/mnt/mnt/snapshots:-o subvol=/@snapshots:"
+    "/dev/nvme0n1p1:/mnt/boot/efi::fat -F 32"
+)
+
+mnt_vols() {
+    for vol in "${volumes[@]}"; do
+        IFS=: read -r -a info <<< "$vol"
+        [[ -n "${info[3]}" ]] && mkfs.${info[3]} "${info[0]}"
+        mkdir -p "${info[1]}"
+        [[ -n "${info[1]}" ]] && mount ${info[2]} "${info[0]}" "${info[1]}"
+    done
+}
 
 prepare() {
     # systemctl stop reflector
@@ -20,29 +34,16 @@ prepare() {
     btrfs subvol create /mnt/@snapshots
     umount -R /mnt
 
-    mount -o subvol=/@root $rootdisk /mnt
-    mkdir -p /mnt/{home,mnt/snapshots}
-    mount -o subvol=/@home $rootdisk /mnt/home
-    mount -o subvol=/@snapshots $rootdisk /mnt/mnt/snapshots
-
-    for volume in "${volumes[@]}"; do
-        IFS=: read -r -a info <<< "$volume"
-        mkfs.${info[2]} "${info[0]}"
-        mkdir -p "${info[1]}"
-        mount "${info[0]}" "${info[1]}"
-    done
-
+    mnt_vols
     pacstrap /mnt base base-devel linux-lts linux-firmware btrfs-progs
     genfstab -U /mnt >> /mnt/etc/fstab
-
     cp install.sh /mnt/root/
     arch-chroot /mnt /root/install.sh install
     rm -rf  /mnt/root/install.sh
+    umount -R /mnt
 
-    timestamp=$(date -d @0 +%y%m%d%H%M%S)
-    mkdir -p /mnt/mnt/snapshots/"$timestamp"
-    btrfs subvol snapshot -r /mnt /mnt/mnt/snapshots/"$timestamp"/@root
-    btrfs subvol snapshot -r /mnt/home /mnt/mnt/snapshots/"$timestamp"/@home
+    mount $rootdisk /mnt
+    ./snapshot init
     umount -R /mnt
 }
 
