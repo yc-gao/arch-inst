@@ -27,8 +27,11 @@ EOF
     systemctl enable docker
     usermod -aG docker $user
 
-    pacman -S --noconfirm qemu-full
-    usermod -aG kvm $user
+    pacman -S --noconfirm virt-manager dnsmasq qemu-full \
+        && systemctl enable libvirtd \
+        && usermod -aG libvirt,kvm $user \
+        && sed -i '/^unix_sock_group/{s/#//}' /etc/libvirt/libvirtd.conf
+
 }
 
 run_nonroot() {
