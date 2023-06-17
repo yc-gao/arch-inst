@@ -32,6 +32,9 @@ EOF
         && usermod -aG libvirt,kvm $user \
         && sed -i '/^unix_sock_group/{s/#//}' /etc/libvirt/libvirtd.conf
 
+    mkdir -p /etc/modprobe.d
+    echo 'options hid_apple fnmode=2' > /etc/modprobe.d/hid_apple.conf
+
 }
 
 run_nonroot() {
