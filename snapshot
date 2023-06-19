@@ -1,62 +1,69 @@
 #!/bin/bash
+set -e
 
 vol_prefix="${VOL_PREFIX:-/mnt}"
 snapshot_prefix="${SNAPSHOT_PREFIX:-/mnt/@snapshots}"
 
 vols=(@root @home)
 
+die() {
+    echo "$@"
+    exit 1
+}
+
 print_usage() {
-    cat <<EOF
-usage:
-    ${0##*/} [label]                snapshot volumes
-    ${0##*/} -r <timestamp>         rollback to specific timestamp
+    cat << EOF
+$0 [label]                  snapshot volume
+$0 -r <label>               rollback snapshot
 EOF
 }
 
+# snapshot [label]
 snapshot() {
-    tm="$1"
-    for v in "${vols[@]}"; do
-        [[ ! -e "$vol_prefix/$v" ]] && echo "volume $v does not exist" && exit 1
-    done
+    label="$1"
+    [[ -z "$label" ]] && label=$(date +%y%m%d%H%M%S)
 
-    [[ -z "$tm" ]] && tm=$(date +%y%m%d%H%M%S)
-    mkdir -p "$snapshot_prefix/$tm"
     for v in "${vols[@]}"; do
-        btrfs subvol snapshot "$vol_prefix/$v" "$snapshot_prefix/$tm/$v"
+        [[ ! -e "$vol_prefix/$v" ]] && die "volume $v does not exist"
+    done
+    [[ -e "$snapshot_prefix/$label" ]] && rm -rf "$snapshot_prefix/$label"
+    mkdir -p "$snapshot_prefix/$label"
+    for v in "${vols[@]}"; do
+        btrfs subvol snapshot -r "$vol_prefix/$v" "$snapshot_prefix/$label/$v"
     done
 }
 
+# rollbacl <label>
 rollback() {
-    tm="$1"
-    [[ ! -e $snapshot_prefix/$tm ]] && echo "snapshot $tm does not exist" && exit 1
+    label="$1"
+    [[ -z "$label" ]] && die "undefined label to rollback"
+
     for v in "${vols[@]}"; do
-        [[ ! -e $snapshot_prefix/$tm/$v ]] && echo "snapshot $tm/$v does not exist" && exit 1
+        [[ ! -e $snapshot_prefix/$label/$v ]] && die "snapshot $label/$v does not exist"
     done
 
     for v in "${vols[@]}"; do
-        [[ -e "$vol_prefix/$v" ]] && btrfs subvol delete "$vol_prefix/$v"
-        btrfs subvol snapshot "$snapshot_prefix/$tm/$v" "$vol_prefix/$v"
+        [[ -e "$vol_prefix/$v" ]] && rm -rf "$vol_prefix/$v"
+        btrfs subvol snapshot "$snapshot_prefix/$label/$v" "$vol_prefix/$v"
     done
 }
 
 main() {
-    if (($# <= 1)) && [[ $1 != '-r' ]]; then
-        snapshot $1
-        exit 0
-    elif (($# == 2)) && [[ $1 == '-r' ]]; then
-        rollback "$2"
-        exit 0
-    else
+    if (($# == 0)); then
+        snapshot
+    elif (($# == 1)); then
         case $1 in
             -h | --help)
                 print_usage
-                exit 0
                 ;;
             *)
-                print_usage
-                exit 1
-            ;;
+                snapshot "$1"
+                ;;
         esac
+    elif (($# == 2)) && [[ $1 == "-r" ]]; then
+        rollback "$2"
+    else
+        print_usage
     fi
 }
 
