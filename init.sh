@@ -13,7 +13,7 @@ EOF
     pacman -S --noconfirm \
         fcitx-im fcitx-googlepinyin fcitx-configtool \
         firefox okular flameshot \
-        xclip ripgrep-all ctags wget curl openbsd-netcat yay
+        xclip ripgrep-all ctags wget curl openbsd-netcat yay man-db man-pages
 
     pacman -S --noconfirm notification-daemon
     mkdir -p /usr/share/dbus-1/services
