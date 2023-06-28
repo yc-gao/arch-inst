@@ -55,6 +55,8 @@ install() {
     locale-gen
 
     # kernel
+    mkdir -p /etc/modprobe.d
+    echo 'options hid_apple fnmode=2' > /etc/modprobe.d/hid_apple.conf
     mkinitcpio -P
 
     # boot
@@ -71,6 +73,11 @@ install() {
     systemctl enable NetworkManager
     systemctl enable sshd
 
+    # desktop
+    pacman -S --noconfirm xorg xorg-xprop sddm bspwm sxhkd alacritty \
+        i3lock xss-lock polybar picom rofi feh ranger
+    systemctl enable sddm
+
     # misc and account
     pacman -S --noconfirm polkit sudo zsh neovim git unzip
 
@@ -79,14 +86,6 @@ install() {
     EDITOR=nvim visudo
     echo "set $user password."
     passwd $user
-
-    # desktop
-    pacman -S --noconfirm xorg xorg-xprop sddm bspwm sxhkd alacritty \
-        i3lock xss-lock polybar picom rofi feh ranger
-    systemctl enable sddm
-    su - $user -c 'install -Dm755 /usr/share/doc/bspwm/examples/bspwmrc ~/.config/bspwm/bspwmrc'
-    su - $user -c 'install -Dm644 /usr/share/doc/bspwm/examples/sxhkdrc ~/.config/sxhkd/sxhkdrc'
-    su - $user -c 'sed -i "s/urxvt/alacritty/" ~/.config/sxhkd/sxhkdrc'
 }
 
 if [[ $# -eq 1 ]]; then
