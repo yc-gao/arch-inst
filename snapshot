@@ -29,7 +29,7 @@ snapshot() {
     [[ -e "$snapshot_prefix/$label" ]] && rm -rf "$snapshot_prefix/$label"
     mkdir -p "$snapshot_prefix/$label"
     for v in "${vols[@]}"; do
-        btrfs subvol snapshot -r "$vol_prefix/$v" "$snapshot_prefix/$label/$v"
+        btrfs subvol snapshot "$vol_prefix/$v" "$snapshot_prefix/$label/$v"
     done
 }
 

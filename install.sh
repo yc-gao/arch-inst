@@ -86,6 +86,10 @@ install() {
     EDITOR=nvim visudo
     echo "set $user password."
     passwd $user
+    su - $user -c 'mkdir -p ~/.config/{bspwm,sxhkd}'
+    su - $user -c 'cp /usr/share/doc/bspwm/examples/bspwmrc ~/.config/bspwm/'
+    su - $user -c 'cp /usr/share/doc/bspwm/examples/sxhkdrc ~/.config/sxhkd/'
+    su - $user -c 'sed -i "s/urxvt/alacritty/" ~/.config/sxhkd/sxhkdrc'
 }
 
 if [[ $# -eq 1 ]]; then
