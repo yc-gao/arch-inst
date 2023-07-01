@@ -11,6 +11,7 @@ volumes=(
     "$rootdisk:/mnt:-o subvol=/@root:"
     "$rootdisk:/mnt/home:-o subvol=/@home:"
     "$rootdisk:/mnt/mnt/snapshots:-o subvol=/@snapshots:"
+    "$rootdisk:/mnt/swap:-o subvol=/@swap:"
     "/dev/nvme0n1p1:/mnt/boot/efi::fat -F 32"
 )
 
@@ -32,11 +33,14 @@ prepare() {
     btrfs subvol create /mnt/@root
     btrfs subvol create /mnt/@home
     btrfs subvol create /mnt/@snapshots
+    btrfs subvol create /mnt/@swap
+    btrfs filesystem mkswapfile --size 64g /mnt/@swap/swapfile
     umount -R /mnt
 
     mnt_vols
     pacstrap /mnt base base-devel linux-lts linux-firmware btrfs-progs
     genfstab -U /mnt | sed -E 's/subvolid=[0-9]+//;s/,,/,/' >> /mnt/etc/fstab
+    echo '/swap/swapfile none swap defaults 0 0' >> /mnt/etc/fstab
     cp install.sh /mnt/root/
     arch-chroot /mnt /root/install.sh install
     rm -rf  /mnt/root/install.sh
