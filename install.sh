@@ -36,7 +36,7 @@ prepare() {
 
     mnt_vols
     pacstrap /mnt base base-devel linux-lts linux-firmware btrfs-progs
-    genfstab -U /mnt >> /mnt/etc/fstab
+    genfstab -U /mnt | sed -E 's/subvolid=[0-9]+//;s/,,/,/' >> /mnt/etc/fstab
     cp install.sh /mnt/root/
     arch-chroot /mnt /root/install.sh install
     rm -rf  /mnt/root/install.sh
