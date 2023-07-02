@@ -43,7 +43,7 @@ rollback() {
     done
 
     for v in "${vols[@]}"; do
-        [[ -e "$vol_prefix/$v" ]] && rm -rf "$vol_prefix/$v"
+        [[ -e "$vol_prefix/$v" ]] && (btrfs subvol delete "$vol_prefix/$v" || rm -rf "$vol_prefix/$v")
         btrfs subvol snapshot "$snapshot_prefix/$label/$v" "$vol_prefix/$v"
     done
 }
