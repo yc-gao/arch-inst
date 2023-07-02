@@ -14,7 +14,7 @@ run_onroot() {
 
     pacman -S --noconfirm notification-daemon
     mkdir -p /usr/share/dbus-1/services
-    cat ./assets/org.freedesktop.Notifications.service > org.freedesktop.Notifications.service
+    cat ./assets/org.freedesktop.Notifications.service > /usr/share/dbus-1/services/org.freedesktop.Notifications.service
 
     pacman -S --noconfirm docker docker-compose
     systemctl enable docker
