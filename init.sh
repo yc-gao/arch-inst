@@ -56,7 +56,7 @@ bspwm() {
     run_asroot pacman -S --noconfirm xorg xorg-xprop sddm bspwm sxhkd alacritty \
         i3lock xss-lock polybar picom rofi feh ranger \
         firefox okular flameshot \
-        xclip ripgrep-all ctags wget curl openbsd-netcat neovim unzip man-db man-pages
+        xclip ripgrep-all ctags wget curl openbsd-netcat unzip man-db man-pages
     run_asroot systemctl enable sddm
 
     archlinuxcn
@@ -66,7 +66,6 @@ bspwm() {
     virt
 }
 
-[[ $UID == '0' ]] && die "please run using $user"
 (( $# < 1 )) && die "please set init action"
 
 read -r -a args <<< "$*"

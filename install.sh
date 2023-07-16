@@ -78,7 +78,7 @@ install() {
     systemctl enable sshd
 
     # misc and account
-    pacman -S --noconfirm polkit sudo zsh git
+    pacman -S --noconfirm polkit sudo zsh git neovim
 
     useradd -m -s /bin/zsh $user
     usermod -aG wheel $user
