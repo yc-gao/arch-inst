@@ -2,41 +2,65 @@
 set -e
 user="xundaoxd"
 
-run_onroot() {
+die() {
+    echo "$@"
+    exit 1
+}
+
+run_asroot() {
+    sudo "$0" "$@"
+}
+
+archlinuxcn() {
+    [[ $UID != 0 ]] && run_asroot archlinuxcn && return
     cat ./assets/pacman.conf >> /etc/pacman.conf
     pacman -Syy
     pacman -S --noconfirm archlinuxcn-keyring
+}
 
+fcitx() {
+    [[ $UID != 0 ]] && run_asroot fcitx && return
     pacman -S --noconfirm \
-        fcitx-im fcitx-googlepinyin fcitx-configtool \
-        firefox okular flameshot \
-        xclip ripgrep-all ctags wget curl openbsd-netcat yay man-db man-pages
+        fcitx-im fcitx-googlepinyin fcitx-configtool
+}
 
+notification() {
+    [[ $UID != 0 ]] && run_asroot notification && return
     pacman -S --noconfirm notification-daemon
     mkdir -p /usr/share/dbus-1/services
     cat ./assets/org.freedesktop.Notifications.service > /usr/share/dbus-1/services/org.freedesktop.Notifications.service
+}
 
+docker() {
+    if [[ $UID != 0 ]]; then
+        run_asroot docker
+        yay -S --noconfirm nvidia-container-toolkit
+        return
+    fi
     pacman -S --noconfirm docker docker-compose
     systemctl enable docker
     usermod -aG docker $user
+}
 
+virt() {
+    [[ $UID != 0 ]] && run_asroot virt && return
     pacman -S --noconfirm virt-manager dnsmasq qemu-full \
         && systemctl enable libvirtd \
         && usermod -aG libvirt,kvm $user \
         && sed -i '/^unix_sock_group/{s/#//}' /etc/libvirt/libvirtd.conf
-
 }
 
-run_nonroot() {
-    sudo "$0"
-    yay -S --noconfirm nvidia-container-toolkit
+bspwm() {
+    archlinuxcn
+    fcitx
+    notification
+    docker
+    virt
 }
 
-if [[ $USER == "$user" ]]; then
-    run_nonroot
-elif [[ $USER == "root" ]]; then
-    run_onroot
-else
-    echo ""
-fi
+[[ $UID == '0' ]] && die "please run using $user"
+(( $# < 1 )) && die "please set init action"
+
+read -r -a args <<< "$*"
+${args[0]} "${args[@]:1}"
 
