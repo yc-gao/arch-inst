@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+
 user="xundaoxd"
 
 die() {
@@ -16,6 +17,7 @@ archlinuxcn() {
     cat ./assets/pacman.conf >> /etc/pacman.conf
     pacman -Syy
     pacman -S --noconfirm archlinuxcn-keyring
+    pacman -S --noconfirm yay
 }
 
 fcitx() {
@@ -51,6 +53,12 @@ virt() {
 }
 
 bspwm() {
+    run_asroot pacman -S --noconfirm xorg xorg-xprop sddm bspwm sxhkd alacritty \
+        i3lock xss-lock polybar picom rofi feh ranger \
+        firefox okular flameshot \
+        xclip ripgrep-all ctags wget curl openbsd-netcat neovim unzip man-db man-pages
+    run_asroot systemctl enable sddm
+
     archlinuxcn
     fcitx
     notification

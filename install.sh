@@ -77,23 +77,14 @@ install() {
     systemctl enable NetworkManager
     systemctl enable sshd
 
-    # desktop
-    pacman -S --noconfirm xorg xorg-xprop sddm bspwm sxhkd alacritty \
-        i3lock xss-lock polybar picom rofi feh ranger
-    systemctl enable sddm
-
     # misc and account
-    pacman -S --noconfirm polkit sudo zsh neovim git unzip
+    pacman -S --noconfirm polkit sudo zsh git
 
     useradd -m -s /bin/zsh $user
     usermod -aG wheel $user
     EDITOR=nvim visudo
     echo "set $user password."
     passwd $user
-    su - $user -c 'mkdir -p ~/.config/{bspwm,sxhkd}'
-    su - $user -c 'cp /usr/share/doc/bspwm/examples/bspwmrc ~/.config/bspwm/'
-    su - $user -c 'cp /usr/share/doc/bspwm/examples/sxhkdrc ~/.config/sxhkd/'
-    su - $user -c 'sed -i "s/urxvt/alacritty/" ~/.config/sxhkd/sxhkdrc'
 }
 
 if [[ $# -eq 1 ]]; then
