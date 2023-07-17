@@ -3,6 +3,7 @@ set -e
 
 hostname='xundaoxd-pc'
 user="xundaoxd"
+user_passwd=""
 
 rootdisk="/dev/nvme0n1p2"
 
@@ -14,6 +15,11 @@ volumes=(
     "$rootdisk:/mnt/swap:-o subvol=/@swap:"
     "/dev/nvme0n1p1:/mnt/boot/efi::fat -F 32"
 )
+
+die() {
+    echo "$@"
+    exit 1
+}
 
 mnt_vols() {
     for vol in "${volumes[@]}"; do
@@ -78,18 +84,17 @@ install() {
     systemctl enable sshd
 
     # misc and account
-    pacman -S --noconfirm polkit sudo zsh git neovim
+    pacman -S --noconfirm polkit sudo zsh git
 
     useradd -m -s /bin/zsh $user
     usermod -aG wheel $user
-    EDITOR=nvim visudo
-    echo "set $user password."
-    passwd $user
+    sed -E -i 's/#\s*(%wheel\s+ALL=\(ALL:ALL\)\s+ALL)/\1/' /etc/sudoers
+    echo -e "${user_passwd}\n${user_passwd}" | passwd $user
 }
 
-if [[ $# -eq 1 ]]; then
-    $1
-else
-    prepare
-fi
+[[ -z "$user_passwd" ]] && die "undefine user password"
+
+action="prepare"
+(( $# > 0 )) && action="$1"
+$action
 
