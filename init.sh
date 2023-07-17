@@ -67,7 +67,5 @@ bspwm() {
 }
 
 (( $# < 1 )) && die "please set init action"
-
-read -r -a args <<< "$*"
-${args[0]} "${args[@]:1}"
+"$@"
 
