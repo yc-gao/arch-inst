@@ -66,6 +66,9 @@ bspwm() {
     virt
 }
 
-(( $# < 1 )) && die "please set init action"
-"$@"
-
+action="bspwm"
+if (( $# > 0 )); then
+    action="$1"
+    shift
+fi
+${action} "$@"
