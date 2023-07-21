@@ -56,7 +56,8 @@ bspwm() {
     [[ $UID == 0 ]] && die "please init bspwm as $user"
     run_asroot pacman -S --noconfirm xorg xorg-xprop sddm bspwm sxhkd alacritty \
         i3lock xss-lock polybar picom rofi feh ranger mpv firefox okular flameshot \
-        man-db man-pages wget curl xclip ripgrep-all ctags openbsd-netcat unzip neovim
+        usbutils man-db man-pages \
+        wget curl xclip ripgrep-all ctags openbsd-netcat unzip neovim
     run_asroot systemctl enable sddm
 
     archlinuxcn
