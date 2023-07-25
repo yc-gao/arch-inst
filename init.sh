@@ -60,6 +60,9 @@ bspwm() {
         wget curl xclip ripgrep-all ctags openbsd-netcat unzip neovim
     run_asroot systemctl enable sddm
 
+    mkdir -p /etc/X11/xorg.conf.d
+    cat ./assets/50-mouse-acceleration.conf > /etc/X11/xorg.conf.d/50-mouse-acceleration.conf
+
     archlinuxcn
     fcitx
     notification
