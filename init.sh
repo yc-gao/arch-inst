@@ -54,10 +54,11 @@ virt() {
 
 bspwm() {
     [[ $UID == 0 ]] && die "please init bspwm as $user"
-    run_asroot pacman -S --noconfirm xorg xorg-xprop sddm bspwm sxhkd alacritty \
-        i3lock xss-lock polybar picom rofi feh ranger mpv firefox okular flameshot \
+    run_asroot pacman -S --noconfirm xorg xorg-xprop sddm \
+        bspwm sxhkd alacritty i3lock xss-lock polybar picom rofi \
         usbutils man-db man-pages \
-        wget curl xclip ripgrep-all ctags openbsd-netcat unzip neovim
+        feh ranger mpv firefox okular flameshot \
+        wget curl xclip ripgrep-all ctags openbsd-netcat unzip neovim jq ffmpeg
     run_asroot systemctl enable sddm
 
     mkdir -p /etc/X11/xorg.conf.d
