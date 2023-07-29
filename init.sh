@@ -52,18 +52,23 @@ virt() {
         && sed -i '/^unix_sock_group/{s/#//}' /etc/libvirt/libvirtd.conf
 }
 
-bspwm() {
-    [[ $UID == 0 ]] && die "please init bspwm as $user"
-    run_asroot pacman -S --noconfirm xorg xorg-xprop sddm \
+bspwm_desktop() {
+    [[ $UID != 0 ]] && run_asroot bspwm_desktop && return
+    pacman -S --noconfirm xorg xorg-xprop sddm \
         bspwm sxhkd alacritty i3lock xss-lock polybar picom rofi \
         usbutils man-db man-pages \
         feh ranger mpv firefox okular flameshot \
         wget curl xclip ripgrep-all ctags openbsd-netcat unzip neovim jq ffmpeg
-    run_asroot systemctl enable sddm
+    systemctl enable sddm
 
     mkdir -p /etc/X11/xorg.conf.d
     cat ./assets/50-mouse-acceleration.conf > /etc/X11/xorg.conf.d/50-mouse-acceleration.conf
+}
 
+bspwm() {
+    [[ $UID == 0 ]] && die "please init bspwm as $user"
+
+    bspwm_desktop
     archlinuxcn
     fcitx
     notification
