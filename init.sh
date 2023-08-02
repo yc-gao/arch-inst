@@ -53,7 +53,11 @@ virt() {
 }
 
 bspwm_desktop() {
-    [[ $UID != 0 ]] && run_asroot bspwm_desktop && return
+    if [[ $UID != 0 ]]; then
+        run_asroot bspwm_desktop
+        yay -S --noconfirm daemonize
+        return
+    fi
     pacman -S --noconfirm xorg xorg-xprop sddm \
         bspwm sxhkd alacritty i3lock xss-lock polybar picom rofi \
         usbutils man-db man-pages \
@@ -68,12 +72,12 @@ bspwm_desktop() {
 bspwm() {
     [[ $UID == 0 ]] && die "please init bspwm as $user"
 
-    bspwm_desktop
     archlinuxcn
     fcitx
     notification
     docker
     virt
+    bspwm_desktop
 }
 
 action="bspwm"
