@@ -40,7 +40,7 @@ prepare() {
     btrfs subvol create /mnt/@home
     btrfs subvol create /mnt/@snapshots
     btrfs subvol create /mnt/@swap
-    btrfs filesystem mkswapfile --size 64g /mnt/@swap/swapfile
+    btrfs filesystem mkswapfile --size 128g /mnt/@swap/swapfile
     umount -R /mnt
 
     mnt_vols
