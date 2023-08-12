@@ -61,7 +61,7 @@ bspwm_desktop() {
     pacman -S --noconfirm xorg xorg-xprop sddm \
         bspwm sxhkd alacritty i3lock xss-lock polybar picom rofi \
         usbutils man-db man-pages \
-        feh ranger mpv firefox okular flameshot \
+        feh ranger vlc firefox okular flameshot \
         wget curl xclip ripgrep-all ctags openbsd-netcat unzip neovim jq ffmpeg
     systemctl enable sddm
 
