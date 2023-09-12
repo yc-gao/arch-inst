@@ -64,9 +64,6 @@ bspwm_desktop() {
         feh ranger vlc sxiv firefox okular flameshot \
         wget curl xclip ripgrep-all ctags openbsd-netcat unzip neovim jq ffmpeg
     systemctl enable sddm
-
-    mkdir -p /etc/X11/xorg.conf.d
-    cat ./assets/50-mouse-acceleration.conf > /etc/X11/xorg.conf.d/50-mouse-acceleration.conf
 }
 
 bspwm() {

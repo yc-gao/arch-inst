@@ -7,13 +7,13 @@ user_passwd=""
 
 rootdisk="/dev/nvme0n1p2"
 
-# disk : mount point : mount options : format options
+# disk : format : mount point : mount options
 volumes=(
-    "$rootdisk:/mnt:-o subvol=/@root:"
-    "$rootdisk:/mnt/home:-o subvol=/@home:"
-    "$rootdisk:/mnt/mnt/snapshots:-o subvol=/@snapshots:"
-    "$rootdisk:/mnt/swap:-o subvol=/@swap:"
-    "/dev/nvme0n1p1:/mnt/boot/efi::fat -F 32"
+    "$rootdisk::/mnt:-o subvol=/@root"
+    "$rootdisk::/mnt/home:-o subvol=/@home"
+    "$rootdisk::/mnt/mnt/snapshots:-o subvol=/@snapshots"
+    "$rootdisk::/mnt/swap:-o subvol=/@swap"
+    "/dev/nvme0n1p1:fat -F 32:/mnt/boot/efi:"
 )
 
 die() {
@@ -24,9 +24,8 @@ die() {
 mnt_vols() {
     for vol in "${volumes[@]}"; do
         IFS=: read -r -a info <<< "$vol"
-        [[ -n "${info[3]}" ]] && mkfs.${info[3]} "${info[0]}"
-        mkdir -p "${info[1]}"
-        [[ -n "${info[1]}" ]] && mount ${info[2]} "${info[0]}" "${info[1]}"
+        [[ -n "${info[1]}" ]] && mkfs.${info[1]} "${info[0]}"
+        [[ -n "${info[2]}" ]] && mkdir -p "${info[2]}" && mount ${info[3]} "${info[0]}" "${info[2]}"
     done
 }
 
