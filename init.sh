@@ -42,7 +42,6 @@ virt() {
 bspwm_desktop() {
     if [[ $UID != 0 ]]; then
         run_asroot bspwm_desktop
-        xmodmap -pke > ~/.Xmodmap
         # yay -S --noconfirm daemonize
         return
     fi
