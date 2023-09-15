@@ -1,3 +1,4 @@
-xss-lock -- i3lock -n &
+xsetroot -cursor_name left_ptr
 
+xss-lock -- i3lock -n &
 exec bspwm
