@@ -5,9 +5,6 @@ export XMODIFIERS=@im=fcitx
 [[ -d $HOME/.local/bin ]] && export PATH="$HOME/.local/bin:$PATH"
 
 if [ -z "${DISPLAY}" ] && [ "${XDG_VTNR}" -eq 1 ]; then
-    xss-lock --ignore-sleep -- xscreensaver-command -lock &
-    xscreensaver &
-    fcitx -d
-    exec startx `which bspwm`
+    exec startx
 fi
 

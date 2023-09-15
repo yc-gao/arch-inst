@@ -45,6 +45,9 @@ bspwm_desktop() {
         # yay -S --noconfirm daemonize
         return
     fi
+    pacman -S --noconfirm notification-daemon
+    mkdir -p /usr/share/dbus-1/services
+    cat ./assets/org.freedesktop.Notifications.service > /usr/share/dbus-1/services/org.freedesktop.Notifications.service
 
     pacman -S --noconfirm xorg xorg-xinit xorg-xprop xdotool xscreensaver xss-lock \
         bspwm sxhkd alacritty polybar picom rofi ranger feh flameshot \
@@ -53,10 +56,7 @@ bspwm_desktop() {
         vlc sxiv firefox okular \
         wget curl xclip ripgrep-all ctags openbsd-netcat unzip neovim jq ffmpeg
     cat ./assets/bash_profile ~/.bash_profile
-
-    pacman -S --noconfirm notification-daemon
-    mkdir -p /usr/share/dbus-1/services
-    cat ./assets/org.freedesktop.Notifications.service > /usr/share/dbus-1/services/org.freedesktop.Notifications.service
+    cat ./assets/xinitrc ~/.xinitrc
 }
 
 bspwm() {

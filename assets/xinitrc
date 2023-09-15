@@ -1,0 +1,6 @@
+xss-lock --ignore-sleep -- xscreensaver-command -lock &
+xscreensaver &
+fcitx -d
+
+exec bspwm
+
