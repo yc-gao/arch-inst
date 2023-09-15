@@ -20,19 +20,6 @@ archlinuxcn() {
     pacman -S --noconfirm yay
 }
 
-fcitx() {
-    [[ $UID != 0 ]] && run_asroot fcitx && return
-    pacman -S --noconfirm \
-        fcitx-im fcitx-googlepinyin fcitx-configtool
-}
-
-notification() {
-    [[ $UID != 0 ]] && run_asroot notification && return
-    pacman -S --noconfirm notification-daemon
-    mkdir -p /usr/share/dbus-1/services
-    cat ./assets/org.freedesktop.Notifications.service > /usr/share/dbus-1/services/org.freedesktop.Notifications.service
-}
-
 docker() {
     if [[ $UID != 0 ]]; then
         run_asroot docker
@@ -58,20 +45,24 @@ bspwm_desktop() {
         # yay -S --noconfirm daemonize
         return
     fi
-    pacman -S --noconfirm xorg xorg-xprop sddm \
-        bspwm sxhkd alacritty i3lock xss-lock polybar picom rofi \
+
+    pacman -S --noconfirm xorg xorg-xinit xorg-xprop xdotool xscreensaver xss-lock \
+        bspwm sxhkd alacritty polybar picom rofi ranger feh flameshot \
+        fcitx-im fcitx-googlepinyin fcitx-configtool \
         usbutils man-db man-pages \
-        feh ranger vlc sxiv firefox okular flameshot \
+        vlc sxiv firefox okular \
         wget curl xclip ripgrep-all ctags openbsd-netcat unzip neovim jq ffmpeg
-    systemctl enable sddm
+    cat ./assets/bash_profile ~/.bash_profile
+
+    pacman -S --noconfirm notification-daemon
+    mkdir -p /usr/share/dbus-1/services
+    cat ./assets/org.freedesktop.Notifications.service > /usr/share/dbus-1/services/org.freedesktop.Notifications.service
 }
 
 bspwm() {
     [[ $UID == 0 ]] && die "please init bspwm as $user"
 
     archlinuxcn
-    fcitx
-    notification
     docker
     virt
     bspwm_desktop
