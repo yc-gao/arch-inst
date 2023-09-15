@@ -1,6 +1,3 @@
-xss-lock --ignore-sleep -- xscreensaver-command -lock &
-xscreensaver &
-fcitx -d
+xss-lock -- i3lock -n &
 
 exec bspwm
-
