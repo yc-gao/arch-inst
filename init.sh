@@ -54,7 +54,7 @@ bspwm_desktop() {
         bspwm sxhkd alacritty polybar picom rofi ranger feh flameshot \
         fcitx-im fcitx-googlepinyin fcitx-configtool \
         usbutils man-db man-pages \
-        vlc sxiv firefox okular \
+        vlc sxiv firefox okular obsidian \
         wget curl xclip ripgrep-all ctags openbsd-netcat unzip neovim jq ffmpeg
     cat ./assets/bash_profile ~/.bash_profile
     cat ./assets/xinitrc ~/.xinitrc
