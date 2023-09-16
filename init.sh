@@ -42,6 +42,8 @@ virt() {
 bspwm_desktop() {
     if [[ $UID != 0 ]]; then
         run_asroot bspwm_desktop
+        cat ./assets/bash_profile > ~/.bash_profile
+        cat ./assets/xinitrc > ~/.xinitrc
         # yay -S --noconfirm daemonize
         return
     fi
@@ -55,8 +57,6 @@ bspwm_desktop() {
         usbutils man-db man-pages \
         vlc sxiv firefox okular obsidian \
         wget curl xclip ripgrep-all ctags openbsd-netcat unzip neovim jq ffmpeg
-    cat ./assets/bash_profile > ~/.bash_profile
-    cat ./assets/xinitrc > ~/.xinitrc
 }
 
 bspwm() {
