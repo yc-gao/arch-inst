@@ -42,8 +42,6 @@ virt() {
 bspwm_desktop() {
     if [[ $UID != 0 ]]; then
         run_asroot bspwm_desktop
-        cat ./assets/bash_profile > ~/.bash_profile
-        cat ./assets/xinitrc > ~/.xinitrc
         # yay -S --noconfirm daemonize
         return
     fi
@@ -51,12 +49,13 @@ bspwm_desktop() {
     mkdir -p /usr/share/dbus-1/services
     cat ./assets/org.freedesktop.Notifications.service > /usr/share/dbus-1/services/org.freedesktop.Notifications.service
 
-    pacman -S --noconfirm xorg xorg-xinit xorg-xmodmap xorg-xprop xdotool xss-lock i3lock \
+    pacman -S --noconfirm xorg xorg-xprop sddm xdotool xss-lock i3lock \
         bspwm sxhkd alacritty polybar picom rofi ranger feh flameshot \
         fcitx-im fcitx-googlepinyin fcitx-configtool \
         usbutils man-db man-pages \
         vlc sxiv firefox okular obsidian \
         wget curl xclip ripgrep-all ctags openbsd-netcat unzip neovim jq ffmpeg
+    systemctl enable sddm
 }
 
 bspwm() {
