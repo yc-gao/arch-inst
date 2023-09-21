@@ -53,7 +53,7 @@ bspwm_desktop() {
         bspwm sxhkd alacritty polybar picom rofi ranger feh flameshot \
         fcitx-im fcitx-googlepinyin fcitx-configtool \
         usbutils man-db man-pages \
-        vlc sxiv firefox okular obsidian \
+        vlc firefox obsidian \
         wget curl xclip ripgrep-all ctags openbsd-netcat unzip neovim jq ffmpeg
     systemctl enable sddm
 }
