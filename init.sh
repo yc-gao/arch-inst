@@ -54,7 +54,8 @@ bspwm_desktop() {
         fcitx-im fcitx-googlepinyin fcitx-configtool \
         usbutils man-db man-pages \
         vlc firefox obsidian \
-        wget curl xclip ripgrep-all ctags openbsd-netcat unzip neovim jq ffmpeg
+        wget curl xclip ripgrep-all ctags openbsd-netcat unzip neovim jq ffmpeg \
+        wqy-microhei wqy-zenhei noto-fonts noto-fonts-cjk noto-fonts-emoji
     systemctl enable sddm
 }
 
