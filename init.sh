@@ -42,7 +42,7 @@ virt() {
 bspwm_desktop() {
     if [[ $UID != 0 ]]; then
         run_asroot bspwm_desktop
-        # yay -S --noconfirm daemonize
+        yay -S --noconfirm daemonize
         return
     fi
     pacman -S --noconfirm notification-daemon
