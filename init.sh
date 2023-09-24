@@ -50,7 +50,7 @@ bspwm_desktop() {
     cat ./assets/org.freedesktop.Notifications.service > /usr/share/dbus-1/services/org.freedesktop.Notifications.service
 
     pacman -S --noconfirm xorg xorg-xprop sddm xdotool xss-lock i3lock \
-        bspwm sxhkd alacritty polybar picom rofi ranger feh flameshot \
+        bspwm sxhkd alacritty polybar rofi ranger feh flameshot \
         fcitx-im fcitx-googlepinyin fcitx-configtool \
         usbutils man-db man-pages \
         vlc firefox obsidian \
