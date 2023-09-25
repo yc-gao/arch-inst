@@ -50,13 +50,14 @@ bspwm_desktop() {
     cat ./assets/org.freedesktop.Notifications.service > /usr/share/dbus-1/services/org.freedesktop.Notifications.service
 
     pacman -S --noconfirm xorg xorg-xprop sddm xdotool xss-lock i3lock \
-        bspwm sxhkd alacritty polybar rofi ranger feh flameshot \
-        fcitx-im fcitx-googlepinyin fcitx-configtool \
-        usbutils man-db man-pages \
-        vlc firefox obsidian \
-        wget curl xclip ripgrep-all ctags openbsd-netcat unzip neovim jq ffmpeg \
-        wqy-microhei wqy-zenhei noto-fonts noto-fonts-cjk noto-fonts-emoji
+        bspwm sxhkd alacritty polybar rofi ranger feh flameshot
     systemctl enable sddm
+
+    pacman -S --noconfirm fcitx-im fcitx-googlepinyin fcitx-configtool
+
+    pacman -S --noconfirm vlc evince firefox obsidian \
+        usbutils ffmpeg \
+        man-db man-pages wget curl xclip ripgrep-all ctags openbsd-netcat unzip neovim jq nmap
 }
 
 bspwm() {
