@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+self_path=$(realpath "${BASH_SOURCE[0]}")
+self_dir=$(dirname "$self_path")
+
 user="xundaoxd"
 
 die() {
@@ -14,7 +17,7 @@ run_asroot() {
 
 archlinuxcn() {
     [[ $UID != 0 ]] && run_asroot archlinuxcn && return
-    cat ./assets/pacman.conf >> /etc/pacman.conf
+    cat "${self_dir}/assets/pacman.conf" >> /etc/pacman.conf
     pacman -Syy
     pacman -S --noconfirm archlinuxcn-keyring
     pacman -S --noconfirm yay
@@ -47,7 +50,7 @@ bspwm_desktop() {
     fi
     pacman -S --noconfirm notification-daemon
     mkdir -p /usr/share/dbus-1/services
-    cat ./assets/org.freedesktop.Notifications.service > /usr/share/dbus-1/services/org.freedesktop.Notifications.service
+    cat "${self_dir}/assets/org.freedesktop.Notifications.service" > /usr/share/dbus-1/services/org.freedesktop.Notifications.service
 
     pacman -S --noconfirm xorg xorg-xprop sddm xdotool xss-lock i3lock \
         bspwm sxhkd alacritty polybar rofi ranger feh flameshot
@@ -60,6 +63,11 @@ bspwm_desktop() {
         man-db man-pages wget curl xclip ripgrep-all ctags openbsd-netcat unzip neovim jq nmap
 }
 
+dotfiles() {
+    git clone git@github.com:xundaoxd/dotfiles.git
+    (cd dotfiles && ./install.sh -f)
+}
+
 bspwm() {
     [[ $UID == 0 ]] && die "please init bspwm as $user"
 
@@ -67,6 +75,7 @@ bspwm() {
     docker
     virt
     bspwm_desktop
+    dotfiles
 }
 
 action="bspwm"

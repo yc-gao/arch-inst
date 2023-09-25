@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+self_path=$(realpath "${BASH_SOURCE[0]}")
+self_dir=$(dirname "$self_path")
+
 hostname='xundaoxd-pc'
 user="xundaoxd"
 user_passwd=""
@@ -46,13 +49,13 @@ prepare() {
     pacstrap /mnt base base-devel linux-lts linux-firmware btrfs-progs
     genfstab -U /mnt | sed -E 's/subvolid=[0-9]+//;s/,,/,/' >> /mnt/etc/fstab
     echo '/swap/swapfile none swap defaults 0 0' >> /mnt/etc/fstab
-    cp install.sh /mnt/root/
+    cp "${self_dir}/install.sh" /mnt/root/
     arch-chroot /mnt /root/install.sh install
     rm -rf  /mnt/root/install.sh
     umount -R /mnt
 
     mount $rootdisk /mnt
-    ./snapshot init
+    "${self_dir}/tools/snapshot" init
     umount -R /mnt
 }
 
