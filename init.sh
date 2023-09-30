@@ -63,9 +63,18 @@ bspwm_desktop() {
         man-db man-pages wget curl xclip ripgrep-all ctags openbsd-netcat unzip neovim jq nmap
 }
 
-dotfiles() {
-    git clone git@github.com:xundaoxd/dotfiles.git
-    (cd dotfiles && ./install.sh -f)
+custom() {
+    work_dir=$(dirname "$self_dir")
+
+    git clone git@github.com:xundaoxd/dotfiles.git "$work_dir/dotfiles"
+    (cd "$work_dir/dotfiles" && ./install.sh -f)
+
+    git clone git@github.com:xundaoxd/docker-apps.git "$work_dir/docker-apps"
+    (cd "$work_dir/docker-apps" && ./init.sh)
+    echo "add_local \"$work_dir/docker-apps\"" >> ~/.zshrc
+
+    mkdir -p ~/Pictures
+    cp -r "${self_dir}/assets/wallpaper" ~/Pictures/
 }
 
 bspwm() {
@@ -75,7 +84,7 @@ bspwm() {
     docker
     virt
     bspwm_desktop
-    dotfiles
+    custom
 }
 
 action="bspwm"
