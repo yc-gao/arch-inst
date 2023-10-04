@@ -1,9 +1,10 @@
 #!/bin/bash
 set -e
 
+wdir="~/Workdir"
+
 self_path=$(realpath "${BASH_SOURCE[0]}")
 self_dir=$(dirname "$self_path")
-
 user="xundaoxd"
 
 die() {
@@ -64,14 +65,12 @@ bspwm_desktop() {
 }
 
 custom() {
-    work_dir=$(dirname "$self_dir")
+    git clone git@github.com:xundaoxd/dotfiles.git "$wdir/dotfiles"
+    (cd "$wdir/dotfiles" && ./install.sh -f)
 
-    git clone git@github.com:xundaoxd/dotfiles.git "$work_dir/dotfiles"
-    (cd "$work_dir/dotfiles" && ./install.sh -f)
-
-    git clone git@github.com:xundaoxd/docker-apps.git "$work_dir/docker-apps"
-    (cd "$work_dir/docker-apps" && ./init.sh)
-    echo "add_local \"$work_dir/docker-apps\"" >> ~/.zshrc
+    git clone git@github.com:xundaoxd/docker-apps.git "$wdir/docker-apps"
+    (cd "$wdir/docker-apps" && ./init.sh)
+    echo "add_local \"$wdir/docker-apps\"" >> ~/.zshrc
 
     mkdir -p ~/Pictures
     cp -r "${self_dir}/assets/wallpaper" ~/Pictures/
@@ -86,6 +85,14 @@ bspwm() {
     bspwm_desktop
     custom
 }
+
+while getopts 'w:' opt; do
+    case $opt in
+        w)      wdir="$OPTARG";;
+        ?)      die "undefined opt: $opt";
+    esac
+done
+shift $((OPTIND - 1))
 
 action="bspwm"
 if (( $# > 0 )); then
