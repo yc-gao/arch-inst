@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-wdir="~/Workdir"
+wdir="$HOME/Workdir"
 
 self_path=$(realpath "${BASH_SOURCE[0]}")
 self_dir=$(dirname "$self_path")
