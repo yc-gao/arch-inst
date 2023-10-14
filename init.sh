@@ -68,10 +68,6 @@ custom() {
     git clone git@github.com:xundaoxd/dotfiles.git "$wdir/dotfiles"
     (cd "$wdir/dotfiles" && ./install.sh -f)
 
-    git clone git@github.com:xundaoxd/docker-apps.git "$wdir/docker-apps"
-    (cd "$wdir/docker-apps" && ./init.sh)
-    echo "add_local \"$wdir/docker-apps\"" >> ~/.zshrc
-
     mkdir -p ~/Pictures
     cp -r "${self_dir}/assets/wallpaper" ~/Pictures/
 }
