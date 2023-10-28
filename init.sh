@@ -50,6 +50,7 @@ bspwm_desktop() {
         yay -S --noconfirm daemonize
         return
     fi
+    cat "${self_dir}/assets/50-mouse-acceleration.conf" > /etc/X11/xorg.conf.d/50-mouse-acceleration.conf
     cat "${self_dir}/assets/sddm.conf" > /etc/sddm.conf
 
     pacman -S --noconfirm notification-daemon
