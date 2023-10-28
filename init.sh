@@ -46,9 +46,12 @@ virt() {
 bspwm_desktop() {
     if [[ $UID != 0 ]]; then
         run_asroot bspwm_desktop
+        cat "${self_dir}/assets/Xresources" > ~/.Xresources
         yay -S --noconfirm daemonize
         return
     fi
+    cat "${self_dir}/assets/sddm.conf" > /etc/sddm.conf
+
     pacman -S --noconfirm notification-daemon
     mkdir -p /usr/share/dbus-1/services
     cat "${self_dir}/assets/org.freedesktop.Notifications.service" > /usr/share/dbus-1/services/org.freedesktop.Notifications.service
