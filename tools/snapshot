@@ -13,7 +13,7 @@ die() {
 
 print_usage() {
     cat << EOF
-$0 [label]                  snapshot volume
+$0 -s [label]               snapshot volume
 $0 -r [label]               rollback snapshot
 $0 -d [label]               delete snapshot
 EOF
@@ -37,8 +37,6 @@ snapshot() {
 # rollback [label]
 rollback() {
     label="$1"
-
-    [[ -z "$label" ]] && label="$(find "$snapshot_prefix" -maxdepth 1 -mindepth 1 -name '[0-9][0-9]*' | sed -E 's/.*\///' | sort -n | tail -n 1)"
     [[ -z "$label" ]] && die "undefined label to rollback"
 
     for v in "${vols[@]}"; do
@@ -54,7 +52,6 @@ rollback() {
 # delete [label]
 delete() {
     label="$1"
-    [[ -z "$label" ]] && label="$(find "$snapshot_prefix" -maxdepth 1 -mindepth 1 -name '[0-9][0-9]*' | sed -E 's/.*\///' | sort -n | tail -n 1)"
     [[ -z "$label" ]] && die "undefined label to rollback"
 
     for v in "${vols[@]}"; do
@@ -63,23 +60,31 @@ delete() {
     rm -rf "$snapshot_prefix/$label"
 }
 
-help_flag=
-rollback_flag=
-delete_flag=
-
-while getopts 'hrd' name; do
-    case $name in
-        h)  help_flag=1;;
-        r)  rollback_flag=1;;
-        d)  delete_flag=1;;
-        ?)  die "undefined options -$name";;
+while (( $# )); do
+    case $1 in
+        -h | --help)
+            print_usage
+            exit
+            ;;
+        -r | --rollback)
+            shift
+            rollback "$@"
+            exit
+            ;;
+        -s | --snapshot)
+            shift
+            snapshot "$@"
+            exit
+            ;;
+        -d | --delete)
+            shift
+            delete "$@"
+            exit
+            ;;
+        *)
+            print_usage
+            exit 1
+            ;;
     esac
 done
-shift $((OPTIND - 1))
-
-[[ -n "$help_flag" ]] && print_usage && exit 0
-[[ -n "$rollback_flag" ]] && rollback "$@" && exit 0
-[[ -n "$delete_flag" ]] && delete "$@" && exit 0
-
-snapshot "$@"
 
