@@ -37,6 +37,7 @@ snapshot() {
 # rollback [label]
 rollback() {
     label="$1"
+    [[ -z "$label" ]] && label="$(ls "$snapshot_prefix" | sort -n | tail -n 1)"
     [[ -z "$label" ]] && die "undefined label to rollback"
 
     for v in "${vols[@]}"; do
@@ -52,6 +53,7 @@ rollback() {
 # delete [label]
 delete() {
     label="$1"
+    [[ -z "$label" ]] && label="$(ls "$snapshot_prefix" | sort -n | tail -n 1)"
     [[ -z "$label" ]] && die "undefined label to rollback"
 
     for v in "${vols[@]}"; do
@@ -60,31 +62,29 @@ delete() {
     rm -rf "$snapshot_prefix/$label"
 }
 
-while (( $# )); do
-    case $1 in
-        -h | --help)
-            print_usage
-            exit
-            ;;
-        -r | --rollback)
-            shift
-            rollback "$@"
-            exit
-            ;;
-        -s | --snapshot)
-            shift
-            snapshot "$@"
-            exit
-            ;;
-        -d | --delete)
-            shift
-            delete "$@"
-            exit
-            ;;
-        *)
-            print_usage
-            exit 1
-            ;;
-    esac
-done
+case $1 in
+    -h | --help)
+        print_usage
+        exit
+        ;;
+    -r | --rollback)
+        shift
+        rollback "$@"
+        exit
+        ;;
+    -s | --snapshot)
+        shift
+        snapshot "$@"
+        exit
+        ;;
+    -d | --delete)
+        shift
+        delete "$@"
+        exit
+        ;;
+    *)
+        print_usage
+        exit 1
+        ;;
+esac
 
