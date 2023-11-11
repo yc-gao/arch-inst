@@ -46,19 +46,16 @@ virt() {
 bspwm_desktop() {
     if [[ $UID != 0 ]]; then
         run_asroot bspwm_desktop
-        cat "${self_dir}/assets/Xresources" > ~/.Xresources
         yay -S --noconfirm daemonize
+        cat "${self_dir}/assets/Xresources" > ~/.Xresources
         return
     fi
-    mkdir -p /etc/X11/xorg.conf.d
-    cat "${self_dir}/assets/50-mouse-acceleration.conf" > /etc/X11/xorg.conf.d/50-mouse-acceleration.conf
-    cat "${self_dir}/assets/sddm.conf" > /etc/sddm.conf
 
     pacman -S --noconfirm notification-daemon
     mkdir -p /usr/share/dbus-1/services
     cat "${self_dir}/assets/org.freedesktop.Notifications.service" > /usr/share/dbus-1/services/org.freedesktop.Notifications.service
 
-    pacman -S --noconfirm xorg xorg-xprop sddm xdotool xss-lock i3lock \
+    pacman -S --noconfirm xorg xorg-apps sddm xdotool xss-lock i3lock \
         bspwm sxhkd alacritty polybar rofi ranger feh flameshot
     systemctl enable sddm
 
@@ -67,6 +64,10 @@ bspwm_desktop() {
     pacman -S --noconfirm vlc evince firefox obsidian \
         usbutils ffmpeg \
         man-db man-pages wget curl xclip ripgrep-all ctags openbsd-netcat unzip neovim jq nmap
+
+    mkdir -p /etc/X11/xorg.conf.d
+    cat "${self_dir}/assets/50-mouse-acceleration.conf" > /etc/X11/xorg.conf.d/50-mouse-acceleration.conf
+    cat "${self_dir}/assets/sddm.conf" > /etc/sddm.conf
 }
 
 custom() {
