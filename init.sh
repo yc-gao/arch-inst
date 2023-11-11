@@ -55,7 +55,7 @@ bspwm_desktop() {
     mkdir -p /usr/share/dbus-1/services
     cat "${self_dir}/assets/org.freedesktop.Notifications.service" > /usr/share/dbus-1/services/org.freedesktop.Notifications.service
 
-    pacman -S --noconfirm xorg xorg-apps sddm xdotool xss-lock i3lock \
+    pacman -S --noconfirm xorg sddm xdotool xss-lock i3lock \
         bspwm sxhkd alacritty polybar rofi ranger feh flameshot
     systemctl enable sddm
 
