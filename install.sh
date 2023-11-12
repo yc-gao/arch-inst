@@ -55,7 +55,7 @@ prepare() {
     umount -R /mnt
 
     mount $rootdisk /mnt
-    "${self_dir}/tools/snapshot" init
+    "${self_dir}/tools/snapshot" -s init
     umount -R /mnt
 }
 
