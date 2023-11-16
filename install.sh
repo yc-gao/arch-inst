@@ -46,6 +46,8 @@ prepare() {
     umount -R /mnt
 
     mnt_vols
+    mkdir -p /mnt/etc
+    cp -r ./airootfs/etc/modprobe.d /mnt/etc/
     pacstrap /mnt base base-devel linux-lts linux-firmware btrfs-progs
     genfstab -U /mnt | sed -E 's/subvolid=[0-9]+//;s/,,/,/' >> /mnt/etc/fstab
     echo '/swap/swapfile none swap defaults 0 0' >> /mnt/etc/fstab
@@ -67,8 +69,6 @@ install() {
     locale-gen
 
     # kernel
-    mkdir -p /etc/modprobe.d
-    echo 'options hid_apple fnmode=2' > /etc/modprobe.d/hid_apple.conf
     mkinitcpio -P
 
     # boot

@@ -2,9 +2,6 @@
 set -e
 
 wdir="$HOME/Workdir"
-
-self_path=$(realpath "${BASH_SOURCE[0]}")
-self_dir=$(dirname "$self_path")
 user="xundaoxd"
 
 die() {
@@ -18,7 +15,7 @@ run_asroot() {
 
 archlinuxcn() {
     [[ $UID != 0 ]] && run_asroot archlinuxcn && return
-    cat "${self_dir}/assets/pacman.conf" >> /etc/pacman.conf
+    cat "./airootfs/etc/pacman.conf" >> /etc/pacman.conf
     pacman -Syy
     pacman -S --noconfirm archlinuxcn-keyring
     pacman -S --noconfirm yay
@@ -47,13 +44,12 @@ bspwm_desktop() {
     if [[ $UID != 0 ]]; then
         run_asroot bspwm_desktop
         yay -S --noconfirm daemonize
-        cat "${self_dir}/assets/Xresources" > ~/.Xresources
+        cp -r ./airootfs/home/xundaoxd /home/
         return
     fi
 
     pacman -S --noconfirm notification-daemon
-    mkdir -p /usr/share/dbus-1/services
-    cat "${self_dir}/assets/org.freedesktop.Notifications.service" > /usr/share/dbus-1/services/org.freedesktop.Notifications.service
+    cp -r ./airootfs/usr /usr/
 
     pacman -S --noconfirm xorg sddm xdotool xss-lock i3lock \
         bspwm sxhkd alacritty polybar rofi ranger feh flameshot
@@ -65,17 +61,13 @@ bspwm_desktop() {
         usbutils ffmpeg \
         man-db man-pages wget curl xclip ripgrep-all ctags openbsd-netcat unzip neovim jq nmap
 
-    mkdir -p /etc/X11/xorg.conf.d
-    cat "${self_dir}/assets/50-mouse-acceleration.conf" > /etc/X11/xorg.conf.d/50-mouse-acceleration.conf
-    cat "${self_dir}/assets/sddm.conf" > /etc/sddm.conf
+    cp -r ./airootfs/etc/X11 /etc/
+    cp ./airootfs/etc/sddm.conf /etc/
 }
 
 custom() {
     git clone git@github.com:xundaoxd/dotfiles.git "$wdir/dotfiles"
     (cd "$wdir/dotfiles" && ./install.sh -f)
-
-    mkdir -p ~/Pictures
-    cp -r "${self_dir}/assets/wallpaper" ~/Pictures/
 }
 
 bspwm() {
