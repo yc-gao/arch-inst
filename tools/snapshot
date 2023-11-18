@@ -10,8 +10,7 @@ die() {
 }
 
 init() {
-    vol_prefix="${root_prefix}mnt/volumes}"
-    snapshot_prefix="${root_prefix}mnt/snapshots}"
+    snapshot_prefix="${root_prefix}/mnt/volumes/snapshots"
 }
 
 print_usage() {
@@ -27,13 +26,13 @@ snapshot() {
     [[ -z "$label" ]] && label=$(date +%y%m%d%H%M%S)
 
     for vol in "${vols[@]}"; do
-        [[ ! -e "$vol_prefix/$vol" ]] && die "volume $vol does not exist"
+        [[ ! -e "$snapshot_prefix/$vol.current" ]] && die "volume $vol does not exist"
     done
 
     for vol in "${vols[@]}"; do
-        btrfs subvol snapshot -r "${snapshot_prefix}/${vol}.latest" "${snapshot_prefix}/${vol}.${label}"
-        rm "${snapshot_prefix}/${vol}.latest"
-        ln -s "${vol}.${label}" "${snapshot_prefix}/${vol}.latest"
+        btrfs subvol snapshot -r "${snapshot_prefix}/$(readlink ${snapshot_prefix}/${vol}.current)" "${snapshot_prefix}/${vol}.${label}"
+        rm "${snapshot_prefix}/${vol}.current"
+        ln -s "${vol}.${label}" "${snapshot_prefix}/${vol}.current"
     done
 }
 

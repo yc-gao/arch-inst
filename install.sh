@@ -12,7 +12,6 @@ targetfs="/mnt"
 volumes=(
     "$rootdisk::-o subvol=volumes/root:${targetfs}"
     "$rootdisk::-o subvol=volumes:${targetfs}/mnt/volumes"
-    "$rootdisk::-o subvol=snapshots:${targetfs}/mnt/snapshots"
     "$espdisk:::${targetfs}/boot/efi"
 )
 
@@ -27,7 +26,7 @@ mnt_vols() {
     for vol in "$@"; do
         IFS=: read -r disk fcmd mopt mpoint <<< "$vol"
         [[ -n "${fopt}" ]] && ${fcmd} "${disk}"
-        [[ -n "${mpoint}" ]] && mkdir -p "${mpoint}" && mount "${mopt}" "${disk}" "${mpoint}"
+        [[ -n "${mpoint}" ]] && mkdir -p "${mpoint}" && mount ${mopt} "${disk}" "${mpoint}"
     done
 }
 
@@ -39,14 +38,14 @@ prepare() {
     mkfs.fat -F32 $espdisk
     mkfs.btrfs -f -L rootdisk $rootdisk
 
-    mount $rootdisk ${targetfs}
+    mount $rootdisk $targetfs
     btrfs subvol create ${targetfs}/volumes
     btrfs filesystem mkswapfile --size 128g ${targetfs}/volumes/swap
-    ln -s snapshots/root.latest ${targetfs}/volumes/root
 
-    btrfs subvol create ${targetfs}/snapshots
-    ln -s root.init ${targetfs}/snapshots/root.latest
-    btrfs subvol create ${targetfs}/snapshots/root.init
+    ln -s snapshots/root.current ${targetfs}/volumes/root
+    mkdir -p ${targetfs}/volumes/snapshots
+    ln -s root.init ${targetfs}/volumes/snapshots/root.current
+    btrfs subvol create ${targetfs}/volumes/snapshots/root.init
 
     umount -R ${targetfs}
     # prepare disk end
@@ -57,7 +56,6 @@ prepare() {
     cat > ${targetfs}/etc/fstab <<EOF
 UUID=$(lsblk -n -o uuid $rootdisk)  /               btrfs   rw,relatime,ssd,space_cache=v2,subvol=volumes/root  0   0
 UUID=$(lsblk -n -o uuid $rootdisk)  /mnt/volumes    btrfs   rw,relatime,ssd,space_cache=v2,subvol=volumes       0   0
-UUID=$(lsblk -n -o uuid $rootdisk)  /mnt/snapshots  btrfs   rw,relatime,ssd,space_cache=v2,subvol=snapshots     0   0
 /mnt/volumes/swap                   none            swap    defaults                                            0   0
 UUID=$(lsblk -n -o uuid $espdisk)   /boot/efi       vfat    rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=ascii,shortname=mixed,utf8,errors=remount-ro   0   2
 EOF
