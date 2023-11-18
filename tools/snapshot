@@ -19,8 +19,8 @@ $0 -s [label]               snapshot volume
 EOF
 }
 
-# snapshot [label]
-snapshot() {
+# checkout [label]
+checkout() {
     init
     label="$1"
     [[ -z "$label" ]] && label=$(date +%y%m%d%H%M%S)
@@ -30,7 +30,9 @@ snapshot() {
     done
 
     for vol in "${vols[@]}"; do
-        btrfs subvol snapshot -r "${snapshot_prefix}/$(readlink ${snapshot_prefix}/${vol}.current)" "${snapshot_prefix}/${vol}.${label}"
+        if [[ ! -e "${snapshot_prefix}/${vol}.${label}" ]]; then
+            btrfs subvol snapshot -r "${snapshot_prefix}/$(readlink "${snapshot_prefix}/${vol}.current")" "${snapshot_prefix}/${vol}.${label}"
+        fi
         rm "${snapshot_prefix}/${vol}.current"
         ln -s "${vol}.${label}" "${snapshot_prefix}/${vol}.current"
     done
@@ -47,9 +49,9 @@ case $1 in
         root_prefix="$2"
         shift 2
         ;;
-    -s | --snapshot)
+    -c | --checkout)
         shift
-        snapshot "$@"
+        checkout "$@"
         exit
         ;;
     *)
