@@ -61,6 +61,7 @@ bspwm_desktop() {
         usbutils ffmpeg \
         man-db man-pages wget curl xclip ripgrep-all ctags openbsd-netcat unzip neovim jq nmap
 
+    cp -r ./airootfs/etc/modprobe.d /etc/
     cp -r ./airootfs/etc/X11 /etc/
     cp ./airootfs/etc/sddm.conf /etc/
 }

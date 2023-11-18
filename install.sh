@@ -1,22 +1,19 @@
 #!/bin/bash
 set -e
 
-self_path=$(realpath "${BASH_SOURCE[0]}")
-self_dir=$(dirname "$self_path")
-
 hostname='xundaoxd-pc'
 user="xundaoxd"
 user_passwd=""
 
+espdisk="/dev/nvme0n1p1"
 rootdisk="/dev/nvme0n1p2"
+targetfs="/mnt"
 
-# disk : format : mount point : mount options
 volumes=(
-    "$rootdisk::/mnt:-o subvol=/@root"
-    "$rootdisk::/mnt/home:-o subvol=/@home"
-    "$rootdisk::/mnt/mnt/snapshots:-o subvol=/@snapshots"
-    "$rootdisk::/mnt/swap:-o subvol=/@swap"
-    "/dev/nvme0n1p1:fat -F 32:/mnt/boot/efi:"
+    "$rootdisk::-o subvol=volumes/root:${targetfs}"
+    "$rootdisk::-o subvol=volumes:${targetfs}/mnt/volumes"
+    "$rootdisk::-o subvol=snapshots:${targetfs}/mnt/snapshots"
+    "$espdisk:::${targetfs}/boot/efi"
 )
 
 die() {
@@ -24,11 +21,13 @@ die() {
     exit 1
 }
 
+# disk:format cmd:mount options:mount point
 mnt_vols() {
-    for vol in "${volumes[@]}"; do
-        IFS=: read -r -a info <<< "$vol"
-        [[ -n "${info[1]}" ]] && mkfs.${info[1]} "${info[0]}"
-        [[ -n "${info[2]}" ]] && mkdir -p "${info[2]}" && mount ${info[3]} "${info[0]}" "${info[2]}"
+    local vol
+    for vol in "$@"; do
+        IFS=: read -r disk fcmd mopt mpoint <<< "$vol"
+        [[ -n "${fopt}" ]] && ${fcmd} "${disk}"
+        [[ -n "${mpoint}" ]] && mkdir -p "${mpoint}" && mount "${mopt}" "${disk}" "${mpoint}"
     done
 }
 
@@ -36,29 +35,39 @@ prepare() {
     # systemctl stop reflector
     # reflector --verbose --country China --protocol http --protocol https --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
 
+    # prepare disk
+    mkfs.fat -F32 $espdisk
     mkfs.btrfs -f -L rootdisk $rootdisk
-    mount $rootdisk /mnt
-    btrfs subvol create /mnt/@root
-    btrfs subvol create /mnt/@home
-    btrfs subvol create /mnt/@snapshots
-    btrfs subvol create /mnt/@swap
-    btrfs filesystem mkswapfile --size 128g /mnt/@swap/swapfile
-    umount -R /mnt
 
-    mnt_vols
-    mkdir -p /mnt/etc
-    cp -r ./airootfs/etc/modprobe.d /mnt/etc/
-    pacstrap /mnt base base-devel linux-lts linux-firmware btrfs-progs
-    genfstab -U /mnt | sed -E 's/subvolid=[0-9]+//;s/,,/,/' >> /mnt/etc/fstab
-    echo '/swap/swapfile none swap defaults 0 0' >> /mnt/etc/fstab
-    cp "${self_dir}/install.sh" /mnt/root/
-    arch-chroot /mnt /root/install.sh install
-    rm -rf  /mnt/root/install.sh
-    umount -R /mnt
+    mount $rootdisk ${targetfs}
+    btrfs subvol create ${targetfs}/volumes
+    btrfs filesystem mkswapfile --size 128g ${targetfs}/volumes/swap
+    ln -s snapshots/root.latest ${targetfs}/volumes/root
 
-    mount $rootdisk /mnt
-    "${self_dir}/tools/snapshot" -s init
-    umount -R /mnt
+    btrfs subvol create ${targetfs}/snapshots
+    ln -s root.init ${targetfs}/snapshots/root.latest
+    btrfs subvol create ${targetfs}/snapshots/root.init
+
+    umount -R ${targetfs}
+    # prepare disk end
+
+    mnt_vols "${volumes[@]}"
+    pacstrap ${targetfs} base base-devel linux-lts linux-firmware btrfs-progs
+
+    cat > ${targetfs}/etc/fstab <<EOF
+UUID=$(lsblk -n -o uuid $rootdisk)  /               btrfs   rw,relatime,ssd,space_cache=v2,subvol=volumes/root  0   0
+UUID=$(lsblk -n -o uuid $rootdisk)  /mnt/volumes    btrfs   rw,relatime,ssd,space_cache=v2,subvol=volumes       0   0
+UUID=$(lsblk -n -o uuid $rootdisk)  /mnt/snapshots  btrfs   rw,relatime,ssd,space_cache=v2,subvol=snapshots     0   0
+/mnt/volumes/swap                   none            swap    defaults                                            0   0
+UUID=$(lsblk -n -o uuid $espdisk)   /boot/efi       vfat    rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=ascii,shortname=mixed,utf8,errors=remount-ro   0   2
+EOF
+
+    cp ./install.sh ${targetfs}/root/
+    arch-chroot ${targetfs} /root/install.sh install
+    rm -rf  ${targetfs}/root/install.sh
+
+    ./tools/snapshot -p /mnt -s
+    umount -R ${targetfs}
 }
 
 install() {

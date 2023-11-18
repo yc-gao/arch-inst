@@ -1,85 +1,56 @@
 #!/bin/bash
 set -e
 
-vol_prefix="${VOL_PREFIX:-/mnt}"
-snapshot_prefix="${SNAPSHOT_PREFIX:-/mnt/@snapshots}"
-
-vols=(@root @home)
+root_prefix="/"
+vols=(root)
 
 die() {
     echo "$@"
     exit 1
 }
 
+init() {
+    vol_prefix="${root_prefix}mnt/volumes}"
+    snapshot_prefix="${root_prefix}mnt/snapshots}"
+}
+
 print_usage() {
     cat << EOF
 $0 -s [label]               snapshot volume
-$0 -r [label]               rollback snapshot
-$0 -d [label]               delete snapshot
 EOF
 }
 
 # snapshot [label]
 snapshot() {
+    init
     label="$1"
     [[ -z "$label" ]] && label=$(date +%y%m%d%H%M%S)
 
-    for v in "${vols[@]}"; do
-        [[ ! -e "$vol_prefix/$v" ]] && die "volume $v does not exist"
-    done
-    [[ -e "$snapshot_prefix/$label" ]] && rm -rf "$snapshot_prefix/$label"
-    mkdir -p "$snapshot_prefix/$label"
-    for v in "${vols[@]}"; do
-        btrfs subvol snapshot "$vol_prefix/$v" "$snapshot_prefix/$label/$v"
-    done
-}
-
-# rollback [label]
-rollback() {
-    label="$1"
-    [[ -z "$label" ]] && label="$(ls "$snapshot_prefix" | sort -n | tail -n 1)"
-    [[ -z "$label" ]] && die "undefined label to rollback"
-
-    for v in "${vols[@]}"; do
-        [[ ! -e $snapshot_prefix/$label/$v ]] && die "snapshot $label/$v does not exist"
+    for vol in "${vols[@]}"; do
+        [[ ! -e "$vol_prefix/$vol" ]] && die "volume $vol does not exist"
     done
 
-    for v in "${vols[@]}"; do
-        [[ -e "$vol_prefix/$v" ]] && (btrfs subvol delete "$vol_prefix/$v" || rm -rf "$vol_prefix/$v")
-        btrfs subvol snapshot "$snapshot_prefix/$label/$v" "$vol_prefix/$v"
+    for vol in "${vols[@]}"; do
+        btrfs subvol snapshot -r "${snapshot_prefix}/${vol}.latest" "${snapshot_prefix}/${vol}.${label}"
+        rm "${snapshot_prefix}/${vol}.latest"
+        ln -s "${vol}.${label}" "${snapshot_prefix}/${vol}.latest"
     done
 }
 
-# delete [label]
-delete() {
-    label="$1"
-    [[ -z "$label" ]] && label="$(ls "$snapshot_prefix" | sort -n | tail -n 1)"
-    [[ -z "$label" ]] && die "undefined label to rollback"
 
-    for v in "${vols[@]}"; do
-        btrfs subvol delete "$snapshot_prefix/$label/$v"
-    done
-    rm -rf "$snapshot_prefix/$label"
-}
-
+while (( $# )); do
 case $1 in
     -h | --help)
         print_usage
         exit
         ;;
-    -r | --rollback)
-        shift
-        rollback "$@"
-        exit
+    -p | --prefix)
+        root_prefix="$2"
+        shift 2
         ;;
     -s | --snapshot)
         shift
         snapshot "$@"
-        exit
-        ;;
-    -d | --delete)
-        shift
-        delete "$@"
         exit
         ;;
     *)
@@ -87,4 +58,4 @@ case $1 in
         exit 1
         ;;
 esac
-
+done
