@@ -44,8 +44,8 @@ prepare() {
 
     ln -s snapshots/root.current ${targetfs}/volumes/root
     mkdir -p ${targetfs}/volumes/snapshots
-    ln -s root.init ${targetfs}/volumes/snapshots/root.current
-    btrfs subvol create ${targetfs}/volumes/snapshots/root.init
+    ln -s root ${targetfs}/volumes/snapshots/root.current
+    btrfs subvol create ${targetfs}/volumes/snapshots/root
 
     umount -R ${targetfs}
     # prepare disk end
@@ -64,7 +64,8 @@ EOF
     arch-chroot ${targetfs} /root/install.sh install
     rm -rf  ${targetfs}/root/install.sh
 
-    ./tools/snapshot -p /mnt -s
+    rm -r ${targetfs}/var/lib/{portables,machines}
+    ./tools/vtils -p ${targetfs} checkout
     umount -R ${targetfs}
 }
 

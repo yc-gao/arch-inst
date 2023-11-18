@@ -1,0 +1,63 @@
+#!/bin/bash
+set -e
+
+root_prefix="/"
+snapshot_prefix="${root_prefix}/mnt/volumes/snapshots"
+
+refresh_config() {
+    snapshot_prefix="${root_prefix}/mnt/volumes/snapshots"
+}
+
+# checkout [label]
+checkout() {
+    local head branch label
+    head=$(readlink "${snapshot_prefix}/root.current")
+    branch=${head%.*}
+
+    label="$1"
+    [[ -z ${label} ]] && label="${branch}.$(date +%Y%m%d%H%M%S)"
+
+    if [[ ! -e "${snapshot_prefix}/${label}" ]]; then
+        btrfs subvol snapshot -r "${snapshot_prefix}/${head}" "${snapshot_prefix}/${label}"
+    fi
+
+    rm "${snapshot_prefix}/root.current"
+    ln -s "${label}" "${snapshot_prefix}/root.current"
+}
+
+delete() {
+    for label in "$@"; do
+        if [[ -e "${snapshot_prefix}/${label}" ]]; then
+            btrfs subvol delete "${snapshot_prefix}/${label}" || echo "delete volume ${label} failed, please check ${snapshot_prefix}/${label}"
+        fi
+    done
+}
+
+main() {
+    while (( $# )); do
+        case $1 in
+            -p | --prefix)
+                root_prefix="$2"
+                refresh_config
+                shift 2
+                ;;
+            checkout)
+                shift
+                checkout "$@"
+                exit 0
+                ;;
+            delete)
+                shift
+                delete "$@"
+                exit 0
+                ;;
+            *)
+                echo "undefined cmd or opt: $1"
+                exit 1
+                ;;
+        esac
+    done
+}
+
+main "$@"
+
