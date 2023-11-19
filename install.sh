@@ -42,9 +42,9 @@ prepare() {
     btrfs subvol create ${targetfs}/volumes
     btrfs filesystem mkswapfile --size 128g ${targetfs}/volumes/swap
 
-    ln -s snapshots/root.current ${targetfs}/volumes/root
+    ln -s snapshots/current ${targetfs}/volumes/root
     mkdir -p ${targetfs}/volumes/snapshots
-    ln -s root ${targetfs}/volumes/snapshots/root.current
+    ln -s root ${targetfs}/volumes/snapshots/current
     btrfs subvol create ${targetfs}/volumes/snapshots/root
 
     umount -R ${targetfs}
@@ -62,6 +62,7 @@ EOF
 
     cp ./install.sh ${targetfs}/root/
     arch-chroot ${targetfs} /root/install.sh install
+    cp ./airootfs/boot ${targetfs}/
     rm -rf  ${targetfs}/root/install.sh
 
     rm -r ${targetfs}/var/lib/{portables,machines}
@@ -82,7 +83,6 @@ install() {
     # boot
     pacman -S --noconfirm grub efibootmgr
     grub-install --efi-directory=/boot/efi --recheck
-    grub-mkconfig -o /boot/grub/grub.cfg
 
     # video and sound
     pacman -S --noconfirm nvidia-lts alsa-utils alsa-firmware pulseaudio pulseaudio-alsa pulseaudio-bluetooth bluez bluez-utils
