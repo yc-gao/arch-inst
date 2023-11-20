@@ -8,10 +8,14 @@ refresh_config() {
     snapshot_prefix="${root_prefix}/mnt/volumes/snapshots"
 }
 
+list() {
+    ls -lha "${snapshot_prefix}"
+}
+
 # checkout [label]
 checkout() {
     local head branch label
-    head=$(readlink "${snapshot_prefix}/root.current")
+    head=$(readlink "${snapshot_prefix}/current")
     branch=${head%.*}
 
     label="$1"
@@ -21,8 +25,8 @@ checkout() {
         btrfs subvol snapshot -r "${snapshot_prefix}/${head}" "${snapshot_prefix}/${label}"
     fi
 
-    rm "${snapshot_prefix}/root.current"
-    ln -s "${label}" "${snapshot_prefix}/root.current"
+    rm "${snapshot_prefix}/current"
+    ln -s "${label}" "${snapshot_prefix}/current"
 }
 
 delete() {
@@ -40,6 +44,11 @@ main() {
                 root_prefix="$2"
                 refresh_config
                 shift 2
+                ;;
+            list)
+                shift
+                list "$@"
+                exit 0
                 ;;
             checkout)
                 shift
