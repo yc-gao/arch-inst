@@ -22,7 +22,7 @@ checkout() {
     [[ -z ${label} ]] && label="${branch}.$(date +%Y%m%d%H%M%S)"
 
     if [[ ! -e "${snapshot_prefix}/${label}" ]]; then
-        btrfs subvol snapshot -r "${snapshot_prefix}/${head}" "${snapshot_prefix}/${label}"
+        btrfs subvol snapshot "${snapshot_prefix}/${head}" "${snapshot_prefix}/${label}"
     fi
 
     rm "${snapshot_prefix}/current"
