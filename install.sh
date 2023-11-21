@@ -62,7 +62,7 @@ EOF
 
     cp ./install.sh ${targetfs}/root/
     arch-chroot ${targetfs} /root/install.sh install
-    cp ./airootfs/boot ${targetfs}/
+    cp -r ./airootfs/boot ${targetfs}/
     rm -rf  ${targetfs}/root/install.sh
 
     rm -r ${targetfs}/var/lib/{portables,machines}
