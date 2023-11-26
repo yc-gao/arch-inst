@@ -8,6 +8,10 @@ refresh_config() {
     snapshot_prefix="${root_prefix}/mnt/volumes/snapshots"
 }
 
+err() {
+    echo "$@" >&2
+}
+
 list() {
     ls -lha "${snapshot_prefix}"
 }
@@ -32,12 +36,16 @@ checkout() {
 delete() {
     for label in "$@"; do
         if [[ -e "${snapshot_prefix}/${label}" ]]; then
-            btrfs subvol delete "${snapshot_prefix}/${label}" || echo "delete volume ${label} failed, please check ${snapshot_prefix}/${label}"
+            btrfs subvol delete "${snapshot_prefix}/${label}" || err "delete volume ${label} failed, please check ${snapshot_prefix}/${label}"
         fi
     done
 }
 
 main() {
+    if [[ $UID != '0' ]]; then
+        sudo "$0" "$@"
+        return
+    fi
     while (( $# )); do
         case $1 in
             -p | --prefix)
@@ -48,17 +56,17 @@ main() {
             list)
                 shift
                 list "$@"
-                exit 0
+                break;
                 ;;
             checkout)
                 shift
                 checkout "$@"
-                exit 0
+                break;
                 ;;
             delete)
                 shift
                 delete "$@"
-                exit 0
+                break;
                 ;;
             *)
                 echo "undefined cmd or opt: $1"
