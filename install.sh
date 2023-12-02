@@ -65,7 +65,6 @@ EOF
     cp -r ./airootfs/boot ${targetfs}/
     rm -rf  ${targetfs}/root/install.sh
 
-    rm -r ${targetfs}/var/lib/{portables,machines}
     ./tools/vtils -p ${targetfs} checkout
     umount -R ${targetfs}
 }
