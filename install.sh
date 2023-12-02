@@ -54,10 +54,9 @@ prepare() {
     pacstrap ${targetfs} base base-devel linux-lts linux-firmware btrfs-progs
 
     cat > ${targetfs}/etc/fstab <<EOF
-UUID=$(lsblk -n -o uuid $rootdisk)  /               btrfs   rw,relatime,ssd,space_cache=v2,subvol=volumes/root  0   0
 UUID=$(lsblk -n -o uuid $rootdisk)  /mnt/volumes    btrfs   rw,relatime,ssd,space_cache=v2,subvol=volumes       0   0
-/mnt/volumes/swap                   none            swap    defaults                                            0   0
 UUID=$(lsblk -n -o uuid $espdisk)   /boot/efi       vfat    rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=ascii,shortname=mixed,utf8,errors=remount-ro   0   2
+/mnt/volumes/swap                   none            swap    defaults                                            0   0
 EOF
 
     cp ./install.sh ${targetfs}/root/
