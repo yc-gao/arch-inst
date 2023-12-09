@@ -13,12 +13,12 @@ run_asroot() {
     sudo "$0" "$@"
 }
 
-archlinuxcn() {
-    [[ $UID != 0 ]] && run_asroot archlinuxcn && return
-    cat "./airootfs/etc/pacman.conf" >> /etc/pacman.conf
-    pacman -Syy
-    pacman -S --noconfirm archlinuxcn-keyring
-    pacman -S --noconfirm yay
+aur() {
+    if [[ $UID != 0 ]]; then
+        git clone https://aur.archlinux.org/yay-bin.git
+        (cd yay-bin && makepkg -si --noconfirm --needed)
+        rm -rf yay-bin
+    fi
 }
 
 docker() {
@@ -74,7 +74,7 @@ custom() {
 bspwm() {
     [[ $UID == 0 ]] && die "please init bspwm as $user"
 
-    archlinuxcn
+    aur
     docker
     virt
     bspwm_desktop
