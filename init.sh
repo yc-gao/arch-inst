@@ -64,6 +64,7 @@ bspwm_desktop() {
     cp -r ./airootfs/etc/modprobe.d /etc/
     cp -r ./airootfs/etc/X11 /etc/
     cp ./airootfs/etc/sddm.conf /etc/
+    mkinitcpio -P
 }
 
 custom() {
