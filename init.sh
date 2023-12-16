@@ -17,7 +17,7 @@ aur() {
     if [[ $UID != 0 ]]; then
         git clone https://aur.archlinux.org/yay-bin.git
         (cd yay-bin && makepkg -si --noconfirm --needed)
-        rm -rf yay-bin
+        rm -rf yay-bin ~/go
     fi
 }
 
