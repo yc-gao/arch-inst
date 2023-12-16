@@ -59,7 +59,7 @@ bspwm_desktop() {
 
     pacman -S --noconfirm vlc evince firefox obsidian \
         usbutils ffmpeg \
-        man-db man-pages wget curl xclip ripgrep-all ctags openbsd-netcat unzip neovim jq nmap
+        man-db man-pages wget curl xclip ripgrep-all ctags openbsd-netcat unzip neovim jq nmap rsync
 
     cp -r ./airootfs/etc/modprobe.d /etc/
     cp -r ./airootfs/etc/X11 /etc/
