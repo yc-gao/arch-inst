@@ -70,6 +70,7 @@ bspwm_desktop() {
 custom() {
     git clone git@github.com:xundaoxd/dotfiles.git "$wdir/dotfiles"
     (cd "$wdir/dotfiles" && ./install.sh -f)
+    rm -rf ~/go
 }
 
 bspwm() {
