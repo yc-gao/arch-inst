@@ -27,6 +27,7 @@ docker() {
         yay -S --noconfirm nvidia-container-toolkit
         return
     fi
+    pacman -Syy
     pacman -S --noconfirm docker docker-compose
     systemctl enable docker
     usermod -aG docker $user
@@ -34,6 +35,7 @@ docker() {
 
 virt() {
     [[ $UID != 0 ]] && run_asroot virt && return
+    pacman -Syy
     pacman -S --noconfirm virt-manager dnsmasq qemu-full \
         && systemctl enable libvirtd \
         && usermod -aG libvirt,kvm $user \
@@ -48,6 +50,7 @@ bspwm_desktop() {
         return
     fi
 
+    pacman -Syy
     pacman -S --noconfirm notification-daemon
     cp -r ./airootfs/usr /usr/
 
