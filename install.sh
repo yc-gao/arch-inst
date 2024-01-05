@@ -10,8 +10,9 @@ rootdisk="/dev/nvme0n1p2"
 targetfs="/mnt"
 
 volumes=(
-    "$rootdisk::-o subvol=volumes/root:${targetfs}"
-    "$espdisk:::${targetfs}/boot/efi"
+    "${rootdisk}:-o subvol=volumes/root:${targetfs}"
+    "${rootdisk}:-o subvol=volumes/swap:${targetfs}/swap"
+    "${espdisk}::${targetfs}/boot/efi"
 )
 
 die() {
@@ -23,8 +24,7 @@ die() {
 mnt_vols() {
     local vol
     for vol in "$@"; do
-        IFS=: read -r disk fcmd mopt mpoint <<< "$vol"
-        [[ -n "${fopt}" ]] && ${fcmd} "${disk}"
+        IFS=: read -r disk mopt mpoint <<< "$vol"
         [[ -n "${mpoint}" ]] && mkdir -p "${mpoint}" && mount ${mopt} "${disk}" "${mpoint}"
     done
 }
@@ -39,7 +39,9 @@ prepare() {
 
     mount $rootdisk $targetfs
     btrfs subvol create ${targetfs}/volumes
-    btrfs filesystem mkswapfile --size 128g ${targetfs}/volumes/swap
+
+    btrfs subvol create ${targetfs}/volumes/swap
+    btrfs filesystem mkswapfile --size 128g ${targetfs}/volumes/swap/swapfile
 
     ln -s snapshots/current ${targetfs}/volumes/root
     mkdir -p ${targetfs}/volumes/snapshots
@@ -57,8 +59,9 @@ prepare() {
     rm -rf  ${targetfs}/root/install.sh
 
     cat > ${targetfs}/etc/fstab <<EOF
-UUID=$(lsblk -n -o uuid $espdisk)   /boot/efi       vfat    rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=ascii,shortname=mixed,utf8,errors=remount-ro   0   2
-/mnt/volumes/swap                   none            swap    defaults                                            0   0
+UUID=$(lsblk -n -o uuid $espdisk)   /boot/efi       vfat    defaults                                                0   2
+UUID=$(lsblk -n -o uuid $rootdisk)  /swap           btrfs   rw,relatime,ssd,space_cache=v2,subvol=volumes/swap      0   0
+/swap/swapfile                      none            swap    defaults                                                0   0
 EOF
     cp -r ./airootfs/boot ${targetfs}/
     umount -R ${targetfs}
