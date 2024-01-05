@@ -11,7 +11,6 @@ targetfs="/mnt"
 
 volumes=(
     "$rootdisk::-o subvol=volumes/root:${targetfs}"
-    "$rootdisk::-o subvol=volumes:${targetfs}/mnt/volumes"
     "$espdisk:::${targetfs}/boot/efi"
 )
 
@@ -50,22 +49,22 @@ prepare() {
     umount -R ${targetfs}
     # prepare disk end
 
+    # install system
     mnt_vols "${volumes[@]}"
     pacstrap ${targetfs} base base-devel linux-lts linux-firmware btrfs-progs
+    cp ./install.sh ${targetfs}/root/
+    arch-chroot ${targetfs} /root/install.sh install
+    rm -rf  ${targetfs}/root/install.sh
 
     cat > ${targetfs}/etc/fstab <<EOF
-UUID=$(lsblk -n -o uuid $rootdisk)  /mnt/volumes    btrfs   rw,relatime,ssd,space_cache=v2,subvol=volumes       0   0
 UUID=$(lsblk -n -o uuid $espdisk)   /boot/efi       vfat    rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=ascii,shortname=mixed,utf8,errors=remount-ro   0   2
 /mnt/volumes/swap                   none            swap    defaults                                            0   0
 EOF
-
-    cp ./install.sh ${targetfs}/root/
-    arch-chroot ${targetfs} /root/install.sh install
     cp -r ./airootfs/boot ${targetfs}/
-    rm -rf  ${targetfs}/root/install.sh
-
-    ./tools/vtils -p ${targetfs} checkout
     umount -R ${targetfs}
+    # end install system
+
+    ./tools/vtils checkout
 }
 
 install() {

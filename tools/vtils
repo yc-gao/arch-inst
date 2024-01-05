@@ -1,15 +1,27 @@
 #!/bin/bash
 set -e
 
-root_prefix="/"
-snapshot_prefix="${root_prefix}/mnt/volumes/snapshots"
+opt_label="rootdisk"
+opt_prefix=""
 
-refresh_config() {
-    snapshot_prefix="${root_prefix}/mnt/volumes/snapshots"
+do_init() {
+    volumes_prefix="${opt_prefix}/mnt/volumes"
+    snapshot_prefix="${volumes_prefix}/snapshots"
+
+    mkdir -p "${volumes_prefix}"
+    mount -L "${opt_label}" -o rw,relatime,ssd,space_cache=v2,subvol=volumes "${volumes_prefix}"
+}
+do_uninit() {
+    umount "${volumes_prefix}"
 }
 
+
 err() {
-    echo "$@" >&2
+    >&2 echo "$@"
+}
+die() {
+    err "$@"
+    exit 1
 }
 
 list() {
@@ -48,25 +60,13 @@ main() {
     fi
     while (( $# )); do
         case $1 in
-            -p | --prefix)
-                root_prefix="$2"
-                refresh_config
+            -L | --label)
+                opt_label="$2"
                 shift 2
                 ;;
-            list)
-                shift
-                list "$@"
-                break;
-                ;;
-            checkout)
-                shift
-                checkout "$@"
-                break;
-                ;;
-            delete)
-                shift
-                delete "$@"
-                break;
+            -p | --prefix)
+                opt_prefix="$2"
+                shift 2
                 ;;
             *)
                 echo "undefined cmd or opt: $1"
@@ -74,6 +74,11 @@ main() {
                 ;;
         esac
     done
+    do_init
+    trap "do_uninit" EXIT
+    local action="$1"
+    shift
+    $action "$@"
 }
 
 main "$@"
