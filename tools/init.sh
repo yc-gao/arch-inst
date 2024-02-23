@@ -54,8 +54,6 @@ bspwm_desktop() {
     fi
 
     pacman -Syy
-    pacman -S --noconfirm notification-daemon
-    cp -r "${proj_dir}/airootfs/usr" /
 
     pacman -S --noconfirm xorg sddm xdotool xss-lock i3lock \
         bspwm sxhkd alacritty polybar rofi ranger feh flameshot
