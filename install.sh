@@ -63,7 +63,7 @@ UUID=$(lsblk -n -o uuid $espdisk)   /boot/efi       vfat    defaults            
 UUID=$(lsblk -n -o uuid $rootdisk)  /swap           btrfs   rw,relatime,ssd,space_cache=v2,subvol=volumes/swap      0   0
 /swap/swapfile                      none            swap    defaults                                                0   0
 EOF
-    cp -r ./airootfs/boot ${targetfs}/
+    cp -r ./grub ${targetfs}/boot
     umount -R ${targetfs}
     # end install system
 
