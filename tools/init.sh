@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+self_dir=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
+proj_dir=$(dirname "$self_dir")
+
 wdir="$HOME/Workdir"
 user="xundaoxd"
 
@@ -46,13 +49,13 @@ bspwm_desktop() {
     if [[ $UID != 0 ]]; then
         run_asroot bspwm_desktop
         yay -S --noconfirm daemonize
-        cp -r ./airootfs/home/xundaoxd /home/
+        cp -r "${proj_dir}/airootfs/home/xundaoxd" /home/
         return
     fi
 
     pacman -Syy
     pacman -S --noconfirm notification-daemon
-    cp -r ./airootfs/usr /usr/
+    cp -r "${proj_dir}/airootfs/usr" /
 
     pacman -S --noconfirm xorg sddm xdotool xss-lock i3lock \
         bspwm sxhkd alacritty polybar rofi ranger feh flameshot
@@ -64,9 +67,8 @@ bspwm_desktop() {
         usbutils ffmpeg \
         man-db man-pages wget curl xclip ripgrep-all ctags openbsd-netcat unzip neovim jq nmap rsync
 
-    cp -r ./airootfs/etc/modprobe.d /etc/
-    cp -r ./airootfs/etc/X11 /etc/
-    cp ./airootfs/etc/sddm.conf /etc/
+    cp -r "${proj_dir}/airootfs/etc/modprobe.d" /etc/
+    cp "${proj_dir}/airootfs/etc/sddm.conf" /etc/
     mkinitcpio -P
 }
 
