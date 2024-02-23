@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+self_dir=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
+proj_dir=$(dirname "$self_dir")
+
 hostname='xundaoxd-pc'
 user="xundaoxd"
 user_passwd=""
@@ -54,20 +57,20 @@ prepare() {
     # install system
     mnt_vols "${volumes[@]}"
     pacstrap ${targetfs} base base-devel linux-lts linux-firmware btrfs-progs
-    cp ./install.sh ${targetfs}/root/
-    arch-chroot ${targetfs} /root/install.sh install
-    rm -rf  ${targetfs}/root/install.sh
+    cp "${self_dir}/inst.sh" ${targetfs}/root/
+    arch-chroot ${targetfs} /root/inst.sh install
+    rm -rf  ${targetfs}/root/inst.sh
 
     cat > ${targetfs}/etc/fstab <<EOF
 UUID=$(lsblk -n -o uuid $espdisk)   /boot/efi       vfat    defaults                                                0   2
 UUID=$(lsblk -n -o uuid $rootdisk)  /swap           btrfs   rw,relatime,ssd,space_cache=v2,subvol=volumes/swap      0   0
 /swap/swapfile                      none            swap    defaults                                                0   0
 EOF
-    cp -r ./grub ${targetfs}/boot
+    cp -r "${proj_dir}/grub" ${targetfs}/boot
     umount -R ${targetfs}
     # end install system
 
-    ./tools/vtils checkout
+    "${self_dir}/vtils" checkout
 }
 
 install() {
