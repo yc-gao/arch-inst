@@ -1,0 +1,30 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build ISO
+        run: |
+          pacman-key --init
+          pacman-key --populate
+          pacman -Syu --noconfirm
+          pacman -S --noconfirm base-devel archiso git
+          mkdir -p work out
+          mkarchiso -v -w work -o out .
+          rm -rf work
+          md5sum out/*
+      - uses: actions/upload-artifact@v3
+        with:
+          name: archiso
+          path: out/
+
