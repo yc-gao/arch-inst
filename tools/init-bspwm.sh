@@ -45,6 +45,12 @@ virt() {
         && sed -i '/^unix_sock_group/{s/#//}' /etc/libvirt/libvirtd.conf
 }
 
+custom() {
+    git clone git@github.com:xundaoxd/dotfiles.git "$wdir/dotfiles"
+    (cd "$wdir/dotfiles" && ./install.sh -f)
+    rm -rf ~/go
+}
+
 bspwm_desktop() {
     if [[ $UID != 0 ]]; then
         run_asroot bspwm_desktop
@@ -70,12 +76,6 @@ bspwm_desktop() {
     mkinitcpio -P
 }
 
-custom() {
-    git clone git@github.com:xundaoxd/dotfiles.git "$wdir/dotfiles"
-    (cd "$wdir/dotfiles" && ./install.sh -f)
-    rm -rf ~/go
-}
-
 bspwm() {
     [[ $UID == 0 ]] && die "please init bspwm as $user"
 
@@ -94,9 +94,5 @@ while getopts 'w:' opt; do
 done
 shift $((OPTIND - 1))
 
-action="bspwm"
-if (( $# > 0 )); then
-    action="$1"
-    shift
-fi
-${action} "$@"
+bspwm "$@"
+
