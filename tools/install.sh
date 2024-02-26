@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 
+self_path="$0"
 self_dir=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
 proj_dir=$(dirname "$self_dir")
 
@@ -57,9 +58,9 @@ prepare() {
     # install system
     mnt_vols "${volumes[@]}"
     pacstrap ${targetfs} base base-devel linux-lts linux-firmware btrfs-progs
-    cp "${self_dir}/inst.sh" ${targetfs}/root/
-    arch-chroot ${targetfs} /root/inst.sh install
-    rm -rf  ${targetfs}/root/inst.sh
+    cp "${self_path}" ${targetfs}/root/
+    arch-chroot ${targetfs} "/root/$(basename "${self_path}")" install
+    rm -rf  "${targetfs}/root/$(basename "${self_path}")"
 
     cat > ${targetfs}/etc/fstab <<EOF
 UUID=$(lsblk -n -o uuid $espdisk)   /boot/efi       vfat    defaults                                                0   2
