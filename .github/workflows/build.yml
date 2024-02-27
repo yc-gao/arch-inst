@@ -13,7 +13,7 @@ jobs:
       image: archlinux
       options: --privileged
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Build ISO
         run: |
           pacman-key --init
@@ -24,7 +24,7 @@ jobs:
           mkarchiso -v -w work -o out .
           rm -rf work
           md5sum out/*
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: archiso
           path: out/
