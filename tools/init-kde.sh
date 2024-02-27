@@ -71,6 +71,7 @@ kde () {
     custom
 }
 
+action="kde"
 while (($#)); do
     case $1 in
         -w)
@@ -82,5 +83,9 @@ while (($#)); do
             ;;
     esac
 done
-kde "$@"
+if (($#)); then
+    action="$1"
+    shift
+fi
+"${action}" "$@"
 
