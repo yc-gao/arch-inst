@@ -42,23 +42,18 @@ custom() {
     (cd "${opt_wdir}/dotfiles" && ./install.sh -f)
 }
 
-bspwm_desktop() {
+kde_desktop() {
     if [[ $UID != 0 ]]; then
-        run_asroot bspwm_desktop
-        cp -r "${proj_dir}/airootfs/home/xundaoxd" /home/
+        run_asroot kde_desktop
         return
     fi
 
     pacman -Syy
-
-    pacman -S --noconfirm xorg sddm xdotool xss-lock i3lock \
-        bspwm sxhkd alacritty polybar rofi ranger feh flameshot
+    pacman -S --noconfirm plasma-meta kde-applications-meta \
+            kcm-fcitx fcitx-googlepinyin
     systemctl enable sddm
 
-    pacman -S --noconfirm fcitx-im fcitx-googlepinyin fcitx-configtool
-
-    pacman -S --noconfirm vlc evince firefox obsidian \
-        usbutils ffmpeg \
+    pacman -S --noconfirm vlc firefox ffmpeg \
         man-db man-pages wget curl xclip ripgrep-all \
         ctags openbsd-netcat unzip neovim jq nmap rsync
 
@@ -67,12 +62,12 @@ bspwm_desktop() {
     mkinitcpio -P
 }
 
-bspwm() {
-    [[ $UID == 0 ]] && die "please init bspwm use $user"
+kde () {
+    [[ $UID == 0 ]] && die "please init kde use $user"
 
     aur
     docker
-    bspwm_desktop
+    kde_desktop
     custom
 }
 
@@ -87,5 +82,5 @@ while (($#)); do
             ;;
     esac
 done
-bspwm "$@"
+kde "$@"
 
