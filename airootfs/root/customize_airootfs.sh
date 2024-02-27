@@ -21,6 +21,7 @@ systemctl enable sddm
 useradd -m -s /bin/zsh xundaoxd
 usermod -aG wheel,input,video,audio,kvm xundaoxd
 sed -E -i '/^#\s*%wheel.*NOPASSWD/{s/^#\s*//}' /etc/sudoers
-echo -e "demo1234\ndemo1234" | passwd xundaoxd
-echo -e "demo1234\ndemo1234" | passwd root
+
+echo "xundaoxd:demo1234" | chpasswd
+echo "root:demo1234" | chpasswd
 

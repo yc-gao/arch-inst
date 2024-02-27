@@ -5,6 +5,5 @@ TERMCMD = "alacritty"
 [[keyboard.bindings]]
 action = "SpawnNewInstance"
 key = "N"
-mods = "Control|Shift"
-
+mods = "Super"
 
