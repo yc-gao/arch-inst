@@ -7,21 +7,22 @@ proj_dir=$(dirname "$self_dir")
 opt_wdir="$HOME/Workdir"
 user="xundaoxd"
 
+err() {
+    echo "$@" >&2
+}
 die() {
-    echo "$@"
+    err "$@"
     exit 1
 }
 
 run_asroot() {
-    sudo "$0" "$@"
+    sudo "$0" -w "${opt_wdir}" "$@"
 }
 
 aur() {
-    if [[ $UID != 0 ]]; then
-        git clone https://aur.archlinux.org/yay-bin.git
-        (cd yay-bin && makepkg -si --noconfirm --needed)
-        rm -rf yay-bin
-    fi
+    git clone https://aur.archlinux.org/yay-bin.git
+    (cd yay-bin && makepkg -si --noconfirm --needed)
+    rm -rf yay-bin
 }
 
 docker() {

@@ -3,7 +3,6 @@ set -e
 
 self_path="$0"
 self_dir=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
-proj_dir=$(dirname "$self_dir")
 
 hostname='xundaoxd-pc'
 user="xundaoxd"
@@ -62,16 +61,16 @@ prepare() {
     arch-chroot ${targetfs} "/root/$(basename "${self_path}")" install
     rm -rf  "${targetfs}/root/$(basename "${self_path}")"
 
-    cat > ${targetfs}/etc/fstab <<EOF
-UUID=$(lsblk -n -o uuid $espdisk)   /boot/efi       vfat    defaults                                                0   2
-UUID=$(lsblk -n -o uuid $rootdisk)  /swap           btrfs   rw,relatime,ssd,space_cache=v2,subvol=volumes/swap      0   0
-/swap/swapfile                      none            swap    defaults                                                0   0
-EOF
+    {
+        echo -e "UUID=$(lsblk -n -o uuid $espdisk)    /boot/efi    vfat    defaults    0    2"
+        echo -e "UUID=$(lsblk -n -o uuid $rootdisk)    /swap    btrfs    rw,relatime,ssd,space_cache=v2,subvol=volumes/swap    0    0"
+        echo -e "/swap/swapfile    none    swap    defaults    0    0"
+    } > "${targetfs}/etc/fstab"
     cp -r "${self_dir}/grub" ${targetfs}/boot
     umount -R ${targetfs}
     # end install system
 
-    "${self_dir}/vtils" checkout
+    "${self_dir}/rmanager" checkout
 }
 
 install() {
@@ -103,7 +102,7 @@ install() {
     useradd -m -s /bin/zsh $user
     usermod -aG wheel $user
     sed -E -i 's/#\s*(%wheel\s+ALL=\(ALL:ALL\)\s+ALL)/\1/' /etc/sudoers
-    echo -e "${user_passwd}\n${user_passwd}" | passwd $user
+    echo "${user}:${user_passwd}" | chpasswd
 }
 
 [[ -z "$user_passwd" ]] && die "undefine user password"
