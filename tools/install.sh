@@ -70,7 +70,7 @@ prepare() {
     umount -R ${targetfs}
     # end install system
 
-    "${self_dir}/rmanager" checkout
+    "${self_dir}/rmanager" checkout bspwm
 }
 
 install() {
