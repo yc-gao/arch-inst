@@ -52,6 +52,9 @@ bspwm_desktop() {
 
     pacman -Syy
 
+    pacman -S --noconfirm alsa-utils alsa-firmware pulseaudio pulseaudio-alsa pulseaudio-bluetooth bluez bluez-utils
+    systemctl enable bluetooth
+
     pacman -S --noconfirm xorg sddm xdotool xss-lock i3lock \
         bspwm sxhkd alacritty polybar rofi ranger feh flameshot
     systemctl enable sddm

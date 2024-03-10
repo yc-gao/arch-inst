@@ -87,9 +87,8 @@ install() {
     pacman -S --noconfirm grub efibootmgr
     grub-install --efi-directory=/boot/efi --recheck
 
-    # video and sound
-    pacman -S --noconfirm nvidia-lts alsa-utils alsa-firmware pulseaudio pulseaudio-alsa pulseaudio-bluetooth bluez bluez-utils
-    systemctl enable bluetooth
+    # nvidia
+    pacman -S --noconfirm nvidia-lts
 
     # network
     pacman -S --noconfirm networkmanager openssh
