@@ -19,6 +19,13 @@ run_asroot() {
     sudo "$0" -w "${opt_wdir}" "$@"
 }
 
+base() {
+    if [[ $UID != 0 ]]; then
+        run_asroot base
+    fi
+    pacman -Syu --noconfirm
+}
+
 aur() {
     git clone https://aur.archlinux.org/yay-bin.git
     (cd yay-bin && makepkg -si --noconfirm --needed)
@@ -74,6 +81,7 @@ bspwm_desktop() {
 bspwm() {
     [[ $UID == 0 ]] && die "please init bspwm use $user"
 
+    base
     aur
     docker
     bspwm_desktop
