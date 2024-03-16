@@ -22,6 +22,7 @@ run_asroot() {
 base() {
     if [[ $UID != 0 ]]; then
         run_asroot base
+        return
     fi
     pacman -Syu --noconfirm
 }
