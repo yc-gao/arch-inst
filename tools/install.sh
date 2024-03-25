@@ -89,7 +89,7 @@ install() {
     grub-install --efi-directory=/boot/efi --recheck
 
     # video and sound
-    pacman -S --noconfirm nvidia-lts alsa-utils alsa-firmware pulseaudio pulseaudio-alsa pulseaudio-bluetooth bluez bluez-utils
+    pacman -S --noconfirm nvidia-lts
     systemctl enable bluetooth
 
     # network
@@ -103,7 +103,7 @@ install() {
     useradd -m -s /bin/zsh $user
     usermod -aG wheel $user
     sed -E -i 's/#\s*(%wheel\s+ALL=\(ALL:ALL\)\s+ALL)/\1/' /etc/sudoers
-    echo -e "${user_passwd}\n${user_passwd}" | passwd $user
+    echo "${user}:${user_passwd}" | chpasswd
 }
 
 [[ -z "$user_passwd" ]] && die "undefine user password"

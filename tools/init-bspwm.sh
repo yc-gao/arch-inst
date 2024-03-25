@@ -37,11 +37,6 @@ docker() {
     usermod -aG docker $user
 }
 
-custom() {
-    git clone git@github.com:xundaoxd/dotfiles.git "${opt_wdir}/dotfiles"
-    (cd "${opt_wdir}/dotfiles" && ./install.sh -f)
-}
-
 bspwm_desktop() {
     if [[ $UID != 0 ]]; then
         run_asroot bspwm_desktop
@@ -55,6 +50,9 @@ bspwm_desktop() {
         bspwm sxhkd alacritty polybar rofi ranger feh flameshot
     systemctl enable sddm
 
+    pacman -S --noconfirm alsa-utils alsa-firmware pulseaudio pulseaudio-alsa pulseaudio-bluetooth bluez bluez-utils
+    systemctl enable bluetooth
+
     pacman -S --noconfirm fcitx-im fcitx-googlepinyin fcitx-configtool
 
     pacman -S --noconfirm vlc evince firefox obsidian \
@@ -65,6 +63,11 @@ bspwm_desktop() {
     cp -r "${proj_dir}/airootfs/etc/modprobe.d" /etc/
     cp "${proj_dir}/airootfs/etc/sddm.conf" /etc/
     mkinitcpio -P
+}
+
+custom() {
+    git clone git@github.com:xundaoxd/dotfiles.git "${opt_wdir}/dotfiles"
+    (cd "${opt_wdir}/dotfiles" && ./install.sh -f)
 }
 
 bspwm() {
