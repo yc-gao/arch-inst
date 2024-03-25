@@ -71,7 +71,6 @@ bspwm_desktop() {
         ctags openbsd-netcat unzip neovim jq nmap rsync
 
     cp -r "${proj_dir}/airootfs/etc/modprobe.d" /etc/
-    cp "${proj_dir}/airootfs/etc/sddm.conf" /etc/
     mkinitcpio -P
 }
 
