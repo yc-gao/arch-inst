@@ -46,12 +46,13 @@ bspwm_desktop() {
 
     pacman -Syy
 
+    pacman -S --noconfirm pipewire pipewire-audio pipewire-alsa wireplumber \
+        bluez blueman
+    systemctl enable bluetooth
+
     pacman -S --noconfirm xorg sddm xdotool xss-lock i3lock \
         bspwm sxhkd alacritty polybar rofi ranger feh flameshot
     systemctl enable sddm
-
-    pacman -S --noconfirm alsa-utils alsa-firmware pulseaudio pulseaudio-alsa pulseaudio-bluetooth bluez bluez-utils
-    systemctl enable bluetooth
 
     pacman -S --noconfirm fcitx-im fcitx-googlepinyin fcitx-configtool
 
@@ -61,7 +62,6 @@ bspwm_desktop() {
         ctags openbsd-netcat unzip neovim jq nmap rsync
 
     cp -r "${proj_dir}/airootfs/etc/modprobe.d" /etc/
-    cp "${proj_dir}/airootfs/etc/sddm.conf" /etc/
     mkinitcpio -P
 }
 
