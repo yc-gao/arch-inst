@@ -46,11 +46,6 @@ docker() {
     usermod -aG docker $user
 }
 
-custom() {
-    git clone git@github.com:xundaoxd/dotfiles.git "${opt_wdir}/dotfiles"
-    (cd "${opt_wdir}/dotfiles" && ./install.sh -f)
-}
-
 bspwm_desktop() {
     if [[ $UID != 0 ]]; then
         run_asroot bspwm_desktop
@@ -77,6 +72,11 @@ bspwm_desktop() {
     cp -r "${proj_dir}/airootfs/etc/modprobe.d" /etc/
     cp "${proj_dir}/airootfs/etc/sddm.conf" /etc/
     mkinitcpio -P
+}
+
+custom() {
+    git clone git@github.com:xundaoxd/dotfiles.git "${opt_wdir}/dotfiles"
+    (cd "${opt_wdir}/dotfiles" && ./install.sh -f)
 }
 
 bspwm() {
