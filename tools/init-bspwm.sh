@@ -55,7 +55,8 @@ bspwm_desktop() {
 
     pacman -Syy
 
-    pacman -S --noconfirm alsa-utils alsa-firmware pulseaudio pulseaudio-alsa pulseaudio-bluetooth bluez bluez-utils
+    pacman -S --noconfirm pipewire wireplumber pipewire-audio pipewire-alsa \
+        bluez blueman
     systemctl enable bluetooth
 
     pacman -S --noconfirm xorg sddm xdotool xss-lock i3lock \
