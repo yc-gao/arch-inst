@@ -55,7 +55,7 @@ bspwm_desktop() {
 
     pacman -Syy
 
-    pacman -S --noconfirm pipewire wireplumber pipewire-audio pipewire-alsa \
+    pacman -S --noconfirm pipewire wireplumber pipewire-audio pipewire-alsa pipewire-pulse \
         bluez bluez-utils
     systemctl enable bluetooth
 
