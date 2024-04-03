@@ -59,7 +59,7 @@ bspwm_desktop() {
         bluez bluez-utils
     systemctl enable bluetooth
 
-    pacman -S --noconfirm xorg sddm xdotool xss-lock i3lock \
+    pacman -S --noconfirm xorg xorg-xrandr sddm xdotool xss-lock i3lock \
         bspwm sxhkd alacritty polybar rofi ranger feh flameshot
     systemctl enable sddm
 

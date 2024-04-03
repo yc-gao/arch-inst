@@ -49,6 +49,7 @@ ntfs-3g
 # desktop
 notification-daemon
 xorg
+xorg-xrandr
 xorg-xprop
 sddm
 xdotool
