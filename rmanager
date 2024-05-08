@@ -60,7 +60,7 @@ delete() {
 
 main() {
     if [[ $UID != '0' ]]; then
-        die "can not manager rootfs as $USER"
+        die "can not manager rootfs as ${USER}"
     fi
     while (( $# )); do
         case $1 in

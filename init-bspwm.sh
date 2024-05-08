@@ -1,10 +1,11 @@
 #!/bin/bash
 set -e
+# TODO: impl
 
 self_dir=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
 proj_dir=$(dirname "$self_dir")
 
-opt_wdir="$HOME/Workdir"
+opt_wdir="${HOME}/Workdir"
 user="xundaoxd"
 
 err() {
