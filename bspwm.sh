@@ -17,6 +17,15 @@ die() {
 
 base() {
     sudo pacman -Syu --noconfirm
+
+    sudo pacman -S --noconfirm openssh
+    sudo systemctl enable sshd
+
+    git clone --depth 1 https://github.com/xundaoxd/arch-builder.git
+    sudo cp -r "${self_dir}/arch-builder/airootfs/etc/modprobe.d" /etc/
+    sudo mkinitcpio -P
+    cp -r "${self_dir}/arch-builder/airootfs/home/xundaoxd" /home/
+    rm -rf arch-builder
 }
 
 aur() {
@@ -34,28 +43,18 @@ docker() {
 
 desktop() {
     sudo pacman -S --noconfirm xorg xorg-xrandr sddm xdotool xss-lock i3lock \
-        bspwm sxhkd alacritty polybar rofi ranger feh flameshot
+        bspwm sxhkd alacritty polybar rofi ranger feh flameshot \
+        fcitx-im fcitx-googlepinyin fcitx-configtool
     sudo systemctl enable sddm
-
-    sudo pacman -S --noconfirm openssh
-    sudo systemctl enable sshd
 
     sudo pacman -S --noconfirm pipewire wireplumber pipewire-audio pipewire-alsa pipewire-pulse \
         bluez bluez-utils
     sudo systemctl enable bluetooth
 
-    sudo pacman -S --noconfirm fcitx-im fcitx-googlepinyin fcitx-configtool
-
     sudo pacman -S --noconfirm vlc evince firefox obsidian \
         usbutils ffmpeg \
         man-db man-pages wget curl xclip ripgrep-all \
         ctags openbsd-netcat unzip neovim jq nmap rsync
-
-    git clone --depth 1 https://github.com/xundaoxd/arch-builder.git
-    sudo cp -r "${self_dir}/arch-builder/airootfs/etc/modprobe.d" /etc/
-    sudo mkinitcpio -P
-    cp -r "${self_dir}/arch-builder/airootfs/home/xundaoxd" /home/
-    rm -rf arch-builder
 }
 
 custom() {
