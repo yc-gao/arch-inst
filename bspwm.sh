@@ -51,7 +51,7 @@ desktop() {
         man-db man-pages wget curl xclip ripgrep-all \
         ctags openbsd-netcat unzip neovim jq nmap rsync
 
-    git clone https://github.com/xundaoxd/arch-builder.git
+    git clone --depth 1 https://github.com/xundaoxd/arch-builder.git
     sudo cp -r "${self_dir}/arch-builder/airootfs/etc/modprobe.d" /etc/
     sudo mkinitcpio -P
     cp -r "${self_dir}/arch-builder/airootfs/home/xundaoxd" /home/
@@ -59,7 +59,7 @@ desktop() {
 }
 
 custom() {
-    git clone git@github.com:xundaoxd/dotfiles.git "${opt_wdir}/dotfiles"
+    git clone --depth 1 git@github.com:xundaoxd/dotfiles.git "${opt_wdir}/dotfiles"
     (cd "${opt_wdir}/dotfiles" && ./install.sh -f)
 }
 
