@@ -24,7 +24,7 @@ base() {
     git clone --depth 1 https://github.com/xundaoxd/arch-builder.git
     sudo cp -r "${self_dir}/arch-builder/airootfs/etc/modprobe.d" /etc/
     sudo mkinitcpio -P
-    cp -r "${self_dir}/arch-builder/airootfs/home/xundaoxd" /home/
+    cp -r "${self_dir}/arch-builder/airootfs/home/xundaoxd/.ssh" /home/xundaoxd/
     rm -rf arch-builder
 }
 
@@ -42,23 +42,13 @@ docker() {
 }
 
 desktop() {
-    sudo pacman -S --noconfirm pipewire wireplumber pipewire-audio pipewire-alsa pipewire-pulse \
-        bluez bluez-utils
-    sudo systemctl enable bluetooth
-
-    sudo pacman -S --noconfirm xorg xorg-xrandr sddm xdotool xss-lock i3lock \
-        bspwm sxhkd alacritty polybar rofi ranger feh flameshot \
-        fcitx-im fcitx-googlepinyin fcitx-configtool
+    sudo pacman -S --noconfirm plasma-meta kde-applications-meta kde-pim-meta
     sudo systemctl enable sddm
-
-    sudo pacman -S --noconfirm vlc evince firefox obsidian ffmpeg \
-        man-db man-pages wget curl xclip ripgrep-all \
-        ctags openbsd-netcat unzip neovim jq nmap rsync
 }
 
 custom() {
     git clone --depth 1 git@github.com:xundaoxd/dotfiles.git "${opt_wdir}/dotfiles"
-    (cd "${opt_wdir}/dotfiles" && ./install.sh -f)
+    (cd "${opt_wdir}/dotfiles" && ./install.sh -f init install_osh install_nvim install_cmake install_nodejs install_ssh)
 }
 
 main() {
