@@ -46,13 +46,13 @@ desktop() {
     sudo systemctl enable bluetooth
 
     sudo pacman -S --noconfirm xorg xorg-xrandr sddm xdotool xss-lock i3lock \
-        bspwm sxhkd alacritty polybar rofi ranger feh flameshot \
-        fcitx-im fcitx-googlepinyin fcitx-configtool
+        bspwm sxhkd alacritty polybar rofi ranger feh flameshot
     sudo systemctl enable sddm
 
-    sudo pacman -S --noconfirm vlc evince firefox obsidian ffmpeg \
-        man-db man-pages wget curl xclip ripgrep-all \
-        ctags openbsd-netcat unzip neovim jq nmap rsync
+    sudo pacman -S --noconfirm fcitx-im fcitx-googlepinyin fcitx-configtool \
+        firefox obsidian \
+        man-db man-pages \
+        ffmpeg wget curl xclip ripgrep-all ctags openbsd-netcat unzip neovim jq nmap rsync
 }
 
 custom() {
