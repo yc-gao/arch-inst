@@ -62,6 +62,9 @@ do_install() {
     usermod -aG wheel "${user}"
     sed -E -i 's/#\s*(%wheel\s+ALL=\(ALL:ALL\)\s+ALL)/\1/' /etc/sudoers
     echo "${user}:${user_passwd}" | chpasswd
+
+    pacman -S --noconfirm openssh
+    systemctl enable sshd
 }
 
 prepare() {
