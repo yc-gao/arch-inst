@@ -39,9 +39,10 @@ docker() {
 
 desktop() {
     sudo pacman -S --noconfirm plasma-meta kde-applications-meta kde-pim-meta
-    sudo systemctl enable sddm
+    sudo systemctl enable sddm bluetooth
 
-    sudo pacman -S --noconfirm curl wget neovim
+    sudo pacman -S --noconfirm man-db man-pages \
+        ffmpeg wget curl xclip ripgrep-all ctags openbsd-netcat unzip neovim jq nmap rsync
 }
 
 custom() {
