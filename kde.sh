@@ -40,6 +40,8 @@ docker() {
 desktop() {
     sudo pacman -S --noconfirm plasma-meta kde-applications-meta kde-pim-meta
     sudo systemctl enable sddm
+
+    sudo pacman -S --noconfirm curl wget neovim
 }
 
 custom() {
