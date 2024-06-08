@@ -42,7 +42,8 @@ desktop() {
     sudo systemctl enable sddm bluetooth
 
     sudo pacman -S --noconfirm ibus ibus-libpinyin
-    echo 'export GTK_IM_MODULE=fcitx' > ~/.xprofile
+    echo '#!/usr/bin/env bash' > ~/.xprofile
+    echo 'export GTK_IM_MODULE=fcitx' >> ~/.xprofile
     echo 'export QT_IM_MODULE=fcitx' >> ~/.xprofile
     echo 'export XMODIFIERS=@im=fcitx' >> ~/.xprofile
     # TODO autostart /usr/bin/ibus-daemon

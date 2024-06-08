@@ -51,7 +51,8 @@ desktop() {
         man-db man-pages \
         ffmpeg wget curl xclip ripgrep-all ctags openbsd-netcat unzip neovim jq nmap rsync
 
-    echo '# xrandr --output HDMI-1 --mode 2560x1440 --rate 144' > ~/.xprofile
+    echo '#!/usr/bin/env bash' > ~/.xprofile
+    echo '# xrandr --output HDMI-1 --mode 2560x1440 --rate 144' >> ~/.xprofile
     echo 'export GTK_IM_MODULE=fcitx' >> ~/.xprofile
     echo 'export QT_IM_MODULE=fcitx' >> ~/.xprofile
     echo 'export XMODIFIERS=@im=fcitx' >> ~/.xprofile
