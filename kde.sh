@@ -41,6 +41,13 @@ desktop() {
     sudo pacman -S --noconfirm plasma-meta kde-applications-meta kde-pim-meta
     sudo systemctl enable sddm bluetooth
 
+    sudo pacman -S --noconfirm ibus ibus-libpinyin
+    echo 'export GTK_IM_MODULE=fcitx' > ~/.xprofile
+    echo 'export QT_IM_MODULE=fcitx' >> ~/.xprofile
+    echo 'export XMODIFIERS=@im=fcitx' >> ~/.xprofile
+    # TODO autostart /usr/bin/ibus-daemon
+
+
     sudo pacman -S --noconfirm man-db man-pages \
         ffmpeg wget curl xclip ripgrep-all ctags openbsd-netcat unzip neovim jq nmap rsync
 }
