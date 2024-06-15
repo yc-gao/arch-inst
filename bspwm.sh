@@ -49,7 +49,7 @@ desktop() {
     sudo pacman -S --noconfirm fcitx-im fcitx-googlepinyin fcitx-configtool \
         firefox obsidian \
         man-db man-pages \
-        ffmpeg wget curl xclip ripgrep-all ctags openbsd-netcat unzip neovim jq nmap rsync
+        ffmpeg wget curl xclip ripgrep-all ctags openbsd-netcat unzip neovim jq nmap rsync lsof
 
     echo '#!/usr/bin/env bash' > ~/.xprofile
     echo '# xrandr --output HDMI-1 --mode 2560x1440 --rate 144' >> ~/.xprofile
