@@ -32,30 +32,37 @@ list() {
     ls -lha "${snapshot_prefix}"
 }
 
-# checkout [label]
+# checkout [tag]
 checkout() {
-    local head branch label
+    local head branch tag
     head=$(readlink "${snapshot_prefix}/current")
     branch=${head%.*}
 
-    label="$1"
-    [[ -z ${label} ]] && label="${branch}.$(date +%Y%m%d%H%M%S)"
+    tag="$1"
+    [[ -z ${tag} ]] && tag="${branch}.$(date +%Y%m%d%H%M%S)"
 
-    if [[ ! -e "${snapshot_prefix}/${label}" ]]; then
-        btrfs subvol snapshot "${snapshot_prefix}/${head}" "${snapshot_prefix}/${label}"
+    if [[ ! -e "${snapshot_prefix}/${tag}" ]]; then
+        btrfs subvol snapshot "${snapshot_prefix}/${head}" "${snapshot_prefix}/${tag}"
     fi
 
     rm "${snapshot_prefix}/current"
-    ln -sfT "${label}" "${snapshot_prefix}/current"
+    ln -sfT "${tag}" "${snapshot_prefix}/current"
 }
 
 delete() {
-    local label
-    for label in "$@"; do
-        if [[ -e "${snapshot_prefix}/${label}" ]]; then
-            btrfs subvol delete "${snapshot_prefix}/${label}" || err "delete volume ${label} failed, please check ${snapshot_prefix}/${label}"
+    local tag
+    for tag in "$@"; do
+        if [[ -e "${snapshot_prefix}/${tag}" ]]; then
+            btrfs subvol delete "${snapshot_prefix}/${tag}" || err "delete volume ${tag} failed, please check ${snapshot_prefix}/${tag}"
         fi
     done
+}
+
+# exec <tag> <cmd>
+exec() {
+    local tag="$1"
+    shift
+    (cd "${snapshot_prefix}/${tag}" && eval "$*")
 }
 
 main() {
