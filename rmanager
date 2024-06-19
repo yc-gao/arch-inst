@@ -58,13 +58,6 @@ delete() {
     done
 }
 
-# exec <tag> <cmd>
-exec() {
-    local tag="$1"
-    shift
-    (cd "${snapshot_prefix}/${tag}" && eval "$*")
-}
-
 main() {
     if [[ $UID != '0' ]]; then
         die "can not manager rootfs as ${USER}"
