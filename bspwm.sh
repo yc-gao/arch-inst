@@ -17,11 +17,6 @@ die() {
 
 base() {
     sudo pacman -Syu --noconfirm
-
-    git clone --depth 1 https://github.com/xundaoxd/arch-builder.git
-    sudo cp -r "${self_dir}/arch-builder/airootfs/etc/modprobe.d" /etc/
-    sudo mkinitcpio -P
-    rm -rf arch-builder
 }
 
 aur() {
