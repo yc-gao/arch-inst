@@ -56,7 +56,7 @@ do_checkout() {
     fi
 
     if [[ ! -e "${snapshot_prefix}/${tag}" ]]; then
-        btrfs subvol snapshot "${snapshot_prefix}/${head}" "${snapshot_prefix}/${tag}"
+        btrfs subvol snapshot "${snapshot_prefix}/${current}" "${snapshot_prefix}/${tag}"
     fi
     rm "${snapshot_prefix}/current"
     ln -sfT "${tag}" "${snapshot_prefix}/current"
