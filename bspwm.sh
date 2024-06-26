@@ -38,7 +38,7 @@ desktop() {
     sudo systemctl enable bluetooth
 
     sudo pacman -S --noconfirm xorg xorg-xrandr sddm xdotool xss-lock i3lock \
-        bspwm sxhkd alacritty polybar rofi ranger feh flameshot
+        bspwm notification-daemon libnotify sxhkd alacritty polybar rofi ranger feh flameshot
     sudo systemctl enable sddm
 
     sudo pacman -S --noconfirm fcitx-im fcitx-googlepinyin fcitx-configtool \
