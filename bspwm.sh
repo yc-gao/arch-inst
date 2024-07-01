@@ -54,7 +54,7 @@ desktop() {
 }
 
 custom() {
-    git clone --depth 1 git@github.com:xundaoxd/dotfiles.git "${opt_wdir}/dotfiles"
+    git clone --depth 1 git@github.com:yc-gao/dotfiles.git "${opt_wdir}/dotfiles"
     (cd "${opt_wdir}/dotfiles" && ./install.sh -f)
 }
 
