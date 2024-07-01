@@ -4,8 +4,8 @@ set -e
 self_path="$(realpath $0)"
 self_dir="$(dirname ${self_path})"
 
-hostname='xundaoxd-pc'
-user="xundaoxd"
+hostname='ycgao-pc'
+user="ycgao"
 user_passwd=""
 
 espdisk="/dev/nvme0n1p1"
