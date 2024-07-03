@@ -42,7 +42,7 @@ desktop() {
     sudo systemctl enable sddm
 
     sudo pacman -S --noconfirm fcitx-im fcitx-googlepinyin fcitx-configtool \
-        firefox obsidian \
+        firefox obsidian vlc \
         man-db man-pages \
         ffmpeg wget curl xclip ripgrep-all ctags openbsd-netcat unzip neovim jq nmap rsync lsof
 
