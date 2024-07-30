@@ -17,6 +17,8 @@ die() {
 
 base() {
     sudo pacman -Syu --noconfirm
+    sudo cp -r -t / ${self_dir}/*
+    mkinitcpio -P
 }
 
 aur() {
@@ -47,7 +49,7 @@ desktop() {
         ffmpeg wget curl xclip ripgrep-all ctags openbsd-netcat unzip neovim jq nmap rsync lsof
 
     echo '#!/usr/bin/env bash' > ~/.xprofile
-    echo '# xrandr --output HDMI-1 --mode 2560x1440 --rate 144' >> ~/.xprofile
+    echo '# xrandr --output DP-0 --mode 2560x1440 --rate 144' >> ~/.xprofile
     echo 'export GTK_IM_MODULE=fcitx' >> ~/.xprofile
     echo 'export QT_IM_MODULE=fcitx' >> ~/.xprofile
     echo 'export XMODIFIERS=@im=fcitx' >> ~/.xprofile
