@@ -30,12 +30,6 @@ fi
 # xrandr --output HDMI-1 --mode 2560x1440 --rate 144
 xsetroot -cursor_name left_ptr
 
-pgrep -x -f /usr/lib/notification-daemon-1.0/notification-daemon || /usr/lib/notification-daemon-1.0/notification-daemon &
-pgrep -x sxhkd > /dev/null || sxhkd &
-pgrep -x polybar > /dev/null || polybar &
-pgrep -x feh > /dev/null || feh --no-fehbg --bg-fill --randomize ~/Pictures/wallpaper/* &
-pgrep -x xss-lock > /dev/null || xss-lock -- i3lock -n &
-
 export GTK_IM_MODULE=fcitx
 export QT_IM_MODULE=fcitx
 export XMODIFIERS=@im=fcitx
