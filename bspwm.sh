@@ -18,7 +18,7 @@ die() {
 base() {
     sudo pacman -Syu --noconfirm
     sudo cp -r -t / ${self_dir}/*
-    mkinitcpio -P
+    sudo mkinitcpio -P
 }
 
 aur() {
@@ -39,7 +39,7 @@ desktop() {
         bluez bluez-utils
     sudo systemctl enable bluetooth
 
-    sudo pacman -S --noconfirm xorg xorg-xrandr sddm xdotool xss-lock i3lock \
+    sudo pacman -S --noconfirm xorg xorg-xinit xorg-xrandr sddm xdotool xss-lock i3lock \
         bspwm notification-daemon libnotify sxhkd alacritty polybar rofi ranger flameshot picom
     sudo systemctl enable sddm
 
