@@ -3,7 +3,6 @@ set -e
 
 self_dir=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
 
-opt_wdir="${HOME}/Workdir"
 user="ycgao"
 
 err() {
