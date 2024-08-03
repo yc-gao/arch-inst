@@ -39,13 +39,13 @@ desktop() {
         bluez bluez-utils
     sudo systemctl enable bluetooth
 
-    sudo pacman -S --noconfirm xorg xorg-xinit xorg-xrandr sddm xdotool xss-lock i3lock \
-        bspwm notification-daemon libnotify sxhkd alacritty polybar rofi ranger flameshot picom
+    sudo pacman -S --noconfirm xorg xorg-xinit xorg-xrandr xdotool xss-lock i3lock \
+        notification-daemon libnotify bspwm sxhkd alacritty polybar rofi ranger flameshot picom
     sudo systemctl enable sddm
 
     sudo pacman -S --noconfirm fcitx-im fcitx-googlepinyin fcitx-configtool \
-        firefox obsidian vlc \
         man-db man-pages \
+        firefox obsidian vlc \
         ffmpeg wget curl xclip ripgrep-all ctags openbsd-netcat unzip neovim jq nmap rsync lsof
 }
 
