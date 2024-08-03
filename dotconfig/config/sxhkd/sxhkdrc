@@ -1,0 +1,92 @@
+# wm independent hotkeys ------------------------------------------------
+# quit/restart bspwm
+super + ctrl + r
+    bspc wm -r
+
+super + ctrl + q
+    loginctl lock-session
+
+# sxhkd reload configuration
+super + Escape
+    pkill -USR1 -x sxhkd
+
+# terminal emulator
+super + Return
+    alacritty
+
+# program launcher
+super + @space
+    rofi -show drun
+
+# close and kill
+super + {_,shift + }w
+    bspc node -{c,k}
+
+# window state ----------------------------------------------------------
+super + {t,shift + t,s,f}
+    bspc node -t {tiled,pseudo_tiled,floating,fullscreen}
+
+# alternate between the tiled and monocle layout
+super + m
+    bspc desktop -l next
+
+# focus/swap the node in the given direction
+super + {_,shift + }{h,j,k,l}
+    bspc node -{f,s} {west,south,north,east}
+
+# focus the next/previous window in the current desktop
+super + {_,shift + }c
+    bspc node -f {next,prev}.local.!hidden.window
+
+# focus the next/previous desktop in the current monitor
+super + bracket{left,right}
+    bspc desktop -f {prev,next}.local
+
+# send the node to next/previous desktop in the current monitor
+super + shift + bracket{left,right}
+    bspc node -d {prev,next}.local --follow
+
+# focus the last node/desktop
+super + {grave,Tab}
+    bspc {node,desktop} -f last
+
+# focus or send to the given desktop
+super + {_,shift + }{1-9,0}
+    bspc {desktop -f,node -d} '^{1-9,10}'
+
+# move/resize -----------------------------------------------------------
+# move a floating window
+super + {Left,Down,Up,Right}
+    bspc node -v {-20 0,0 20,0 -20,20 0}
+
+# expand a window by moving one of its side outward
+super + shift + {Left,Down,Up,Right}
+    bspc node -z {left -20 0,bottom 0 20,top 0 -20,right 20 0}
+
+# contract a window by moving one of its side inward
+super + ctrl + shift + {Left,Down,Up,Right}
+    bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}
+
+# misc ------------------------------------------------------------------
+# set the node flags
+super + ctrl + {m,x,y,z}
+    bspc node -g {marked,locked,sticky,private}
+
+# cancel the preselection for the focused node
+super + ctrl + space
+    bspc node -p cancel
+
+# preselect the direction
+super + ctrl + {h,j,k,l}
+    bspc node -p {west,south,north,east}
+
+# preselect the ratio
+super + ctrl + {1-9}
+    bspc node -o 0.{1-9}
+
+Print
+    flameshot screen -p ~/Pictures
+
+shift + Print
+    flameshot gui
+

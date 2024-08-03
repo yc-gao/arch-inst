@@ -17,7 +17,7 @@ die() {
 
 base() {
     sudo pacman -Syu --noconfirm
-    sudo cp -r -t / ${self_dir}/*
+    sudo cp -r ./airootfs/* /
     sudo mkinitcpio -P
 }
 
@@ -47,17 +47,35 @@ desktop() {
         firefox obsidian vlc \
         man-db man-pages \
         ffmpeg wget curl xclip ripgrep-all ctags openbsd-netcat unzip neovim jq nmap rsync lsof
-
-    echo '#!/usr/bin/env bash' > ~/.xprofile
-    echo '# xrandr --output DP-0 --mode 2560x1440 --rate 144' >> ~/.xprofile
-    echo 'export GTK_IM_MODULE=fcitx' >> ~/.xprofile
-    echo 'export QT_IM_MODULE=fcitx' >> ~/.xprofile
-    echo 'export XMODIFIERS=@im=fcitx' >> ~/.xprofile
 }
 
 custom() {
-    git clone --depth 1 git@github.com:yc-gao/dotfiles.git "${opt_wdir}/dotfiles"
-    (cd "${opt_wdir}/dotfiles" && ./install.sh -f)
+    git clone https://github.com/ohmyzsh/ohmyzsh.git "$HOME"/.oh-my-zsh
+    cp "$HOME"/.oh-my-zsh/templates/zshrc.zsh-template "$HOME"/.zshrc
+    cat "${self_dir}"/dotconfig/zshrc >> "$HOME"/.zshrc
+
+    ln -sfT "${self_dir}"/dotconfig/zprofile "$HOME"/.zprofile
+    ln -sfT "${self_dir}"/dotconfig/xinitrc "$HOME"/.xinitrc
+
+    mkdir -p "$HOME"/Pictures
+    cp -rf "${self_dir}"/dotconfig/Pictures/* "$HOME"/Pictures/
+
+    for t in "${self_dir}"/dotconfig/config/*; do
+        ln -sfT "${t}" "$HOME/.config/$(basename "${t}")"
+    done
+
+    ln -sfT "$(which nvim)" "$HOME"/.local/bin/vim
+    ln -sfT "$(which ranger)" "$HOME"/.local/bin/ra
+
+    mkdir -p ~/.software
+    wget -O - https://github.com/Kitware/CMake/releases/download/v3.29.3/cmake-3.29.3-linux-x86_64.tar.gz \
+        | tar -C ~/.software -xz
+    echo 'add_local "$HOME"/.software/cmake-3.29.3-linux-x86_64' >> ~/.zshrc
+
+    mkdir -p ~/.software
+    wget -O - https://nodejs.org/dist/v20.14.0/node-v20.14.0-linux-x64.tar.xz \
+        | tar -C ~/.software -xJ
+    echo 'add_local "$HOME"/.software/node-v20.14.0-linux-x64' >> ~/.zshrc
 }
 
 main() {

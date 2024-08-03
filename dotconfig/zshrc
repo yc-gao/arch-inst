@@ -1,0 +1,9 @@
+if [[ -d $HOME/.local/bin ]]; then
+    export PATH="$HOME/.local/bin:$PATH"
+fi
+
+export EDITOR="nvim"
+add_local() {
+    [[ -d $1/bin ]] && export PATH="$1/bin:$PATH"
+}
+

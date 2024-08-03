@@ -1,0 +1,27 @@
+snippet cmake
+    cmake_minimum_required(VERSION 3.17)
+    project(${0:proj}
+        VERSION 0.0.1
+        LANGUAGES C CXX)
+
+    list(APPEND CMAKE_MODULE_PATH "\${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
+    set(${0}_COMMON_INCLUDE_DIRS
+        \${CMAKE_CURRENT_SOURCE_DIR}/include
+        \${CMAKE_CURRENT_SOURCE_DIR}
+        \${CMAKE_CURRENT_BINARY_DIR}
+    )
+
+    set(CMAKE_CXX_STANDARD 17)
+    set(CMAKE_CXX_STANDARD_REQUIRED ON)
+    set(CMAKE_CXX_FLAGS "-pipe -Wall -Wextra")
+    set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
+    set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
+    set(CMAKE_POSITION_INDEPENDENT_CODE True)
+
+snippet cpm
+    # curl --create-dirs -o cmake/CPM.cmake -fsSL https://github.com/cpm-cmake/CPM.cmake/releases/latest/download/get_cpm.cmake
+    set(CPM_SOURCE_CACHE "\$ENV{HOME}/.cache/CPM" CACHE STRING "cpm cache directory")
+    include(CPM)
+    # CPMAddPackage("gh:fmtlib/fmt#7.1.3")
+
