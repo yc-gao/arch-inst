@@ -50,10 +50,10 @@ desktop() {
 custom() {
     git clone https://github.com/ohmyzsh/ohmyzsh.git "$HOME"/.oh-my-zsh
     cp "$HOME"/.oh-my-zsh/templates/zshrc.zsh-template "$HOME"/.zshrc
-    cat "${self_dir}"/dotconfig/zshrc >> "$HOME"/.zshrc
+    cat "${self_dir}"/dotconfig/zshrc >>"$HOME"/.zshrc
 
+    cat "${self_dir}"/dotconfig/xinitrc >"$HOME"/.xinitrc
     ln -sfT "${self_dir}"/dotconfig/zprofile "$HOME"/.zprofile
-    ln -sfT "${self_dir}"/dotconfig/xinitrc "$HOME"/.xinitrc
 
     mkdir -p "$HOME"/Pictures
     cp -rf "${self_dir}"/dotconfig/Pictures/* "$HOME"/Pictures/
