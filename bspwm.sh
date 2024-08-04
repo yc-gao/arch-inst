@@ -39,7 +39,7 @@ desktop() {
     sudo systemctl enable bluetooth
 
     sudo pacman -S --noconfirm xorg xorg-xinit xorg-xrandr xdotool xss-lock i3lock \
-        notification-daemon libnotify bspwm sxhkd alacritty polybar rofi ranger flameshot picom
+        notification-daemon libnotify bspwm sxhkd alacritty polybar feh rofi ranger flameshot picom
 
     sudo pacman -S --noconfirm fcitx-im fcitx-googlepinyin fcitx-configtool \
         man-db man-pages \
@@ -62,6 +62,7 @@ custom() {
         ln -sfT "${t}" "$HOME/.config/$(basename "${t}")"
     done
 
+    mkdir -p "$HOME"/.local/bin
     ln -sfT "$(which nvim)" "$HOME"/.local/bin/vim
     ln -sfT "$(which ranger)" "$HOME"/.local/bin/ra
 
