@@ -40,7 +40,6 @@ desktop() {
 
     sudo pacman -S --noconfirm xorg xorg-xinit xorg-xrandr xdotool xss-lock i3lock \
         notification-daemon libnotify bspwm sxhkd alacritty polybar rofi ranger flameshot picom
-    sudo systemctl enable sddm
 
     sudo pacman -S --noconfirm fcitx-im fcitx-googlepinyin fcitx-configtool \
         man-db man-pages \
