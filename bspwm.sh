@@ -53,7 +53,8 @@ custom() {
     cat "${self_dir}"/dotconfig/zshrc >>"$HOME"/.zshrc
 
     cat "${self_dir}"/dotconfig/xinitrc >"$HOME"/.xinitrc
-    ln -sfT "${self_dir}"/dotconfig/zprofile "$HOME"/.zprofile
+    cat "${self_dir}"/dotconfig/xprofile >"$HOME"/.xprofile
+    ln -sfT "${self_dir}"/dotconfig/zprofile >"$HOME"/.zprofile
 
     mkdir -p "$HOME"/Pictures
     cp -rf "${self_dir}"/dotconfig/Pictures/* "$HOME"/Pictures/
