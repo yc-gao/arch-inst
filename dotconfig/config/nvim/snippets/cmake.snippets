@@ -6,12 +6,6 @@ snippet cmake
 
     list(APPEND CMAKE_MODULE_PATH "\${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-    set(${0}_COMMON_INCLUDE_DIRS
-        \${CMAKE_CURRENT_SOURCE_DIR}/include
-        \${CMAKE_CURRENT_SOURCE_DIR}
-        \${CMAKE_CURRENT_BINARY_DIR}
-    )
-
     set(CMAKE_CXX_STANDARD 17)
     set(CMAKE_CXX_STANDARD_REQUIRED ON)
     set(CMAKE_CXX_FLAGS "-pipe -Wall -Wextra")
