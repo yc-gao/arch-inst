@@ -43,7 +43,7 @@ desktop() {
 
     sudo pacman -S --noconfirm fcitx-im fcitx-googlepinyin fcitx-configtool \
         man-db man-pages \
-        firefox obsidian vlc \
+        firefox obsidian vlc imagemagick \
         ffmpeg wget curl xclip ripgrep-all ctags openbsd-netcat unzip neovim jq nmap rsync lsof
 }
 
