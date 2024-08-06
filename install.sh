@@ -87,7 +87,8 @@ prepare() {
 
     # install system
     mnt_vols "${volumes[@]}"
-    pacstrap "${targetfs}" base base-devel linux-lts linux-firmware btrfs-progs
+    pacstrap "${targetfs}" base base-devel linux-lts linux-firmware \
+        btrfs-progs exfatprogs
     cp "${self_path}" ${targetfs}/root/
     arch-chroot "${targetfs}" "/root/$(basename "${self_path}")" do_install
     rm -rf  "${targetfs}/root/$(basename "${self_path}")"
