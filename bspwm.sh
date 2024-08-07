@@ -46,9 +46,9 @@ desktop() {
 
     sudo pacman -S --noconfirm \
         fcitx-im fcitx-googlepinyin fcitx-configtool \
-        firefox obsidian vlc \
+        firefox obsidian \
         man-db man-pages \
-        ffmpeg imagemagick \
+        ffmpeg imagemagick vlc \
         ranger ueberzug ffmpegthumbnailer imv \
         xdotool xclip \
         wget curl neovim unzip \
