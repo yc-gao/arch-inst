@@ -38,14 +38,21 @@ desktop() {
         bluez bluez-utils
     sudo systemctl enable bluetooth
 
-    sudo pacman -S --noconfirm xorg xorg-xinit xorg-xrandr xdotool xss-lock i3lock \
-        notification-daemon libnotify bspwm sxhkd alacritty polybar feh rofi flameshot picom \
-        ranger ueberzug ffmpegthumbnailer
+    sudo pacman -S --noconfirm \
+        notification-daemon libnotify \
+        xorg xorg-xinit xorg-xrandr \
+        xss-lock i3lock \
+        bspwm sxhkd alacritty polybar feh rofi flameshot picom
 
-    sudo pacman -S --noconfirm fcitx-im fcitx-googlepinyin fcitx-configtool \
+    sudo pacman -S --noconfirm \
+        fcitx-im fcitx-googlepinyin fcitx-configtool \
+        firefox obsidian vlc \
         man-db man-pages \
-        firefox obsidian vlc imagemagick \
-        ffmpeg wget curl xclip ripgrep-all ctags openbsd-netcat unzip neovim jq nmap rsync lsof imagemagick
+        ffmpeg imagemagick \
+        ranger ueberzug ffmpegthumbnailer imv \
+        xdotool xclip \
+        wget curl neovim unzip \
+        ripgrep-all ctags openbsd-netcat jq nmap rsync lsof
 }
 
 custom() {
