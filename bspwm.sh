@@ -39,12 +39,13 @@ desktop() {
     sudo systemctl enable bluetooth
 
     sudo pacman -S --noconfirm xorg xorg-xinit xorg-xrandr xdotool xss-lock i3lock \
-        notification-daemon libnotify bspwm sxhkd alacritty polybar feh rofi ranger flameshot picom
+        notification-daemon libnotify bspwm sxhkd alacritty polybar feh rofi flameshot picom \
+        ranger ueberzug ffmpegthumbnailer
 
     sudo pacman -S --noconfirm fcitx-im fcitx-googlepinyin fcitx-configtool \
         man-db man-pages \
         firefox obsidian vlc imagemagick \
-        ffmpeg wget curl xclip ripgrep-all ctags openbsd-netcat unzip neovim jq nmap rsync lsof
+        ffmpeg wget curl xclip ripgrep-all ctags openbsd-netcat unzip neovim jq nmap rsync lsof imagemagick
 }
 
 custom() {
