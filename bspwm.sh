@@ -67,13 +67,11 @@ custom() {
     mkdir -p "$HOME"/Pictures
     cp -rf "${self_dir}"/dotconfig/Pictures/* "$HOME"/Pictures/
 
-    for t in "${self_dir}"/dotconfig/config/*; do
-        ln -sfT "${t}" "$HOME/.config/$(basename "${t}")"
-    done
-
     mkdir -p "$HOME"/.local/bin
     ln -sfT "$(which nvim)" "$HOME"/.local/bin/vim
     ln -sfT "$(which ranger)" "$HOME"/.local/bin/ra
+
+    ln -sft "$HOME/.config/" "${self_dir}"/dotconfig/config/*
 
     mkdir -p ~/.software
     wget -O - https://github.com/Kitware/CMake/releases/download/v3.29.3/cmake-3.29.3-linux-x86_64.tar.gz \
