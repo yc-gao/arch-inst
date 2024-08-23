@@ -5,3 +5,5 @@ export XMODIFIERS=@im=fcitx
 # xrandr --output HDMI-1 --mode 2560x1440 --rate 144
 xsetroot -cursor_name left_ptr
 
+pgrep -x fcitx > /dev/null || fcitx -d
+
