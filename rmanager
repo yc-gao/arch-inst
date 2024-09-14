@@ -72,27 +72,29 @@ do_delete() {
     done
 }
 
-# exec [-u user] tag cmd...
+# exec [-u user] -t tag cmd...
 do_exec() {
     local opt_user=root
+    local opt_tag=
     while (($#)); do
         case $1 in
             -u | --user)
                 opt_user="$2"
                 shift 2
                 ;;
+            -t | --tag)
+                opt_tag="$2"
+                shift 2
+                ;;
             *)
                 break;;
         esac
     done
-    local tag="$1"
-    shift
-    if [[ ! -e "${snapshot_prefix}/${tag}" ]]; then
-        die "exec failed, check tag: ${snapshot_prefix}/${tag}"
-    fi
+    [[ -z "${opt_tag}" ]] && die "empty tag"
+    [[ ! -e "${snapshot_prefix}/${opt_tag}" ]] && die "exec failed, check tag: ${snapshot_prefix}/${opt_tag}"
 
     for cmd in "$@"; do
-        (cd "${snapshot_prefix}/${tag}" && su "${opt_user}" -c "${cmd}")
+        (cd "${snapshot_prefix}/${opt_tag}" && su "${opt_user}" -c "${cmd}")
     done
 }
 
