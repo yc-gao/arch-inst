@@ -5,7 +5,7 @@ local mason_init = function()
             'clangd', 'cmake',
             'pyright', 'pylsp',
             'html', 'emmet_language_server',
-            'tsserver',
+            'eslint', 'ts_ls',
             'cssls',
             'bashls', 'awk_ls',
             'lua_ls',
