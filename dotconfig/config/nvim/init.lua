@@ -23,6 +23,9 @@ vim.o.expandtab = true
 vim.o.wrap = false
 vim.o.swapfile = false
 
+vim.o.foldmethod = 'syntax'
+vim.o.foldlevelstart = 99
+
 -- move
 vim.keymap.set({ 'n', 'v' }, 'H', '^')
 vim.keymap.set({ 'n', 'v' }, 'L', '$')
