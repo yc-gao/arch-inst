@@ -1,6 +1,5 @@
 return {
-    'morhetz/gruvbox',
-    event = 'VimEnter',
+    'ellisonleao/gruvbox.nvim',
     config = function()
         vim.cmd([[colorscheme gruvbox]])
     end,
