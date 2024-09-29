@@ -69,31 +69,40 @@ local cmp_init = function()
             documentation = cmp.config.window.bordered()
         },
         mapping = cmp.mapping.preset.insert({
-            ['<Tab>'] = cmp.mapping(function(fallback)
+            ['<Tab>'] = function(fallback)
                 if cmp.visible() then
                     cmp.select_next_item()
-                elseif luasnip.expand_or_jumpable() then
-                    luasnip.expand_or_jump()
+                elseif luasnip.locally_jumpable(1) then
+                    luasnip.jump(1)
                 elseif has_words_before() then
                     cmp.complete()
                 else
                     fallback()
                 end
-            end, { 'i', 's' }),
-            ['<S-Tab>'] = cmp.mapping(function(fallback)
+            end,
+            ['<S-Tab>'] = function(fallback)
                 if cmp.visible() then
                     cmp.select_prev_item()
-                elseif luasnip.jumpable(-1) then
+                elseif luasnip.locally_jumpable(-1) then
                     luasnip.jump(-1)
                 else
                     fallback()
                 end
-            end, { 'i', 's' }),
-            -- ['<Tab>'] = cmp.mapping.select_next_item(),
-            -- ['<S-Tab>'] = cmp.mapping.select_prev_item(),
+            end,
+            ['<CR>'] = function(fallback)
+                if cmp.visible() then
+                    if luasnip.expandable() then
+                        luasnip.expand()
+                    else
+                        cmp.confirm({ select = true })
+                    end
+                else
+                    fallback()
+                end
+            end,
+            ['<ESC>'] = cmp.mapping.abort(),
             ['<A-k>'] = cmp.mapping.scroll_docs(-4),
             ['<A-j>'] = cmp.mapping.scroll_docs(4),
-            ['<CR>'] = cmp.mapping.confirm(),
         }),
         formatting = {
             fields = { "kind", "abbr", "menu" },
