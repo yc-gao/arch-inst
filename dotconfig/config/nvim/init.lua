@@ -34,10 +34,10 @@ vim.keymap.set({ 'n', 'v' }, 'K', '10k')
 vim.keymap.set({ 'n', 'v' }, 'W', 'b')
 vim.keymap.set({ 'n', 'v' }, 'E', 'ge')
 
-vim.keymap.set('i', '<C-h>', '<left>')
-vim.keymap.set('i', '<C-j>', '<down>')
-vim.keymap.set('i', '<C-k>', '<up>')
-vim.keymap.set('i', '<C-l>', '<right>')
+vim.keymap.set('i', '<A-h>', '<left>')
+vim.keymap.set('i', '<A-j>', '<down>')
+vim.keymap.set('i', '<A-k>', '<up>')
+vim.keymap.set('i', '<A-l>', '<right>')
 
 -- copy, cut, delete
 vim.keymap.set('n', 'dl', 'd$')
