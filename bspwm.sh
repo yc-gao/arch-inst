@@ -16,6 +16,8 @@ die() {
 
 base() {
     sudo pacman -Syu --noconfirm
+    sudo pacman -S --noconfirm cifs-utils
+
     sudo cp -r ./airootfs/* /
     sudo mkinitcpio -P
 }
