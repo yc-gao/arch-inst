@@ -109,7 +109,6 @@ local cmp_init = function()
             format = function(entry, vim_item)
                 vim_item.kind = string.format('%s', vim_item.kind)
                 vim_item.menu = ({
-                    nvim_lsp_signature_help = "[LSP]",
                     nvim_lsp = "[LSP]",
                     luasnip = "[LuaSnip]",
                     buffer = "[Buffer]",
@@ -121,7 +120,6 @@ local cmp_init = function()
             end,
         },
         sources = cmp.config.sources({
-            { name = 'nvim_lsp_signature_help' },
             { name = 'nvim_lsp' },
             { name = 'luasnip' },
             { name = 'buffer' },
@@ -137,7 +135,6 @@ local cmp_init = function()
     cmp.setup.cmdline('/', {
         mapping = cmp.mapping.preset.cmdline(),
         sources = cmp.config.sources({
-            { name = 'nvim_lsp_document_symbol' },
             { name = 'buffer' }
         })
     })
@@ -157,8 +154,6 @@ return {
         'hrsh7th/cmp-emoji',
         'hrsh7th/cmp-cmdline',
         'hrsh7th/cmp-calc',
-        'hrsh7th/cmp-nvim-lsp-signature-help',
-        'hrsh7th/cmp-nvim-lsp-document-symbol',
 
         'saadparwaiz1/cmp_luasnip',
         'L3MON4D3/LuaSnip',
@@ -175,7 +170,8 @@ return {
         cmp_init()
 
         vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action)
-        vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename)
-        vim.keymap.set('n', '<leader>fm', vim.lsp.buf.format)
+        vim.keymap.set('n', '<leader>cr', vim.lsp.buf.rename)
+        vim.keymap.set('n', '<leader>cm', vim.lsp.buf.format)
+
     end,
 }

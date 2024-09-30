@@ -43,9 +43,11 @@ return {
         vim.keymap.set('n', '<leader>fg', builtin.live_grep)
         vim.keymap.set('n', '<leader>fb', builtin.buffers)
 
-        vim.keymap.set('n', '<leader>gr', builtin.lsp_references)
         vim.keymap.set('n', '<leader>gd', builtin.lsp_definitions)
-        vim.keymap.set('n', '<leader>gD', builtin.lsp_implementations)
+        vim.keymap.set('n', '<leader>gD', builtin.diagnostics)
+        vim.keymap.set('n', '<leader>gr', builtin.lsp_references)
+        vim.keymap.set('n', '<leader>gi', builtin.lsp_incoming_calls)
+        vim.keymap.set('n', '<leader>go', builtin.lsp_outgoing_calls)
 
         require('todo-comments').setup({})
         vim.keymap.set('n', '<leader>ft', '<cmd>TodoTelescope keywords=TODO,FIX,HACK,WARNING<CR>')
