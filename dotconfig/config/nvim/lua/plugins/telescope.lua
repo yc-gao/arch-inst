@@ -21,19 +21,20 @@ return {
                         ['<A-k>'] = actions.preview_scrolling_up,
                         ['<A-h>'] = actions.preview_scrolling_left,
                         ['<A-l>'] = actions.preview_scrolling_right,
+                        ['<ESC>'] = actions.close,
                     },
-                    n = {
-                        ['<CR>'] = actions.select_default,
-                        ['<Tab>'] = actions.toggle_selection + actions.move_selection_worse,
-                        ['<S-Tab>'] = actions.toggle_selection + actions.move_selection_better,
-                        ['<A-j>'] = actions.preview_scrolling_down,
-                        ['<A-k>'] = actions.preview_scrolling_up,
-                        ['<A-h>'] = actions.preview_scrolling_left,
-                        ['<A-l>'] = actions.preview_scrolling_right,
-
-                        ['gg'] = actions.move_to_top,
-                        ['G'] = actions.move_to_bottom,
-                    }
+                    -- n = {
+                    --     ['<CR>'] = actions.select_default,
+                    --     ['<Tab>'] = actions.toggle_selection + actions.move_selection_worse,
+                    --     ['<S-Tab>'] = actions.toggle_selection + actions.move_selection_better,
+                    --     ['<A-j>'] = actions.preview_scrolling_down,
+                    --     ['<A-k>'] = actions.preview_scrolling_up,
+                    --     ['<A-h>'] = actions.preview_scrolling_left,
+                    --     ['<A-l>'] = actions.preview_scrolling_right,
+                    --
+                    --     ['gg'] = actions.move_to_top,
+                    --     ['G'] = actions.move_to_bottom,
+                    -- }
                 }
             }
         })
