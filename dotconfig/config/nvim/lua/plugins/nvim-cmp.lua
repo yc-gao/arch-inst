@@ -70,10 +70,10 @@ local cmp_init = function()
         },
         mapping = cmp.mapping.preset.insert({
             ['<Tab>'] = function(fallback)
-                if cmp.visible() then
-                    cmp.select_next_item()
-                elseif luasnip.locally_jumpable(1) then
+                if luasnip.locally_jumpable(1) then
                     luasnip.jump(1)
+                elseif cmp.visible() then
+                    cmp.select_next_item()
                 elseif has_words_before() then
                     cmp.complete()
                 else
@@ -81,10 +81,10 @@ local cmp_init = function()
                 end
             end,
             ['<S-Tab>'] = function(fallback)
-                if cmp.visible() then
-                    cmp.select_prev_item()
-                elseif luasnip.locally_jumpable(-1) then
+                if luasnip.locally_jumpable(-1) then
                     luasnip.jump(-1)
+                elseif cmp.visible() then
+                    cmp.select_prev_item()
                 else
                     fallback()
                 end
@@ -100,7 +100,7 @@ local cmp_init = function()
                     fallback()
                 end
             end,
-            ['<ESC>'] = cmp.mapping.abort(),
+            -- ['<ESC>'] = cmp.mapping.abort(),
             ['<A-k>'] = cmp.mapping.scroll_docs(-4),
             ['<A-j>'] = cmp.mapping.scroll_docs(4),
         }),
@@ -172,6 +172,5 @@ return {
         vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action)
         vim.keymap.set('n', '<leader>cr', vim.lsp.buf.rename)
         vim.keymap.set('n', '<leader>cm', vim.lsp.buf.format)
-
     end,
 }
