@@ -11,7 +11,6 @@ return {
                     handler_opts = {
                         border = "rounded"
                     }
-                vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action)
                 }, bufnr)
             end
         })
