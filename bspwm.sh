@@ -55,6 +55,8 @@ desktop() {
         xdotool xclip \
         wget curl neovim unzip \
         ripgrep-all ctags openbsd-netcat jq nmap rsync lsof
+
+    yay -S --noconfirm ripdrag-git
 }
 
 custom() {
