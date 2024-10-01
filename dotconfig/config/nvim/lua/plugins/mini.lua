@@ -5,7 +5,7 @@ return {
         require('mini.pairs').setup()
         require('mini.move').setup({
             mappings = {
-                 left = '<C-h>',
+                left = '<C-h>',
                 right = '<C-l>',
                 down = '<C-j>',
                 up = '<C-k>',
