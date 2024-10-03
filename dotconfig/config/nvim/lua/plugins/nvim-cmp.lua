@@ -171,6 +171,6 @@ return {
 
         vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action)
         vim.keymap.set('n', '<leader>cr', vim.lsp.buf.rename)
-        vim.keymap.set('n', '<leader>cm', vim.lsp.buf.format)
+        vim.keymap.set('n', '<leader>cf', vim.lsp.buf.format)
     end,
 }

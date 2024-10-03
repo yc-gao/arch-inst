@@ -26,6 +26,6 @@ return {
             },
         })
 
-        vim.keymap.set('n', '<leader>co', '<cmd>AerialToggle<CR>')
+        vim.keymap.set('n', '<leader>cm', '<cmd>AerialToggle<CR>')
     end,
 }
