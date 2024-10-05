@@ -47,9 +47,27 @@ do_list() {
     ls -lha "${snapshot_prefix}"
 }
 
-# checkout [tag]
+# checkout [--base tag] [tag]
 do_checkout() {
-    local current="$(readlink "${snapshot_prefix}/current")"
+    local opt_base=
+
+    while (($#)); do
+        case $1 in
+            --base)
+                opt_base="$2"
+                shift 2
+                ;;
+            *)
+                break
+                ;;
+        esac
+    done
+
+    local current="${opt_base}"
+    if [[ -z "${current}" ]]; then
+        current="$(readlink "${snapshot_prefix}/current")"
+    fi
+
     local tag="$1"
     if [[ -z "${tag}" ]]; then
         tag="${current%%.*}.$(date +%Y%m%d%H%M%S)"
@@ -98,20 +116,6 @@ do_exec() {
     done
 }
 
-# backup src dest
-do_backup() {
-    local vol_src="$1"
-    local vol_dest="$2"
-
-    if [[ ! -e "${snapshot_prefix}/${vol_src}" ]]; then
-        die "can not find src vol ${vol_src}"
-    fi
-    if [[ -e "${snapshot_prefix}/${vol_dest}" ]]; then
-        die "non empty dest vol ${vol_dest}"
-    fi
-    btrfs subvol snapshot "${snapshot_prefix}/${vol_src}" "${snapshot_prefix}/${vol_dest}"
-}
-
 main() {
     while (( $# )); do
         case $1 in
@@ -151,10 +155,6 @@ main() {
         exec)
             shift 1
             do_exec "$@"
-            ;;
-        backup)
-            shift 1
-            do_backup "$@"
             ;;
         *)
             die "unknown action: $*"
