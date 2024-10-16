@@ -43,8 +43,10 @@ desktop() {
     sudo pacman -S --noconfirm \
         notification-daemon libnotify \
         xorg xorg-xinit xorg-xrandr \
-        xss-lock i3lock \
-        bspwm sxhkd alacritty polybar feh rofi flameshot picom
+        sddm \
+        bspwm sxhkd alacritty polybar feh rofi flameshot picom \
+        xss-lock i3lock
+    sudo systemctl enable sddm
 
     sudo pacman -S --noconfirm \
         fcitx-im fcitx-googlepinyin fcitx-configtool \
@@ -64,9 +66,7 @@ custom() {
     cp "$HOME"/.oh-my-zsh/templates/zshrc.zsh-template "$HOME"/.zshrc
     cat "${self_dir}"/dotconfig/zshrc >>"$HOME"/.zshrc
 
-    cat "${self_dir}"/dotconfig/xinitrc >"$HOME"/.xinitrc
     cat "${self_dir}"/dotconfig/xprofile >"$HOME"/.xprofile
-    cat "${self_dir}"/dotconfig/zprofile >"$HOME"/.zprofile
 
     mkdir -p "$HOME"/Pictures
     cp -rf "${self_dir}"/dotconfig/Pictures/* "$HOME"/Pictures/
