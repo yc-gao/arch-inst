@@ -28,12 +28,12 @@ aur() {
     rm -rf yay-bin
 }
 
-docker() {
-    sudo pacman -S --noconfirm docker docker-compose
-    sudo systemctl enable docker
-    sudo usermod -aG docker "${user}"
-    yay -S --noconfirm nvidia-container-toolkit
-}
+# docker() {
+#     sudo pacman -S --noconfirm docker docker-compose
+#     sudo systemctl enable docker
+#     sudo usermod -aG docker "${user}"
+#     yay -S --noconfirm nvidia-container-toolkit
+# }
 
 desktop() {
     sudo pacman -S --noconfirm pipewire wireplumber pipewire-audio pipewire-alsa pipewire-pulse \
@@ -93,7 +93,7 @@ main() {
 
     base
     aur
-    docker
+    # docker
     desktop
     custom
 }
