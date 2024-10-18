@@ -28,6 +28,11 @@ aur() {
     rm -rf yay-bin
 }
 
+podman() {
+    sudo pacman -S --noconfirm podman passt
+    sudo usermod --add-subuids 100000-165535 --add-subgids 100000-165535 "${user}"
+    yay -S --noconfirm nvidia-container-toolkit
+}
 # docker() {
 #     sudo pacman -S --noconfirm docker docker-compose
 #     sudo systemctl enable docker
@@ -93,6 +98,7 @@ main() {
 
     base
     aur
+    podman
     # docker
     desktop
     custom
