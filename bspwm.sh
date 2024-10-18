@@ -16,7 +16,7 @@ die() {
 
 base() {
     sudo pacman -Syu --noconfirm
-    sudo pacman -S --noconfirm cifs-utils lvm2 mdadm udisk2
+    sudo pacman -S --noconfirm cifs-utils lvm2 mdadm udisks2
 
     sudo cp -r ./airootfs/* /
     sudo mkinitcpio -P
