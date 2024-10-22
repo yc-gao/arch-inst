@@ -29,8 +29,7 @@ aur() {
 }
 
 podman() {
-    sudo pacman -S --noconfirm podman passt
-    sudo usermod --add-subuids 100000-165535 --add-subgids 100000-165535 "${user}"
+    sudo pacman -S --noconfirm podman passt netavark
     yay -S --noconfirm nvidia-container-toolkit
 }
 # docker() {
