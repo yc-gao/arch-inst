@@ -82,12 +82,12 @@ custom() {
     ln -sft "$HOME/.config/" "${self_dir}"/dotconfig/config/*
 
     mkdir -p ~/.software
-    wget -O - https://github.com/Kitware/CMake/releases/download/v3.29.3/cmake-3.29.3-linux-x86_64.tar.gz \
+    wget -t 8 -O - https://github.com/Kitware/CMake/releases/download/v3.29.3/cmake-3.29.3-linux-x86_64.tar.gz \
         | tar -C ~/.software -xz
     echo 'add_local "$HOME"/.software/cmake-3.29.3-linux-x86_64' >> ~/.zshrc
 
     mkdir -p ~/.software
-    wget -O - https://nodejs.org/dist/v20.14.0/node-v20.14.0-linux-x64.tar.xz \
+    wget -t 8 -O - https://nodejs.org/dist/v20.14.0/node-v20.14.0-linux-x64.tar.xz \
         | tar -C ~/.software -xJ
     echo 'add_local "$HOME"/.software/node-v20.14.0-linux-x64' >> ~/.zshrc
 }
