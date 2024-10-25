@@ -17,11 +17,9 @@ trap do_defer EXIT
 # defer script end
 
 opt_label="rootdisk"
-opt_subvol="volumes"
-opt_prefix=""
 
-volumes_prefix="${opt_prefix}/mnt/volumes"
-snapshot_prefix="${volumes_prefix}/snapshots"
+mnt_prefix="/mnt/rootdisk"
+snapshot_prefix="${mnt_prefix}/snapshots"
 
 err() {
     echo "$@" >&2
@@ -32,14 +30,10 @@ die() {
 }
 
 do_init() {
-    volumes_prefix="${opt_prefix}/mnt/volumes"
-    snapshot_prefix="${volumes_prefix}/snapshots"
-
-    mkdir -p "${volumes_prefix}"
-    mount -L "${opt_label}" -o rw,relatime,ssd,space_cache=v2,subvol="${opt_subvol}" "${volumes_prefix}"
+    mount --mkdir -L "${opt_label}" "${mnt_prefix}"
 }
 do_uninit() {
-    umount "${volumes_prefix}"
+    umount "${mnt_prefix}"
 }
 
 
@@ -121,14 +115,6 @@ main() {
         case $1 in
             -L | --label)
                 opt_label="$2"
-                shift 2
-                ;;
-            -p | --prefix)
-                opt_prefix="$2"
-                shift 2
-                ;;
-            --subvol)
-                opt_subvol="$2"
                 shift 2
                 ;;
             *)

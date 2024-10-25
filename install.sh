@@ -13,8 +13,7 @@ rootdisk="/dev/nvme0n1p2"
 targetfs="/mnt"
 
 volumes=(
-    "${rootdisk}:-o subvol=volumes/root:${targetfs}"
-    "${rootdisk}:-o subvol=volumes/swap:${targetfs}/swap"
+    "${rootdisk}:-o subvol=root:${targetfs}"
     "${espdisk}::${targetfs}/boot/efi"
 )
 
@@ -73,15 +72,14 @@ prepare() {
     mkfs.btrfs -f -L rootdisk "${rootdisk}"
 
     mount "${rootdisk}" "${targetfs}"
-    btrfs subvol create "${targetfs}/volumes"
 
-    btrfs subvol create "${targetfs}/volumes/swap"
-    btrfs filesystem mkswapfile --size 128g "${targetfs}/volumes/swap/swapfile"
+    btrfs subvol create "${targetfs}/swap"
+    btrfs filesystem mkswapfile --size 128g "${targetfs}/swap/swapfile"
 
-    ln -s snapshots/current "${targetfs}/volumes/root"
-    mkdir -p "${targetfs}/volumes/snapshots"
-    ln -s root "${targetfs}/volumes/snapshots/current"
-    btrfs subvol create "${targetfs}/volumes/snapshots/root"
+    ln -s snapshots/current "${targetfs}/root"
+    mkdir -p "${targetfs}/snapshots"
+    ln -s base "${targetfs}/snapshots/current"
+    btrfs subvol create "${targetfs}/snapshots/base"
 
     umount -R "${targetfs}"
 
@@ -91,16 +89,16 @@ prepare() {
         btrfs-progs exfatprogs
     cp "${self_path}" ${targetfs}/root/
     arch-chroot "${targetfs}" "/root/$(basename "${self_path}")" do_install
-    rm -rf  "${targetfs}/root/$(basename "${self_path}")"
+    rm -rf "${targetfs}/root/$(basename "${self_path}")"
 
     cp -r "${self_dir}/grub" ${targetfs}/boot
     {
         echo -e "UUID=$(lsblk -n -o uuid $espdisk)      /boot/efi       vfat    defaults    0    2"
-        echo -e "UUID=$(lsblk -n -o uuid $rootdisk)     /swap           btrfs   rw,relatime,ssd,space_cache=v2,subvol=volumes/swap    0    0"
+        echo -e "UUID=$(lsblk -n -o uuid $rootdisk)     /swap           btrfs   defaults,subvol=swap    0    0"
         echo -e "/swap/swapfile    none    swap    defaults    0    0"
     } > "${targetfs}/etc/fstab"
     umount -R "${targetfs}"
-    "${self_dir}/rmanager" checkout bspwm
+    "${self_dir}/rmanager" checkout main
 }
 
 action="prepare"
