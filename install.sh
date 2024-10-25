@@ -76,9 +76,9 @@ prepare() {
     btrfs subvol create "${targetfs}/swap"
     btrfs filesystem mkswapfile --size 128g "${targetfs}/swap/swapfile"
 
-    ln -s snapshots/current "${targetfs}/root"
+    ln -sT snapshots/current "${targetfs}/root"
     mkdir -p "${targetfs}/snapshots"
-    ln -s base "${targetfs}/snapshots/current"
+    ln -sT base "${targetfs}/snapshots/current"
     btrfs subvol create "${targetfs}/snapshots/base"
 
     umount -R "${targetfs}"
@@ -93,8 +93,8 @@ prepare() {
 
     cp -r "${self_dir}/grub" ${targetfs}/boot
     {
-        echo -e "UUID=$(lsblk -n -o uuid $espdisk)      /boot/efi       vfat    defaults    0    2"
-        echo -e "UUID=$(lsblk -n -o uuid $rootdisk)     /swap           btrfs   defaults,subvol=swap    0    0"
+        echo -e "UUID=$(lsblk -n -o uuid "${espdisk}")      /boot/efi       vfat    defaults    0    2"
+        echo -e "UUID=$(lsblk -n -o uuid "${rootdisk}")     /swap           btrfs   defaults,subvol=swap    0    0"
         echo -e "/swap/swapfile    none    swap    defaults    0    0"
     } > "${targetfs}/etc/fstab"
     umount -R "${targetfs}"
@@ -105,5 +105,5 @@ action="prepare"
 if (( $# >0 )); then
     action="$1"
 fi
-$action
+"${action}"
 
