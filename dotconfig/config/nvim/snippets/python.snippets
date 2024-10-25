@@ -1,0 +1,13 @@
+snippet main
+    def parse_options():
+        parser = argparse.ArgumentParser()
+        return parser.parse_args()
+
+
+    def main():
+        options = parse_options()
+
+
+    if __name__ == "__main__":
+        main()
+
