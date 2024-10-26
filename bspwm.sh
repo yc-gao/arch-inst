@@ -29,7 +29,9 @@ aur() {
 }
 
 podman() {
-    sudo pacman -S --noconfirm podman passt netavark
+    sudo pacman -S --noconfirm podman \
+        passt netavark \
+        qemu-user-static qemu-user-static-binfmt
     yay -S --noconfirm nvidia-container-toolkit
 }
 # docker() {
