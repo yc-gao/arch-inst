@@ -57,8 +57,8 @@ return {
         vim.keymap.set({ 'n', 'v' }, '<A-[>', function() mappings.by_step('focus', -1) end)
         vim.keymap.set({ 'n', 'v' }, '<A-]>', function() mappings.by_step('focus', 1) end)
 
-        vim.keymap.set({ 'n', 'v' }, '<A-S-{>', function() mappings.by_step('switch', -1) end)
-        vim.keymap.set({ 'n', 'v' }, '<A-S-}>', function() mappings.by_step('switch', 1) end)
+        vim.keymap.set({ 'n', 'v' }, '<A-S-[>', function() mappings.by_step('switch', -1) end)
+        vim.keymap.set({ 'n', 'v' }, '<A-S-]>', function() mappings.by_step('switch', 1) end)
 
         vim.keymap.set({ 'n', 'v' }, '<A-C-[>', function() mappings.by_step('close', -1) end)
         vim.keymap.set({ 'n', 'v' }, '<A-C-]>', function() mappings.by_step('close', 1) end)
