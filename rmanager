@@ -86,7 +86,7 @@ do_delete() {
 
 # exec [-u user] -t tag cmd...
 do_exec() {
-    local opt_user=root
+    local opt_user="root"
     local opt_tag=
     while (($#)); do
         case $1 in
