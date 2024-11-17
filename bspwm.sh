@@ -33,6 +33,8 @@ podman() {
         passt netavark \
         qemu-user-static qemu-user-static-binfmt
     yay -S --noconfirm nvidia-container-toolkit
+    systemctl --user enable podman.socket
+    systemctl --user enable podman-restart.service
 }
 # docker() {
 #     sudo pacman -S --noconfirm docker docker-compose
