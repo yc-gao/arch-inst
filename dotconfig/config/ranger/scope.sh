@@ -338,13 +338,14 @@ handle_fallback() {
     exit 1
 }
 
-
-MIMETYPE="$( file --dereference --brief --mime-type -- "${FILE_PATH}" )"
-if [[ "${PV_IMAGE_ENABLED}" == 'True' ]]; then
-    handle_image "${MIMETYPE}"
+if [ "$(du -bsk "${FILE_PATH}" | cut -f 1)" -lt "1000000" ]; then
+    MIMETYPE="$( file --dereference --brief --mime-type -- "${FILE_PATH}" )"
+    if [[ "${PV_IMAGE_ENABLED}" == 'True' ]]; then
+        handle_image "${MIMETYPE}"
+    fi
+    handle_extension
+    handle_mime "${MIMETYPE}"
 fi
-handle_extension
-handle_mime "${MIMETYPE}"
 handle_fallback
 
 exit 1
