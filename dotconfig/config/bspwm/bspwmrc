@@ -3,6 +3,7 @@
 pgrep -x sxhkd > /dev/null || sxhkd &
 pgrep -x polybar > /dev/null || polybar &
 pgrep -x feh > /dev/null || feh --no-fehbg --bg-fill --randomize ~/Pictures/wallpaper/* &
+pgrep -x picom > /dev/null || picom -b --config ~/.config/picom/picom.conf
 
 bspc config focus_follows_pointer true
 
