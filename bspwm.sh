@@ -58,7 +58,7 @@ desktop() {
 
     sudo pacman -S --noconfirm \
         fcitx-im fcitx-googlepinyin fcitx-configtool \
-        firefox obsidian \
+        firefox \
         man-db man-pages \
         ffmpeg imagemagick vlc \
         ranger ueberzug ffmpegthumbnailer imv \
