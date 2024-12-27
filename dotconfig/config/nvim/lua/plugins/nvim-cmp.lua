@@ -2,49 +2,53 @@ local mason_init = function()
     require('mason').setup()
     require('mason-lspconfig').setup({
         ensure_installed = {
-            'clangd', 'cmake',
+            'clangd',
             'pyright', 'pylsp',
-            'html', 'emmet_language_server',
-            'eslint', 'ts_ls',
-            'cssls',
             'bashls', 'awk_ls',
-            'lua_ls',
             'dockerls', 'docker_compose_language_service',
             'jsonls', 'yamlls',
         },
-        automatic_installation = true
-    })
-    require('mason-lspconfig').setup_handlers({
-        function(server_name) -- default handler (optional)
-            require("lspconfig")[server_name].setup({})
-        end,
-        ['emmet_language_server'] = function()
-            local lspconfig = require('lspconfig')
-            lspconfig.emmet_language_server.setup({
-                filetypes = {
-                    'css', 'less', 'sass', 'scss',
-                    'html', 'eruby', 'pug',
-                    'javascript', 'javascriptreact',
-                    'typescript', 'typescriptreact',
-                },
-            })
-        end,
-        ['html'] = function()
-            local lspconfig = require('lspconfig')
-            local capabilities = vim.lsp.protocol.make_client_capabilities()
-            capabilities.textDocument.completion.completionItem.snippetSupport = true
-            lspconfig.html.setup({
-                capabilities = capabilities,
-            })
-        end,
-        ['cssls'] = function()
-            local lspconfig = require('lspconfig')
-            local capabilities = vim.lsp.protocol.make_client_capabilities()
-            capabilities.textDocument.completion.completionItem.snippetSupport = true
-            lspconfig.cssls.setup({
-                capabilities = capabilities,
-            })
-        end,
+        automatic_installation = true,
+        handlers = {
+            function(server_name) -- default handler (optional)
+                require("lspconfig")[server_name].setup({})
+            end,
+            -- ['emmet_language_server'] = function()
+            --     local lspconfig = require('lspconfig')
+            --     lspconfig.emmet_language_server.setup({
+            --         filetypes = {
+            --             'css', 'less', 'sass', 'scss',
+            --             'html', 'eruby', 'pug',
+            --             'javascript', 'javascriptreact',
+            --             'typescript', 'typescriptreact',
+            --         },
+            --     })
+            -- end,
+            -- ['html'] = function()
+            --     local lspconfig = require('lspconfig')
+            --     local capabilities = vim.lsp.protocol.make_client_capabilities()
+            --     capabilities.textDocument.completion.completionItem.snippetSupport = true
+            --     lspconfig.html.setup({
+            --         capabilities = capabilities,
+            --     })
+            -- end,
+            -- ['cssls'] = function()
+            --     local lspconfig = require('lspconfig')
+            --     local capabilities = vim.lsp.protocol.make_client_capabilities()
+            --     capabilities.textDocument.completion.completionItem.snippetSupport = true
+            --     lspconfig.cssls.setup({
+            --         capabilities = capabilities,
+            --     })
+            -- end,
+            -- ['neocmake'] = function()
+            --     local lspconfig = require('lspconfig')
+            --     local capabilities = vim.lsp.protocol.make_client_capabilities()
+            --     -- capabilities.textDocument.completion.completionItem.snippetSupport = true
+            --     lspconfig.neocmake.setup({
+            --         capabilities = capabilities,
+            --     })
+            -- end,
+        },
     })
 end
 
