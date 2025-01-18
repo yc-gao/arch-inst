@@ -1,4 +1,13 @@
 return {
     'numToStr/Comment.nvim',
-    opts = {},
+    opts = {
+        toggler = {
+            line = 'gcc',
+            block = 'gbc',
+        },
+        opleader = {
+            line = 'gc',
+            block = 'gb',
+        }
+    },
 }

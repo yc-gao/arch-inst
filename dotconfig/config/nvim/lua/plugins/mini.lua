@@ -3,6 +3,13 @@ return {
     version = '*',
     config = function()
         require('mini.pairs').setup()
+        require('mini.surround').setup({
+            mappings = {
+                add = 'ys',
+                delete = 'ds',
+                replace = 'cs',
+            },
+        })
         require('mini.move').setup({
             mappings = {
                 left = '<C-h>',
@@ -17,6 +24,5 @@ return {
                 line_up = '<C-k>',
             }
         })
-        require('mini.align').setup()
     end,
 }

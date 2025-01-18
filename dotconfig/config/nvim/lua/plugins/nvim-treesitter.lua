@@ -14,7 +14,6 @@ return {
                 "dockerfile",
                 "json", "yaml",
                 "gitignore", "git_config",
-
             },
             auto_install = true,
             highlight = {
@@ -32,7 +31,7 @@ return {
                 enable = true
             }
         })
-        vim.o.foldmethod = 'expr'
-        vim.o.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+        vim.wo.foldmethod = 'expr'
+        vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
     end
 }

@@ -1,5 +1,10 @@
 return {
-    'kyazdani42/nvim-tree.lua',
+    'nvim-tree/nvim-tree.lua',
+    init = function()
+        vim.g.loaded_netrw = 1
+        vim.g.loaded_netrwPlugin = 1
+        vim.o.termguicolors = true
+    end,
     config = function()
         require('nvim-tree').setup({
             view = {
@@ -15,9 +20,6 @@ return {
             },
             update_focused_file = {
                 enable = true,
-            },
-            live_filter = {
-                always_show_folders = false,
             },
             on_attach = function(bufnr)
                 local function opts(desc)
@@ -55,10 +57,5 @@ return {
 
         })
         vim.keymap.set('n', '<leader>dr', '<cmd>NvimTreeToggle<cr>')
-    end,
-    init = function()
-        vim.g.loaded_netrw = 1
-        vim.g.loaded_netrwPlugin = 1
-        vim.opt.termguicolors = true
     end,
 }

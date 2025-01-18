@@ -3,51 +3,13 @@ local mason_init = function()
     require('mason-lspconfig').setup({
         ensure_installed = {
             'clangd',
-            'pyright', 'pylsp',
-            'bashls', 'awk_ls',
-            'dockerls', 'docker_compose_language_service',
-            'jsonls', 'yamlls',
+            'bashls',
         },
         automatic_installation = true,
         handlers = {
             function(server_name) -- default handler (optional)
                 require("lspconfig")[server_name].setup({})
             end,
-            -- ['emmet_language_server'] = function()
-            --     local lspconfig = require('lspconfig')
-            --     lspconfig.emmet_language_server.setup({
-            --         filetypes = {
-            --             'css', 'less', 'sass', 'scss',
-            --             'html', 'eruby', 'pug',
-            --             'javascript', 'javascriptreact',
-            --             'typescript', 'typescriptreact',
-            --         },
-            --     })
-            -- end,
-            -- ['html'] = function()
-            --     local lspconfig = require('lspconfig')
-            --     local capabilities = vim.lsp.protocol.make_client_capabilities()
-            --     capabilities.textDocument.completion.completionItem.snippetSupport = true
-            --     lspconfig.html.setup({
-            --         capabilities = capabilities,
-            --     })
-            -- end,
-            -- ['cssls'] = function()
-            --     local lspconfig = require('lspconfig')
-            --     local capabilities = vim.lsp.protocol.make_client_capabilities()
-            --     capabilities.textDocument.completion.completionItem.snippetSupport = true
-            --     lspconfig.cssls.setup({
-            --         capabilities = capabilities,
-            --     })
-            -- end,
-            -- ['neocmake'] = function()
-            --     local lspconfig = require('lspconfig')
-            --     local capabilities = vim.lsp.protocol.make_client_capabilities()
-            --     -- capabilities.textDocument.completion.completionItem.snippetSupport = true
-            --     lspconfig.neocmake.setup({
-            --         capabilities = capabilities,
-            --     })
-            -- end,
         },
     })
 end
@@ -58,10 +20,14 @@ local has_words_before = function()
     return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
 end
 
-local cmp_init = function()
+local luasnip_init = function()
     local luasnip = require('luasnip')
     require('luasnip.loaders.from_vscode').lazy_load()
     require('luasnip.loaders.from_snipmate').lazy_load()
+end
+
+local cmp_init = function()
+    local luasnip = require('luasnip')
 
     local cmp = require('cmp')
     cmp.setup({
@@ -101,8 +67,8 @@ local cmp_init = function()
                 end
             end,
             -- ['<ESC>'] = cmp.mapping.abort(),
-            ['<A-k>'] = cmp.mapping.scroll_docs(-4),
-            ['<A-j>'] = cmp.mapping.scroll_docs(4),
+            ['<C-k>'] = cmp.mapping.scroll_docs(-4),
+            ['<C-j>'] = cmp.mapping.scroll_docs(4),
         }),
         formatting = {
             fields = { "kind", "abbr", "menu" },
@@ -111,6 +77,7 @@ local cmp_init = function()
                 vim_item.menu = ({
                     nvim_lsp = "[LSP]",
                     luasnip = "[LuaSnip]",
+                    nvim_lsp_signature_help = "",
                     buffer = "[Buffer]",
                     path = "[Path]",
                     calc = "[Calc]",
@@ -122,6 +89,7 @@ local cmp_init = function()
         sources = cmp.config.sources({
             { name = 'nvim_lsp' },
             { name = 'luasnip' },
+            { name = 'nvim_lsp_signature_help' },
             { name = 'buffer' },
             { name = 'path' },
             { name = 'calc' },
@@ -161,16 +129,21 @@ return {
         'honza/vim-snippets',
 
         'hrsh7th/cmp-nvim-lsp',
+        'hrsh7th/cmp-nvim-lsp-signature-help',
+        'williamboman/mason-lspconfig.nvim',
         'neovim/nvim-lspconfig',
         'williamboman/mason.nvim',
-        'williamboman/mason-lspconfig.nvim',
     },
     config = function()
+        luasnip_init()
         mason_init()
         cmp_init()
 
-        vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action)
-        vim.keymap.set('n', '<leader>cr', vim.lsp.buf.rename)
-        vim.keymap.set('n', '<leader>cf', vim.lsp.buf.format)
+        vim.keymap.set('n', 'grn', vim.lsp.buf.rename)
+        vim.keymap.set('n', 'gra', vim.lsp.buf.code_action)
+        vim.keymap.set('n', 'grr', vim.lsp.buf.references)
+        vim.keymap.set('n', 'gri', vim.lsp.buf.implementation)
+
+        vim.keymap.set('n', 'gq', vim.lsp.buf.format)
     end,
 }
