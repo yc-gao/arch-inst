@@ -5,7 +5,7 @@ return {
         require('mini.pairs').setup()
         require('mini.surround').setup({
             mappings = {
-                add = 'ys',
+                add = 's',
                 delete = 'ds',
                 replace = 'cs',
             },
