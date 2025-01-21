@@ -87,16 +87,16 @@ local cmp_init = function()
             end,
         },
         sources = cmp.config.sources({
+            { name = 'nvim_lsp_signature_help' },
             { name = 'nvim_lsp' },
             { name = 'luasnip' },
-            { name = 'nvim_lsp_signature_help' },
             { name = 'buffer' },
             { name = 'path' },
             { name = 'calc' },
             { name = 'emoji' },
         }),
         sorting = {
-            comparators = { cmp.config.compare.exact, cmp.config.compare.offset }
+            comparators = { cmp.config.compare.offset, cmp.config.compare.exact }
         },
     })
 
