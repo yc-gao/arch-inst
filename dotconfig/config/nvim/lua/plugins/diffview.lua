@@ -10,7 +10,11 @@ return {
                 },
             },
             keymaps = {
-                disable_defaults = true,
+                disable_defaults = false,
+                file_panel = {
+                    { "n", "<tab>",   actions.select_next_entry,             { desc = "Open the diff for the next file" } },
+                    { "n", "<s-tab>", actions.select_prev_entry,             { desc = "Open the diff for the previous file" } },
+                },
                 view = {
                     { "n", "<tab>",   actions.select_next_entry,             { desc = "Open the diff for the next file" } },
                     { "n", "<s-tab>", actions.select_prev_entry,             { desc = "Open the diff for the previous file" } },
