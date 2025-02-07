@@ -2,7 +2,9 @@ export GTK_IM_MODULE=fcitx
 export QT_IM_MODULE=fcitx
 export XMODIFIERS=@im=fcitx
 
-# xrandr --output HDMI-1 --mode 2560x1440 --rate 144
+if xrandr | grep 'connected primary'; then
+    xrandr --output `xrandr | grep 'connected primary' | cut -d ' ' -f1` --mode 2560x1440 --rate 144
+fi
 # xset s off -dpms # Disable DPMS and prevent screen from blanking
 
 pgrep -x fcitx > /dev/null || fcitx -d
