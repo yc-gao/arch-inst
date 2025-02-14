@@ -1,5 +1,6 @@
 #!/bin/sh
 
+pgrep -x xss-lock > /dev/null || xss-lock -- i3lock -n &
 pgrep -x sxhkd > /dev/null || sxhkd &
 pgrep -x polybar > /dev/null || polybar &
 pgrep -x feh > /dev/null || feh --no-fehbg --bg-fill --randomize ~/Pictures/wallpaper/* &
