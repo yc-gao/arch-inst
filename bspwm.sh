@@ -44,8 +44,9 @@ podman() {
 # }
 
 desktop() {
-    sudo pacman -S --noconfirm pipewire wireplumber pipewire-audio pipewire-alsa pipewire-pulse \
-        bluez bluez-utils
+    sudo pacman -S --noconfirm pipewire wireplumber pipewire-audio pipewire-alsa pipewire-pulse
+
+    sudo pacman -S --noconfirm bluez bluez-utils bluetui
     sudo systemctl enable bluetooth
 
     sudo pacman -S --noconfirm \
