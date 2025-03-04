@@ -34,8 +34,8 @@ return {
                 vim.keymap.set('n', 'L', api.tree.expand_all, opts('Expand All'))
                 vim.keymap.set('n', 'H', api.tree.collapse_all, opts('Collapse All'))
 
-                vim.keymap.set('n', ']', api.tree.change_root_to_node, opts('CD'))
-                vim.keymap.set('n', '[', api.tree.change_root_to_parent, opts('Up'))
+                vim.keymap.set('n', ']]', api.tree.change_root_to_node, opts('CD'))
+                vim.keymap.set('n', '[[', api.tree.change_root_to_parent, opts('Up'))
 
                 vim.keymap.set('n', 'r', api.fs.rename, opts('Rename'))
                 vim.keymap.set('n', 'a', api.fs.create, opts('Create'))
