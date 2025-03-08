@@ -1,54 +1,48 @@
-#!/bin/bash
-set -e
+#!/usr/bin/env bash
+set -o errexit
+set -o pipefail
+set -o nounset
 
-# defer script
-__func_defered=()
-defer() {
-    __func_defered+=("$*")
+info() {
+    echo "[info]" "$@"
 }
+
+err() {
+    echo "[error]" "$@" 2>&1
+}
+
+die() {
+    local code="$1"
+    shift
+
+    err "$@"
+    exit "${code}"
+}
+
+__func_defered=()
 do_defer() {
     for ((i=${#__func_defered[@]}-1;i>=0;i--)); do
         if ! eval "${__func_defered[i]}"; then
-            echo "eval cmd failed, cmd: \"${__func_defered[i]}\"" >&2
+            die 1 "eval cmd failed, cmd: \"${__func_defered[i]}\""
         fi
     done
 }
 trap do_defer EXIT
-# defer script end
+defer() {
+    __func_defered+=("$*")
+}
 
 opt_label="rootdisk"
 
-mnt_prefix="/mnt/rootdisk"
-snapshot_prefix="${mnt_prefix}/snapshots"
+# snapshot [--base base_tag] tags...
+do_snapshot() {
+    local snapshot_prefix="/mnt/${opt_label}/snapshots"
 
-err() {
-    echo "$@" >&2
-}
-die() {
-    echo "$@" >&2
-    exit 1
-}
-
-do_init() {
-    mount --mkdir -L "${opt_label}" "${mnt_prefix}"
-}
-do_uninit() {
-    umount "${mnt_prefix}"
-}
-
-
-do_list() {
-    ls -lha "${snapshot_prefix}"
-}
-
-# checkout [--base tag] [tag]
-do_checkout() {
-    local opt_base=
-
+    local base_tag=
     while (($#)); do
-        case $1 in
+        case "$1" in
             --base)
-                opt_base="$2"
+                base_tag="$2"
                 shift 2
                 ;;
             *)
@@ -57,62 +51,74 @@ do_checkout() {
         esac
     done
 
-    local current="${opt_base}"
-    if [[ -z "${current}" ]]; then
-        current="$(readlink "${snapshot_prefix}/current")"
+    if [[ -z "${base_tag}" ]]; then
+        base_tag="$(readlink "${snapshot_prefix}/current")"
+    fi
+
+    local tags=("$@")
+    if [[ "${#tags[@]}" -eq 0 ]]; then
+        IFS='.' read -r branch version <<<"${base_tag}"
+        tags+=("${branch}.$(date +%Y%m%d%H%M%S)")
+    fi
+
+    for tag in "${tags[@]}"; do
+        btrfs subvol snapshot "${snapshot_prefix}/${base_tag}" "${snapshot_prefix}/${tag}" || die 255 "btrfs cannot snapshot '${base_tag}' to ${tag}"
+    done
+}
+
+# delete tags...
+do_delete() {
+    local snapshot_prefix="/mnt/${opt_label}/snapshots"
+
+    for tag in "$@"; do
+        btrfs subvol delete "${snapshot_prefix}/${tag}" || die 255 "btrfs cannot delete subvol '${tag}'"
+    done
+}
+
+do_list() {
+    local snapshot_prefix="/mnt/${opt_label}/snapshots"
+    ls -lh "${snapshot_prefix}/"
+
+}
+
+# checkout [--base base_tag] tag
+do_checkout() {
+    local snapshot_prefix="/mnt/${opt_label}/snapshots"
+
+    local base_tag=
+    while (($#)); do
+        case "$1" in
+            --base)
+                base_tag="$2"
+                shift 2
+                ;;
+            *)
+                break
+                ;;
+        esac
+    done
+
+    if [[ -z "${base_tag}" ]]; then
+        base_tag="$(readlink "${snapshot_prefix}/current")"
     fi
 
     local tag="$1"
     if [[ -z "${tag}" ]]; then
-        tag="${current%%.*}.$(date +%Y%m%d%H%M%S)"
+        IFS='.' read -r branch version <<<"${base_tag}"
+        tag="${branch}.$(date +%Y%m%d%H%M%S)"
     fi
 
     if [[ ! -e "${snapshot_prefix}/${tag}" ]]; then
-        btrfs subvol snapshot "${snapshot_prefix}/${current}" "${snapshot_prefix}/${tag}"
+        do_snapshot --base "${base_tag}" "${tag}"
     fi
+
     rm "${snapshot_prefix}/current"
     ln -sfT "${tag}" "${snapshot_prefix}/current"
 }
 
-# delete tag...
-do_delete() {
-    local tag
-    for tag in "$@"; do
-        if [[ -e "${snapshot_prefix}/${tag}" ]]; then
-            btrfs subvol delete "${snapshot_prefix}/${tag}" || err "delete volume ${tag} failed, please check ${snapshot_prefix}/${tag}"
-        fi
-    done
-}
-
-# exec [-u user] -t tag cmd...
-do_exec() {
-    local opt_user="root"
-    local opt_tag=
-    while (($#)); do
-        case $1 in
-            -u | --user)
-                opt_user="$2"
-                shift 2
-                ;;
-            -t | --tag)
-                opt_tag="$2"
-                shift 2
-                ;;
-            *)
-                break;;
-        esac
-    done
-    [[ -z "${opt_tag}" ]] && die "empty tag"
-    [[ ! -e "${snapshot_prefix}/${opt_tag}" ]] && die "exec failed, check tag: ${snapshot_prefix}/${opt_tag}"
-
-    for cmd in "$@"; do
-        (cd "${snapshot_prefix}/${opt_tag}" && su "${opt_user}" -c "${cmd}")
-    done
-}
-
 main() {
-    while (( $# )); do
-        case $1 in
+    while (($#)); do
+        case "$1" in
             -L | --label)
                 opt_label="$2"
                 shift 2
@@ -122,31 +128,31 @@ main() {
                 ;;
         esac
     done
-    defer do_uninit
-    do_init
 
-    case "${1}" in
-        list)
-            shift 1
-            do_list "$@"
-            ;;
-        checkout)
-            shift 1
-            do_checkout "$@"
+    mount --mkdir -L "${opt_label}" "/mnt/${opt_label}"
+    defer "umount /mnt/${opt_label}"
+
+    case "$1" in
+        snapshot)
+            shift
+            do_snapshot "$@"
             ;;
         delete)
-            shift 1
+            shift
             do_delete "$@"
             ;;
-        exec)
-            shift 1
-            do_exec "$@"
+        list)
+            shift
+            do_list
+            ;;
+        checkout)
+            shift
+            do_checkout "$@"
             ;;
         *)
-            die "unknown action: $*"
+            die 255 "undefined command '$1'"
             ;;
     esac
 }
 
 main "$@"
-
