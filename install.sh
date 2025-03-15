@@ -78,8 +78,8 @@ prepare() {
 
     ln -sT snapshots/current "${targetfs}/root"
     mkdir -p "${targetfs}/snapshots"
-    ln -sT base "${targetfs}/snapshots/current"
-    btrfs subvol create "${targetfs}/snapshots/base"
+    ln -sT main "${targetfs}/snapshots/current"
+    btrfs subvol create "${targetfs}/snapshots/main"
 
     umount -R "${targetfs}"
 
@@ -98,7 +98,7 @@ prepare() {
         echo -e "/swap/swapfile    none    swap    defaults    0    0"
     } > "${targetfs}/etc/fstab"
     umount -R "${targetfs}"
-    "${self_dir}/rmanager" checkout main
+    "${self_dir}/rmanager" snapshot
 }
 
 action="prepare"
