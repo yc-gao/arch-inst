@@ -76,10 +76,10 @@ prepare() {
     btrfs subvol create "${targetfs}/swap"
     btrfs filesystem mkswapfile --size 128g "${targetfs}/swap/swapfile"
 
-    ln -sT snapshots/current "${targetfs}/root"
     mkdir -p "${targetfs}/snapshots"
-    ln -sT main "${targetfs}/snapshots/current"
     btrfs subvol create "${targetfs}/snapshots/main"
+    ln -sT main "${targetfs}/snapshots/current"
+    ln -sT snapshots/current "${targetfs}/root"
 
     umount -R "${targetfs}"
 
