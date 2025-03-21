@@ -16,7 +16,7 @@ die() {
 
 base() {
     sudo pacman -Syu --noconfirm
-    sudo pacman -S --noconfirm cifs-utils lvm2 mdadm udisks2
+    sudo pacman -S --noconfirm cifs-utils lvm2 mdadm
 
     sudo cp -r ./airootfs/* /
     sudo mkinitcpio -P
@@ -51,20 +51,18 @@ desktop() {
     sudo systemctl enable bluetooth
 
     sudo pacman -S --noconfirm \
+        xorg xorg-xrandr sddm \
         notification-daemon libnotify \
-        xorg xorg-xinit xorg-xrandr \
-        sddm \
-        bspwm sxhkd alacritty polybar feh rofi flameshot picom \
-        xss-lock i3lock
+        fcitx-im fcitx-googlepinyin fcitx-configtool \
+        bspwm sxhkd alacritty polybar feh rofi flameshot picom ranger \
+        xss-lock i3lock xdotool xclip
     sudo systemctl enable sddm
 
     sudo pacman -S --noconfirm \
-        fcitx-im fcitx-googlepinyin fcitx-configtool \
         firefox \
         man-db man-pages \
         ffmpeg imagemagick vlc \
-        ranger ueberzug ffmpegthumbnailer imv \
-        xdotool xclip \
+        ueberzug ffmpegthumbnailer imv \
         wget curl neovim unzip \
         ripgrep-all ctags openbsd-netcat jq nmap rsync lsof
 }
