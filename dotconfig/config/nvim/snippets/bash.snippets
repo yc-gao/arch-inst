@@ -22,6 +22,7 @@ snippet main
 
     __func_defered=()
     do_defer() {
+        local i
         for ((i=\${#__func_defered[@]}-1;i>=0;i--)); do
             if ! eval "\${__func_defered[i]}"; then
                 die 1 "eval cmd failed, cmd: \"\${__func_defered[i]}\""
