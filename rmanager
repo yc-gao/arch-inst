@@ -37,7 +37,8 @@ opt_label="rootdisk"
 
 # snapshot [--base base_tag] tags...
 do_snapshot() {
-    local snapshot_prefix="/mnt/${opt_label}/snapshots"
+    local rootdisk_prefix="/mnt/${opt_label}"
+    local snapshot_prefix="${rootdisk_prefix}/snapshots"
 
     local base_tag=
     while (($#)); do
@@ -53,7 +54,7 @@ do_snapshot() {
     done
 
     if [[ -z "${base_tag}" ]]; then
-        base_tag="$(readlink "${snapshot_prefix}/current")"
+        base_tag="$(readlink "${rootdisk_prefix}/rootfs")"
     fi
 
     local tags=("$@")
@@ -71,7 +72,8 @@ do_snapshot() {
 
 # delete tags...
 do_delete() {
-    local snapshot_prefix="/mnt/${opt_label}/snapshots"
+    local rootdisk_prefix="/mnt/${opt_label}"
+    local snapshot_prefix="${rootdisk_prefix}/snapshots"
 
     local tag
     for tag in "$@"; do
@@ -80,14 +82,17 @@ do_delete() {
 }
 
 do_list() {
-    local snapshot_prefix="/mnt/${opt_label}/snapshots"
-    ls -lh "${snapshot_prefix}/"
+    local rootdisk_prefix="/mnt/${opt_label}"
+    local snapshot_prefix="${rootdisk_prefix}/snapshots"
 
+    ls -lh "${snapshot_prefix}/"
+    ls -dlh "${rootdisk_prefix}/rootfs"
 }
 
 # checkout [--base base_tag] tag
 do_checkout() {
-    local snapshot_prefix="/mnt/${opt_label}/snapshots"
+    local rootdisk_prefix="/mnt/${opt_label}"
+    local snapshot_prefix="${rootdisk_prefix}/snapshots"
 
     local base_tag=
     while (($#)); do
@@ -103,7 +108,7 @@ do_checkout() {
     done
 
     if [[ -z "${base_tag}" ]]; then
-        base_tag="$(readlink "${snapshot_prefix}/current")"
+        base_tag="$(readlink "${rootdisk_prefix}/rootfs")"
     fi
 
     local tag="${1:-}"
@@ -117,8 +122,8 @@ do_checkout() {
         do_snapshot --base "${base_tag}" "${tag}"
     fi
 
-    rm "${snapshot_prefix}/current"
-    ln -sfT "${tag}" "${snapshot_prefix}/current"
+    rm "${rootdisk_prefix}/rootfs"
+    ln -sfT "snapshots/${tag}" "${rootdisk_prefix}/rootfs"
 }
 
 main() {

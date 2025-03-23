@@ -78,8 +78,7 @@ prepare() {
 
     mkdir -p "${targetfs}/snapshots"
     btrfs subvol create "${targetfs}/snapshots/main"
-    ln -sT main "${targetfs}/snapshots/current"
-    ln -sT snapshots/current "${targetfs}/root"
+    ln -sT snapshots/main "${targetfs}/rootfs"
 
     umount -R "${targetfs}"
 
