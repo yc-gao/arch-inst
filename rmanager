@@ -55,6 +55,7 @@ do_snapshot() {
 
     if [[ -z "${base_tag}" ]]; then
         base_tag="$(readlink "${rootdisk_prefix}/rootfs")"
+	base_tag="$(basename "${base_tag}")"
     fi
 
     local tags=("$@")
@@ -109,6 +110,7 @@ do_checkout() {
 
     if [[ -z "${base_tag}" ]]; then
         base_tag="$(readlink "${rootdisk_prefix}/rootfs")"
+	base_tag="$(basename "${base_tag}")"
     fi
 
     local tag="${1:-}"
