@@ -78,7 +78,7 @@ do_delete() {
 
     local tag
     for tag in "$@"; do
-        btrfs subvol delete "${snapshot_prefix}/${tag}" || die 255 "btrfs cannot delete subvol '${tag}'"
+        btrfs subvol delete -R "${snapshot_prefix}/${tag}" || die 255 "btrfs cannot delete subvol '${tag}'"
     done
 }
 
