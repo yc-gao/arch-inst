@@ -21,6 +21,7 @@ die() {
 
 __func_defered=()
 do_defer() {
+    local i
     for ((i=${#__func_defered[@]}-1;i>=0;i--)); do
         if ! eval "${__func_defered[i]}"; then
             die 1 "eval cmd failed, cmd: \"${__func_defered[i]}\""
@@ -57,10 +58,12 @@ do_snapshot() {
 
     local tags=("$@")
     if [[ "${#tags[@]}" -eq 0 ]]; then
+        local branch version
         IFS='.' read -r branch version <<<"${base_tag}"
         tags+=("${branch}.$(date +%Y%m%d%H%M%S)")
     fi
 
+    local tag
     for tag in "${tags[@]}"; do
         btrfs subvol snapshot "${snapshot_prefix}/${base_tag}" "${snapshot_prefix}/${tag}" || die 255 "btrfs cannot snapshot '${base_tag}' to ${tag}"
     done
@@ -70,6 +73,7 @@ do_snapshot() {
 do_delete() {
     local snapshot_prefix="/mnt/${opt_label}/snapshots"
 
+    local tag
     for tag in "$@"; do
         btrfs subvol delete "${snapshot_prefix}/${tag}" || die 255 "btrfs cannot delete subvol '${tag}'"
     done
@@ -102,8 +106,9 @@ do_checkout() {
         base_tag="$(readlink "${snapshot_prefix}/current")"
     fi
 
-    local tag="$1"
+    local tag="${1:-}"
     if [[ -z "${tag}" ]]; then
+        local branch version
         IFS='.' read -r branch version <<<"${base_tag}"
         tag="${branch}.$(date +%Y%m%d%H%M%S)"
     fi
