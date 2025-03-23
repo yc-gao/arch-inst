@@ -13,7 +13,7 @@ rootdisk="/dev/nvme0n1p2"
 targetfs="/mnt"
 
 volumes=(
-    "${rootdisk}:-o subvol=root:${targetfs}"
+    "${rootdisk}:-o subvol=rootfs:${targetfs}"
     "${espdisk}::${targetfs}/boot/efi"
 )
 
