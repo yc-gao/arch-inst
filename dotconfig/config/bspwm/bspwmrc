@@ -16,4 +16,5 @@ bspc config borderless_monocle    false
 bspc config gapless_monocle       false
 
 bspc rule -a imv state=floating
+bspc rule -a Blueman-manager state=floating
 
