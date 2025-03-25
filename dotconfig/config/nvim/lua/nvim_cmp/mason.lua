@@ -4,7 +4,6 @@ require('mason-lspconfig').setup({
         'clangd',
         'bashls',
     },
-    automatic_installation = true,
     handlers = {
         function(server_name) -- default handler (optional)
             require("lspconfig")[server_name].setup({})
