@@ -11,8 +11,8 @@ require('mason-lspconfig').setup({
         ['emmet_language_server'] = function()
             require("lspconfig")["emmet_language_server"].setup({
                 filetypes = {
-                    "css", "eruby", "html", "htmldjango", "javascriptreact", "less", "pug", "sass", "scss", "typescriptreact", "htmlangular",
-                    "javascript"
+                    "css", "eruby", "html", "htmldjango", "less", "pug", "sass", "scss", "htmlangular",
+                    "javascriptreact", "typescriptreact"
                 },
             })
         end,
