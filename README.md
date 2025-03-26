@@ -3,7 +3,9 @@
 - disk
     - swap *
         - swapfile
-    - rootfs  -> snapshots/base
+    - rootfs  -> snapshots/main
     - snapshots
-        - base *
+        - basic
+        - basic...
+        - main *
 
