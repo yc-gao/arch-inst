@@ -12,25 +12,9 @@ espdisk="/dev/nvme0n1p1"
 rootdisk="/dev/nvme0n1p2"
 targetfs="/mnt"
 
-volumes=(
-    "${rootdisk}:-o subvol=rootfs:${targetfs}"
-    "${espdisk}::${targetfs}/boot/efi"
-)
-
 die() {
     echo "$@" >&2
     exit 1
-}
-
-mnt_vols() {
-    local vol
-    for vol in "$@"; do
-        IFS=: read -r disk mopt mpoint <<< "${vol}"
-        if [[ -n "${mpoint}" ]]; then
-            mkdir -p "${mpoint}"
-            mount ${mopt} "${disk}" "${mpoint}"
-        fi
-    done
 }
 
 do_install() {
@@ -77,27 +61,40 @@ prepare() {
     btrfs filesystem mkswapfile --size 128g "${targetfs}/swap/swapfile"
 
     mkdir -p "${targetfs}/snapshots"
-    btrfs subvol create "${targetfs}/snapshots/main"
-    ln -sT snapshots/main "${targetfs}/rootfs"
+    btrfs subvol create "${targetfs}/snapshots/basic"
+    ln -sT snapshots/basic "${targetfs}/rootfs"
 
     umount -R "${targetfs}"
 
     # install system
-    mnt_vols "${volumes[@]}"
-    pacstrap "${targetfs}" base base-devel linux-lts linux-firmware \
+    mount -o subvol=rootfs "${rootdisk}" "${targetfs}"
+    mount "${espdisk}" "${targetfs}/boot/efi"
+
+    pacstrap "${targetfs}" \
+        base base-devel \
+        linux-lts linux-firmware \
         btrfs-progs exfatprogs
-    cp "${self_path}" ${targetfs}/root/
+    cp "${self_path}" "${targetfs}/root/"
     arch-chroot "${targetfs}" "/root/$(basename "${self_path}")" do_install
     rm -rf "${targetfs}/root/$(basename "${self_path}")"
-
-    cp -r "${self_dir}/grub" ${targetfs}/boot
     {
         echo -e "UUID=$(lsblk -n -o uuid "${espdisk}")      /boot/efi       vfat    defaults    0    2"
         echo -e "UUID=$(lsblk -n -o uuid "${rootdisk}")     /swap           btrfs   defaults,subvol=swap    0    0"
         echo -e "/swap/swapfile    none    swap    defaults    0    0"
     } > "${targetfs}/etc/fstab"
+
+    mkdir -p "${targetfs}/boot/grub"
+    cp "${self_dir}/grub/grub.boot.cfg" "${targetfs}/boot/grub/grub.cfg"
     umount -R "${targetfs}"
-    "${self_dir}/rmanager" snapshot
+
+    # install real grub
+    "${self_dir}/rmanager" checkout
+    mount -o subvol=rootfs "${rootdisk}" "${targetfs}"
+    mount "${espdisk}" "${targetfs}/boot/efi"
+
+    cp "${self_dir}/grub/grub.cfg" "${targetfs}/boot/grub/grub.cfg"
+    umount -R "${targetfs}"
+    "${self_dir}/rmanager" checkout main
 }
 
 action="prepare"
