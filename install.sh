@@ -55,7 +55,7 @@ prepare() {
     mkfs.fat -F32 "${espdisk}"
     mkfs.btrfs -f -L rootdisk "${rootdisk}"
 
-    mount "${rootdisk}" "${targetfs}"
+    mount --mkdir "${rootdisk}" "${targetfs}"
 
     btrfs subvol create "${targetfs}/swap"
     btrfs filesystem mkswapfile --size 128g "${targetfs}/swap/swapfile"
@@ -68,7 +68,7 @@ prepare() {
 
     # install system
     mount -o subvol=rootfs "${rootdisk}" "${targetfs}"
-    mount "${espdisk}" "${targetfs}/boot/efi"
+    mount --mkdir "${espdisk}" "${targetfs}/boot/efi"
 
     pacstrap "${targetfs}" \
         base base-devel \
