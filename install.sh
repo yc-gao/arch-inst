@@ -88,7 +88,7 @@ prepare() {
     umount -R "${targetfs}"
 
     # install real grub
-    "${self_dir}/rmanager" checkout
+    "${self_dir}/rmanager" snapshot
     mount -o subvol=rootfs "${rootdisk}" "${targetfs}"
     mount "${espdisk}" "${targetfs}/boot/efi"
 
