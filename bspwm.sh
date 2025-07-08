@@ -57,6 +57,7 @@ desktop() {
         bspwm sxhkd alacritty polybar feh rofi flameshot picom ranger \
         xss-lock i3lock xdotool xclip
     sudo systemctl enable sddm
+    yay -S --noconfirm dragon-drop
 
     sudo pacman -S --noconfirm \
         firefox \
