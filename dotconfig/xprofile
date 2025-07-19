@@ -2,8 +2,8 @@ export GTK_IM_MODULE=fcitx
 export QT_IM_MODULE=fcitx
 export XMODIFIERS=@im=fcitx
 
-if xrandr | grep -E -- '-[0-9]+ connected'; then
-    xrandr --output `xrandr | grep -E -- '-[0-9]+ connected' | cut -d ' ' -f1` --mode 2560x1440 --rate 144
+if xrandr | grep ' connected'; then
+    xrandr --output `xrandr | grep ' connected' | cut -d ' ' -f1` --mode 2560x1440 --rate 144
 fi
 # xset s off -dpms # Disable DPMS and prevent screen from blanking
 
