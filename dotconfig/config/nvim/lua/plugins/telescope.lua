@@ -40,8 +40,11 @@ return {
         vim.keymap.set('n', '<leader>ff', builtin.find_files)
         vim.keymap.set('n', '<leader>fg', builtin.live_grep)
         vim.keymap.set('n', '<leader>fb', builtin.current_buffer_fuzzy_find)
+        vim.keymap.set('n', '<leader>fh', builtin.help_tags)
 
         vim.keymap.set('n', 'grr', builtin.lsp_references)
-        vim.keymap.set('n', 'gri', builtin.lsp_definitions)
+        vim.keymap.set('n', 'gri', builtin.lsp_implementations)
+        vim.keymap.set('n', 'grt', builtin.lsp_type_definitions)
+        vim.keymap.set('n', 'gO', builtin.lsp_document_symbols)
     end,
 }
