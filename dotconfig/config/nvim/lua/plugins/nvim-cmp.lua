@@ -14,6 +14,8 @@ return {
 
         'hrsh7th/cmp-nvim-lsp',
         'hrsh7th/cmp-nvim-lsp-signature-help',
+        'hrsh7th/cmp-nvim-lsp-document-symbol',
+
         'williamboman/mason-lspconfig.nvim',
         'neovim/nvim-lspconfig',
         'williamboman/mason.nvim',
