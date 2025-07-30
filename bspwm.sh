@@ -29,13 +29,13 @@ aur() {
 }
 
 podman() {
-    sudo nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
     sudo pacman -S --noconfirm podman \
         passt netavark \
         qemu-user-static qemu-user-static-binfmt
     yay -S --noconfirm nvidia-container-toolkit
     systemctl --user enable podman.socket
     systemctl --user enable podman-restart.service
+    sudo nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
 }
 # docker() {
 #     sudo pacman -S --noconfirm docker docker-compose
