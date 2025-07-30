@@ -29,6 +29,7 @@ aur() {
 }
 
 podman() {
+    sudo nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
     sudo pacman -S --noconfirm podman \
         passt netavark \
         qemu-user-static qemu-user-static-binfmt
