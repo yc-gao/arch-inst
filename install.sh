@@ -61,8 +61,8 @@ prepare() {
     btrfs filesystem mkswapfile --size 128g "${targetfs}/swap/swapfile"
 
     mkdir -p "${targetfs}/snapshots"
-    btrfs subvol create "${targetfs}/snapshots/basic"
-    ln -sT snapshots/basic "${targetfs}/rootfs"
+    btrfs subvol create "${targetfs}/snapshots/boot_0"
+    ln -sT snapshots/boot_0 "${targetfs}/rootfs"
 
     umount -R "${targetfs}"
 
@@ -88,10 +88,8 @@ prepare() {
     umount -R "${targetfs}"
 
     # install real grub
-    "${self_dir}/rmanager" snapshot
+    "${self_dir}/rmanager" checkout boot_1
     mount -o subvol=rootfs "${rootdisk}" "${targetfs}"
-    mount "${espdisk}" "${targetfs}/boot/efi"
-
     cp "${self_dir}/grub/grub.cfg" "${targetfs}/boot/grub/grub.cfg"
     umount -R "${targetfs}"
     "${self_dir}/rmanager" checkout main
