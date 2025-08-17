@@ -31,17 +31,15 @@ aur() {
 podman() {
     sudo pacman -S --noconfirm podman \
         passt netavark \
-        qemu-user-static qemu-user-static-binfmt
-    yay -S --noconfirm nvidia-container-toolkit
-    sudo nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
+        qemu-user-static qemu-user-static-binfmt \
+        nvidia-container-toolkit
     systemctl --user enable podman.socket
     systemctl --user enable podman-restart.service
 }
 # docker() {
-#     sudo pacman -S --noconfirm docker docker-compose
+#     sudo pacman -S --noconfirm docker nvidia-container-toolkit docker-compose
 #     sudo systemctl enable docker
 #     sudo usermod -aG docker "${user}"
-#     yay -S --noconfirm nvidia-container-toolkit
 # }
 
 desktop() {
