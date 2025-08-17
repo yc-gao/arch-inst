@@ -31,8 +31,8 @@ aur() {
 podman() {
     sudo pacman -S --noconfirm podman \
         passt netavark \
-        qemu-user-static qemu-user-static-binfmt \
-        nvidia-container-toolkit
+        qemu-user-static qemu-user-static-binfmt
+    sudo pacman -S --noconfirm nvidia-container-toolkit
     systemctl --user enable podman.socket
     systemctl --user enable podman-restart.service
 }
