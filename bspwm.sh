@@ -33,9 +33,9 @@ podman() {
         passt netavark \
         qemu-user-static qemu-user-static-binfmt
     yay -S --noconfirm nvidia-container-toolkit
+    sudo nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
     systemctl --user enable podman.socket
     systemctl --user enable podman-restart.service
-    sudo nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
 }
 # docker() {
 #     sudo pacman -S --noconfirm docker docker-compose
