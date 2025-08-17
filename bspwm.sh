@@ -95,9 +95,9 @@ main() {
     base
     aur
     desktop
-    custom
     podman
     # docker
+    custom
 }
 
 main
