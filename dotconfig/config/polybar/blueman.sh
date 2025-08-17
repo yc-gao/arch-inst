@@ -4,7 +4,7 @@ set -o pipefail
 set -o nounset
 
 print_info() {
-    local device_paired="$(bluetoothctl devices Connected | cut -d' ' -f3-)"
+    local device_paired="$(bluetoothctl devices Connected | grep '^Device' | cut -d' ' -f3-)"
     if [[ -n "${device_paired}" ]]; then
         printf " ${device_paired}"
     else
