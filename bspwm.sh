@@ -36,7 +36,7 @@ podman() {
     systemctl --user enable podman-restart.service
 
     sudo pacman -S --noconfirm nvidia-container-toolkit
-    cat >/etc/systemd/system/nvidia-ctk-cdi.service <<EOF
+    sudo tee /etc/systemd/system/nvidia-ctk-cdi.service <<EOF
 [Unit]
 Description=Run nvidia-ctk cdi
 
