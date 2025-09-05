@@ -32,9 +32,21 @@ podman() {
     sudo pacman -S --noconfirm podman \
         passt netavark \
         qemu-user-static qemu-user-static-binfmt
-    sudo pacman -S --noconfirm nvidia-container-toolkit
     systemctl --user enable podman.socket
     systemctl --user enable podman-restart.service
+
+    sudo pacman -S --noconfirm nvidia-container-toolkit
+    cat >/etc/systemd/system/nvidia-ctk-cdi.service <<EOF
+[Unit]
+Description=Run nvidia-ctk cdi
+
+[Service]
+ExecStart=/usr/share/libalpm/scripts/nvidia-ctk-cdi
+
+[Install]
+WantedBy=multi-user.target
+EOF
+    systemctl enable nvidia-ctk-cdi.service
 }
 # docker() {
 #     sudo pacman -S --noconfirm docker nvidia-container-toolkit docker-compose
