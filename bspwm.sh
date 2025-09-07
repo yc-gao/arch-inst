@@ -46,7 +46,7 @@ ExecStart=/usr/share/libalpm/scripts/nvidia-ctk-cdi
 [Install]
 WantedBy=multi-user.target
 EOF
-    systemctl enable nvidia-ctk-cdi.service
+    sudo systemctl enable nvidia-ctk-cdi.service
 }
 # docker() {
 #     sudo pacman -S --noconfirm docker nvidia-container-toolkit docker-compose
