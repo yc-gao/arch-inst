@@ -15,14 +15,18 @@ return {
         'hrsh7th/cmp-nvim-lsp',
         'hrsh7th/cmp-nvim-lsp-signature-help',
         'hrsh7th/cmp-nvim-lsp-document-symbol',
+        'folke/trouble.nvim',
 
         'williamboman/mason-lspconfig.nvim',
         'neovim/nvim-lspconfig',
         'williamboman/mason.nvim',
+        'stevearc/conform.nvim',
     },
     config = function()
         require('nvim_cmp.mason')
         require('nvim_cmp.cmp')
+        require('nvim_cmp.trouble')
+        require('nvim_cmp.conform')
     end,
 }
 
