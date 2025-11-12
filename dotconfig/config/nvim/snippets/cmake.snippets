@@ -14,7 +14,7 @@ snippet main
     set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
     set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
 
-    set(proj_COMMON_INCLUDE_DIRS "\${CMAKE_SOURCE_DIR};\${CMAKE_BINARY_DIR}")
+    set(proj_COMMON_INCLUDE_DIRS "\${CMAKE_CURRENT_SOURCE_DIR};\${CMAKE_CURRENT_BINARY_DIR}")
 
 snippet cpm
     # curl --create-dirs -o cmake/CPM.cmake -fsSL https://github.com/cpm-cmake/CPM.cmake/releases/latest/download/get_cpm.cmake
