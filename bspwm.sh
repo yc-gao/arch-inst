@@ -29,8 +29,7 @@ aur() {
 }
 
 podman() {
-    sudo pacman -S --noconfirm podman \
-        passt netavark \
+    sudo pacman -S --noconfirm podman netavark \
         qemu-user-static qemu-user-static-binfmt
     systemctl --user enable podman.socket
     systemctl --user enable podman-restart.service
