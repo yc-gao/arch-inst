@@ -20,6 +20,13 @@ snippet main
         exit "\${code}"
     }
 
+    run_in() {
+        pushd "\$1"
+        shift
+        eval "\$@"
+        popd
+    }
+
     __func_defered=()
     do_defer() {
         local i
