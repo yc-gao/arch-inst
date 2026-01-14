@@ -19,7 +19,7 @@ super + @space
     rofi -show combi -modes combi -combi-modes "drun,run"
 
 # close and kill
-super + {_,shift + }w
+super + {_,shift +} w
     bspc node -{c,k}
 
 # window state ----------------------------------------------------------
@@ -31,11 +31,11 @@ super + m
     bspc desktop -l next
 
 # focus/swap the node in the given direction
-super + {_,shift + }{h,j,k,l}
+super + {_,shift +} {h,j,k,l}
     bspc node -{f,s} {west,south,north,east}
 
 # focus the next/previous window in the current desktop
-super + {_,shift + }c
+super + {_,shift +} c
     bspc node -f {next,prev}.local.!hidden.window
 
 # focus the next/previous desktop in the current monitor
