@@ -5,7 +5,7 @@
         - swapfile
     - rootfs  -> snapshots/main
     - snapshots
-        - basic
-        - basic...
+        - boot_0
+        - boot_1
         - main *
 
