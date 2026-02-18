@@ -3,8 +3,8 @@ set -o nounset
 set -o errexit
 set -o pipefail
 
-self_path="$(realpath $0)"
-self_dir="$(dirname ${self_path})"
+script_dir="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
+script_name="$(basename "${BASH_SOURCE[0]}")"
 
 hostname='ycgao-pc'
 user="ycgao"
@@ -12,12 +12,7 @@ user_passwd=""
 
 espdisk="/dev/nvme0n1p1"
 rootdisk="/dev/nvme0n1p2"
-targetfs="/mnt"
-
-die() {
-    echo "$@" >&2
-    exit 1
-}
+targetfs="/mnt/target"
 
 do_install() {
     echo "${hostname}" > /etc/hostname
@@ -76,9 +71,9 @@ prepare() {
         base base-devel \
         linux-lts linux-firmware \
         btrfs-progs exfatprogs
-    cp "${self_path}" "${targetfs}/root/"
-    arch-chroot "${targetfs}" "/root/$(basename "${self_path}")" do_install
-    rm -rf "${targetfs}/root/$(basename "${self_path}")"
+    cp "${script_dir}/${script_name}" "${targetfs}/root/"
+    arch-chroot "${targetfs}" "/root/${script_name}" do_install
+    rm -rf "${targetfs}/root/${script_name}"
     {
         echo -e "UUID=$(lsblk -n -o uuid "${espdisk}")      /boot/efi       vfat    defaults    0    2"
         echo -e "UUID=$(lsblk -n -o uuid "${rootdisk}")     /swap           btrfs   defaults,subvol=swap    0    0"
@@ -86,15 +81,15 @@ prepare() {
     } > "${targetfs}/etc/fstab"
 
     mkdir -p "${targetfs}/boot/grub"
-    cp "${self_dir}/grub/grub.boot.cfg" "${targetfs}/boot/grub/grub.cfg"
+    cp "${script_dir}/grub/grub.boot.cfg" "${targetfs}/boot/grub/grub.cfg"
     umount -R "${targetfs}"
 
     # install real grub
-    "${self_dir}/rmanager" checkout boot_1
+    "${script_dir}/rmanager" checkout boot_1
     mount -o subvol=rootfs "${rootdisk}" "${targetfs}"
-    cp "${self_dir}/grub/grub.cfg" "${targetfs}/boot/grub/grub.cfg"
+    cp "${script_dir}/grub/grub.cfg" "${targetfs}/boot/grub/grub.cfg"
     umount -R "${targetfs}"
-    "${self_dir}/rmanager" checkout main
+    "${script_dir}/rmanager" checkout main
 }
 
 action="prepare"
