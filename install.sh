@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-set -e
+set -o nounset
+set -o errexit
+set -o pipefail
 
 self_path="$(realpath $0)"
 self_dir="$(dirname ${self_path})"
