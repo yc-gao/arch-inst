@@ -32,7 +32,6 @@ podman() {
     sudo pacman -S --noconfirm podman netavark \
         qemu-user-static qemu-user-static-binfmt
     systemctl --user enable podman.socket
-    systemctl --user enable podman-restart.service
 
     sudo pacman -S --noconfirm nvidia-container-toolkit
     sudo tee /etc/systemd/system/nvidia-ctk-cdi.service <<EOF
