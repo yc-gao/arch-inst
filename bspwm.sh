@@ -34,6 +34,7 @@ podman() {
     sudo tee /etc/containers/registries.conf.d/10-unqualified-search-registries.conf <<EOF
 unqualified-search-registries = ["docker.io"]
 EOF
+    systemctl --user enable podman-restart.service
 
     sudo pacman -S --noconfirm nvidia-container-toolkit
     sudo tee /etc/systemd/system/nvidia-ctk-cdi.service <<EOF
