@@ -31,7 +31,9 @@ aur() {
 podman() {
     sudo pacman -S --noconfirm podman netavark \
         qemu-user-static qemu-user-static-binfmt
-    systemctl --user enable podman.socket
+    sudo tee /etc/containers/registries.conf.d/10-unqualified-search-registries.conf <<EOF
+unqualified-search-registries = ["docker.io"]
+EOF
 
     sudo pacman -S --noconfirm nvidia-container-toolkit
     sudo tee /etc/systemd/system/nvidia-ctk-cdi.service <<EOF
