@@ -1,8 +1,6 @@
 snippet main
     #!/usr/bin/env bash
-    set -o errexit
-    set -o pipefail
-    set -o nounset
+    set -euo pipefail
 
     info() {
         echo "[info]" "\$@"
@@ -17,7 +15,7 @@ snippet main
         shift
 
         err "\$@"
-        exit "\${code}"
+        exit "\$code"
     }
 
     run_in() {
