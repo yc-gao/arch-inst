@@ -109,7 +109,7 @@ do_checkout() {
         base_tag="$(basename $(realpath "${rootdisk_prefix}/rootfs"))"
     fi
 
-    local tag="$1"
+    local tag="${1:-}"
     if [[ -z "${tag}" ]]; then
         local branch version
         IFS='.' read -r branch version <<<"${base_tag}"
