@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
-set -o nounset
-set -o errexit
-set -o pipefail
+set -euo pipefail
 
 script_dir="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 script_name="$(basename "${BASH_SOURCE[0]}")"
