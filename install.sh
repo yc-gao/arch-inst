@@ -4,19 +4,33 @@ set -euo pipefail
 script_dir="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 script_name="$(basename "${BASH_SOURCE[0]}")"
 
+info() {
+    echo "Info: $*"
+}
+
+error() {
+    echo "Error: $*" >&2
+}
+
+die() {
+    error "Error: $*"
+    exit 1
+}
+
 hostname='ycgao-pc'
 user="ycgao"
-user_passwd=""
+user_passwd=
 
 espdisk="/dev/nvme0n1p1"
 rootdisk="/dev/nvme0n1p2"
 targetfs="/mnt/target"
 
 do_install() {
-    echo "${hostname}" > /etc/hostname
+    printf "$hostname" > /etc/hostname
+    printf "en_US.UTF-8 UTF-8\nzh_CN.UTF-8 UTF-8" > /etc/locale.gen
+    printf "LANG=en_US.UTF-8" > /etc/locale.conf
+
     ln -sfT /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-    echo -e 'en_US.UTF-8 UTF-8\nzh_CN.UTF-8 UTF-8' >> /etc/locale.gen
-    echo 'LANG=en_US.UTF-8' > /etc/locale.conf
     locale-gen
 
     # kernel
@@ -39,7 +53,7 @@ do_install() {
     useradd -m -s /bin/zsh "${user}"
     usermod -aG wheel "${user}"
     sed -E -i 's/#\s*(%wheel\s+ALL=\(ALL:ALL\)\s+ALL)/\1/' /etc/sudoers
-    echo "${user}:${user_passwd}" | chpasswd
+    printf "${user}:${user_passwd}" | chpasswd
 
     pacman -S --noconfirm openssh
     systemctl enable sshd
@@ -72,10 +86,11 @@ prepare() {
     cp "${script_dir}/${script_name}" "${targetfs}/root/"
     arch-chroot "${targetfs}" "/root/${script_name}" do_install
     rm -rf "${targetfs}/root/${script_name}"
+
     {
-        echo -e "UUID=$(lsblk -n -o uuid "${espdisk}")      /boot/efi       vfat    defaults    0    2"
-        echo -e "UUID=$(lsblk -n -o uuid "${rootdisk}")     /swap           btrfs   defaults,subvol=swap    0    0"
-        echo -e "/swap/swapfile    none    swap    defaults    0    0"
+        printf "UUID=%s\t/boot/efi\tvfat\tdefaults\t0\t2\n" "$(lsblk -n -o uuid "${espdisk}")"
+        printf "UUID=%s\t/swap\tbtrfs\tdefaults,subvol=swap\t0\t0\n" "$(lsblk -n -o uuid "${rootdisk}")"
+        printf "/swap/swapfile\tnone\tswap\tdefaults\t0\t0\n"
     } > "${targetfs}/etc/fstab"
 
     mkdir -p "${targetfs}/boot/grub"
@@ -90,9 +105,14 @@ prepare() {
     "${script_dir}/rmanager" checkout main
 }
 
-action="prepare"
-if (( $# >0 )); then
-    action="$1"
+actions=("prepare")
+if (( $# > 0 )); then
+    actions=("$@")
 fi
-"${action}"
 
+for action in "${actions[@]}"; do
+    if ! declare -f "${action}" > /dev/null; then
+        die "function '${action}' not found"
+    fi
+    "${action}"
+done

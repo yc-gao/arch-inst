@@ -1,18 +1,23 @@
 #!/bin/bash
-set -e
+set -euo pipefail
 
-self_dir=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
+script_dir="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
+script_name="$(basename "${BASH_SOURCE[0]}")"
 
-user="ycgao"
+info() {
+    echo "Info: $*"
+}
 
-err() {
-    echo "$@" >&2
+error() {
+    echo "Error: $*" >&2
 }
 
 die() {
-    err "$@"
+    error "Error: $*"
     exit 1
 }
+
+user="ycgao"
 
 base() {
     sudo pacman -Syu --noconfirm
@@ -49,11 +54,6 @@ WantedBy=multi-user.target
 EOF
     sudo systemctl enable nvidia-ctk-cdi.service
 }
-# docker() {
-#     sudo pacman -S --noconfirm docker nvidia-container-toolkit docker-compose
-#     sudo systemctl enable docker
-#     sudo usermod -aG docker "${user}"
-# }
 
 desktop() {
     sudo pacman -S --noconfirm pipewire wireplumber \
@@ -83,27 +83,27 @@ desktop() {
 custom() {
     git clone https://github.com/ohmyzsh/ohmyzsh.git "$HOME"/.oh-my-zsh
     cp "$HOME"/.oh-my-zsh/templates/zshrc.zsh-template "$HOME"/.zshrc
-    cat "${self_dir}"/dotconfig/zshrc >>"$HOME"/.zshrc
+    cat "${script_dir}"/dotconfig/zshrc >>"$HOME"/.zshrc
 
-    cat "${self_dir}"/dotconfig/xprofile >"$HOME"/.xprofile
+    cat "${script_dir}"/dotconfig/xprofile >"$HOME"/.xprofile
 
     mkdir -p "$HOME"/Pictures
-    cp -rf "${self_dir}"/dotconfig/Pictures/* "$HOME"/Pictures/
+    cp -rf "${script_dir}"/dotconfig/Pictures/* "$HOME"/Pictures/
 
     mkdir -p "$HOME"/.local/bin
     ln -sfT "$(which nvim)" "$HOME"/.local/bin/vim
     ln -sfT "$(which ranger)" "$HOME"/.local/bin/ra
 
-    ln -sft "$HOME/.config/" "${self_dir}"/dotconfig/config/*
+    ln -sft "$HOME/.config/" "${script_dir}"/dotconfig/config/*
 
     mkdir -p ~/.software
     wget -t 8 -O - https://nodejs.org/dist/v20.14.0/node-v20.14.0-linux-x64.tar.xz \
         | tar -C ~/.software -xJ
-    echo 'add_local "$HOME"/.software/node-v20.14.0-linux-x64' >> ~/.zshrc
+    printf 'add_local "$HOME"/.software/node-v20.14.0-linux-x64\n' >> ~/.zshrc
 }
 
 main() {
-    [[ "${UID}" == 0 ]] && die "please init bspwm use ${user}"
+    (( "$UID" == 0 )) && die "init bspwm use ${user}"
 
     base
     aur

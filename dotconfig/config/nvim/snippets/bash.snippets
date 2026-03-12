@@ -6,19 +6,16 @@ snippet main
     script_name="\$(basename "\${BASH_SOURCE[0]}")"
 
     info() {
-        echo "[info]" "\$@"
+        echo "Info: \$*"
     }
 
-    err() {
-        echo "[error]" "\$@" 2>&1
+    error() {
+        echo "Error: \$*" >&2
     }
 
     die() {
-        local code="\$1"
-        shift
-
-        err "\$@"
-        exit "\$code"
+        error "Error: \$*"
+        exit 1
     }
 
     run_in() {
@@ -33,7 +30,7 @@ snippet main
         local i
         for ((i=\${#__func_defered[@]}-1;i>=0;i--)); do
             if ! eval "\${__func_defered[i]}"; then
-                die 1 "eval cmd failed, cmd: \"\${__func_defered[i]}\""
+                die "eval cmd failed, cmd: \"\${__func_defered[i]}\""
             fi
         done
     }
