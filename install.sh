@@ -41,7 +41,7 @@ do_install() {
     grub-install --efi-directory=/boot/efi --recheck
 
     # nvidia
-    pacman -S --noconfirm nvidia-lts
+    pacman -S --noconfirm nvidia-open-lts
 
     # network
     pacman -S --noconfirm networkmanager
