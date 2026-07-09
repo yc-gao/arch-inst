@@ -63,7 +63,7 @@ desktop() {
     sudo systemctl enable bluetooth
 
     sudo pacman -S --noconfirm \
-        xorg xorg-xrandr sddm \
+        xorg xorg-xrandr autorandr sddm \
         notification-daemon libnotify \
         fcitx-im fcitx-googlepinyin fcitx-configtool \
         bspwm sxhkd alacritty polybar feh rofi flameshot picom ranger \

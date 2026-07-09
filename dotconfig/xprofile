@@ -2,9 +2,10 @@ export GTK_IM_MODULE=fcitx
 export QT_IM_MODULE=fcitx
 export XMODIFIERS=@im=fcitx
 
-if xrandr | grep ' connected'; then
-    xrandr --output `xrandr | grep ' connected' | cut -d ' ' -f1` --mode 2560x1440 --rate 144
-fi
+# xrandr --output `xrandr | grep ' connected' | cut -d ' ' -f1` --mode 2560x1440 --rate 144
+# autorandr -s main
+autorandr --change
+
 # xset s off -dpms # Disable DPMS and prevent screen from blanking
 
 pgrep -x fcitx > /dev/null || fcitx -d
