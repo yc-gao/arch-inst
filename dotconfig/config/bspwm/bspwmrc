@@ -22,4 +22,3 @@ bspc rule -a Blueman-manager state=floating
 
 bspc rule -a vlc state=floating
 bspc rule -a imv state=floating
-
