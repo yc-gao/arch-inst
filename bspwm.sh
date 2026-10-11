@@ -42,15 +42,15 @@ desktop() {
         bspwm sxhkd alacritty polybar feh rofi flameshot picom \
         ueberzug ffmpegthumbnailer ranger \
         adobe-source-han-serif-cn-fonts adobe-source-han-sans-cn-fonts wqy-microhei wqy-zenhei \
-        xdotool xclip
+        xdotool xclip \
+        man-db man-pages \
+        wget curl neovim unzip \
+        ripgrep-all ctags openbsd-netcat jq nmap rsync lsof
     sudo systemctl enable sddm
 
     sudo pacman -S --noconfirm \
         firefox \
-        man-db man-pages \
-        ffmpeg imagemagick vlc imv \
-        wget curl neovim unzip \
-        ripgrep-all ctags openbsd-netcat jq nmap rsync lsof
+        ffmpeg imagemagick vlc imv
 }
 
 podman() {
