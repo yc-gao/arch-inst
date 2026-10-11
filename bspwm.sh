@@ -41,6 +41,7 @@ desktop() {
         notification-daemon libnotify \
         bspwm sxhkd alacritty polybar feh rofi flameshot picom \
         ueberzug ffmpegthumbnailer ranger \
+        adobe-source-han-serif-cn-fonts adobe-source-han-sans-cn-fonts wqy-microhei wqy-zenhei \
         xdotool xclip
     sudo systemctl enable sddm
 

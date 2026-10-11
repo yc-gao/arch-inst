@@ -8,5 +8,5 @@ autorandr --change
 export GTK_IM_MODULE=fcitx
 export QT_IM_MODULE=fcitx
 export XMODIFIERS=@im=fcitx
-pgrep -x fcitx > /dev/null || fcitx -d
+pgrep -x fcitx5 > /dev/null || fcitx5 -D &
 
