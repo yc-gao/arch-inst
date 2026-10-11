@@ -37,7 +37,7 @@ desktop() {
     sudo pacman -S --noconfirm \
         xorg xorg-xrandr autorandr sddm \
         xss-lock i3lock \
-        fcitx-im fcitx-googlepinyin fcitx-configtool \
+        fcitx5-im fcitx5-configtool fcitx5-chinese-addons \
         notification-daemon libnotify \
         bspwm sxhkd alacritty polybar feh rofi flameshot picom \
         ueberzug ffmpegthumbnailer ranger \
