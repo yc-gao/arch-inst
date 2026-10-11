@@ -11,7 +11,8 @@
 
 1. edisk setup, fstab setup
     lslkb -o name,uuid
-    UUID=123556e4-12b5-4f12-b69f-29723259eb43   /mnt/edisk  ext4    defaults    0   0
+    fstab: UUID=123556e4-12b5-4f12-b69f-29723259eb43   /mnt/edisk  ext4    defaults    0   0
+    sudo mount -a
 2. fonts&ssh setup
     tar -xvf /mnt/edisk/backup/fonts-pack.tar -C $HOME/.local/share
     tar -xvf /mnt/edisk/backup/ssh.tar -C $HOME && mv $HOME/ssh $HOME/.ssh
