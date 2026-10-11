@@ -10,14 +10,17 @@
         - main *
 
 1. edisk setup, fstab setup
-2. autorandr setup
-3. fcitx5 setup
-4. fonts&ssh setup
+    lslkb -o name,uuid
+    UUID=123556e4-12b5-4f12-b69f-29723259eb43   /mnt/edisk  ext4    defaults    0   0
+2. fonts&ssh setup
     tar -xvf /mnt/edisk/backup/fonts-pack.tar -C $HOME/.local/share
     tar -xvf /mnt/edisk/backup/ssh.tar -C $HOME && mv $HOME/ssh $HOME/.ssh
-    git config --global user.name ycgao
-    git config --global user.email yc_x@outlook.com
-5. docker-apps setup
+3. bspwm setup
+    rm -rf $HOME/Workdir/arch-inst && git clone git@github.com:yc-gao/arch-inst $HOME/Workdir/arch-inst
+
+4. autorandr setup
+5. fcitx5 setup
+6. docker-apps setup
     cat /mnt/edisk/images/mllab.docker.tar | podman import -
-    git clone https://github.com/yc-gao/docker-apps.git $HOME/Workdir/docker-apps
+    git clone git@github.com:yc-gao/docker-apps $HOME/Workdir/docker-apps
     zshrc: add_local "$HOME"/Workdir/docker-apps
