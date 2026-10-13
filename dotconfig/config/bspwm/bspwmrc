@@ -4,7 +4,7 @@ pgrep -x xss-lock > /dev/null || xss-lock -- i3lock -n &
 pgrep -x -f /usr/lib/notification-daemon-1.0/notification-daemon || /usr/lib/notification-daemon-1.0/notification-daemon &
 
 pgrep -x sxhkd > /dev/null || sxhkd &
-pgrep -x polybar > /dev/null || polybar &
+pgrep -x polybar > /dev/null || polybar -r &
 pgrep -x feh > /dev/null || feh --no-fehbg --bg-fill --randomize ~/Pictures/wallpaper/* &
 pgrep -x picom > /dev/null || picom -b --config ~/.config/picom/picom.conf
 
