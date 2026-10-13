@@ -62,6 +62,8 @@ prepare() {
 
     mount --mkdir "${rootdisk}" "${targetfs}"
 
+    install -D "${script_dir}/grub/grub.cfg" "${targetfs}/boot/grub/grub.cfg"
+
     btrfs subvol create "${targetfs}/swap"
     btrfs filesystem mkswapfile --size 128g "${targetfs}/swap/swapfile"
 
@@ -73,7 +75,6 @@ prepare() {
 
     # install system
     mount -o subvol=rootfs "${rootdisk}" "${targetfs}"
-    mount --mkdir "${espdisk}" "${targetfs}/boot/efi"
 
     pacstrap "${targetfs}" \
         base base-devel \
@@ -88,6 +89,8 @@ prepare() {
         printf "/swap/swapfile  none        swap    defaults    0    0\n"
     } >"${targetfs}/etc/fstab"
 
+    # install bootloader
+    mount --mkdir "${espdisk}" "${targetfs}/boot/efi"
     local grubmodules=(all_video at_keyboard boot btrfs cat chain configfile echo efifwsetup efinet exfat ext2 f2fs fat font \
         gfxmenu gfxterm gzio halt hfsplus iso9660 jpeg keylayouts linux loadenv loopback lsefi lsefimmap \
         minicmd normal ntfs ntfscomp part_apple part_gpt part_msdos png read reboot regexp search \
@@ -97,7 +100,7 @@ prepare() {
     grub-mkstandalone -O x86_64-efi \
         --modules="${grubmodules[*]}" \
         -o "${targetfs}/boot/efi/EFI/BOOT/BOOTx64.EFI" \
-        "boot/grub/grub.cfg=grub/grub.embedded.cfg"
+        "boot/grub/grub.cfg=${script_dir}/grub/grub.embedded.cfg"
     umount -R "${targetfs}"
 
     "${script_dir}/rmanager" checkout main

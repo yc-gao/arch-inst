@@ -1,13 +1,14 @@
 # root disk layout
 
 - disk
+    - boot/grub/grub.cfg
     - swap *
         - swapfile
-    - rootfs  -> snapshots/main
     - snapshots
         - boot
             - boot/efi
         - main *
+    - rootfs  -> snapshots/main
 
 1. wifi setup
     nmcli device wifi
