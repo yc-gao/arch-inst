@@ -62,14 +62,14 @@ prepare() {
 
     mount --mkdir "${rootdisk}" "${targetfs}"
 
-    install -D "${script_dir}/grub/grub.cfg" "${targetfs}/boot/grub/grub.cfg"
-
     btrfs subvol create "${targetfs}/swap"
     btrfs filesystem mkswapfile --size 128g "${targetfs}/swap/swapfile"
 
     mkdir -p "${targetfs}/snapshots"
     btrfs subvol create "${targetfs}/snapshots/boot"
     ln -sT snapshots/boot "${targetfs}/rootfs"
+
+    install -D "${script_dir}/grub/grub.cfg" "${targetfs}/rootfs/boot/grub/grub.cfg"
 
     umount -R "${targetfs}"
 
