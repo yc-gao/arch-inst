@@ -62,7 +62,6 @@ do_snapshot() {
         tags+=("${branch}.$(date +%Y%m%d%H%M%S)")
     fi
 
-    local tag
     for tag in "${tags[@]}"; do
         btrfs subvol snapshot "${snapshot_prefix}/${base_tag}" "${snapshot_prefix}/${tag}" || die "btrfs cannot snapshot '${base_tag}' to ${tag}"
     done
@@ -73,7 +72,6 @@ do_delete() {
     local rootdisk_prefix="/mnt/${opt_label}"
     local snapshot_prefix="${rootdisk_prefix}/snapshots"
 
-    local tag
     for tag in "$@"; do
         btrfs subvol delete -R "${snapshot_prefix}/${tag}" || die "btrfs cannot delete subvol '${tag}'"
     done
