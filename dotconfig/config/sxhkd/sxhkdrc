@@ -1,28 +1,9 @@
-# wm independent hotkeys ------------------------------------------------
-# quit/restart bspwm
-super + ctrl + r
-    bspc wm -r
-
-super + ctrl + q
-    loginctl lock-session
-
-# sxhkd reload configuration
-super + Escape
-    pkill -USR1 -x sxhkd
-
-# terminal emulator
-super + Return
-    alacritty
-
-# program launcher
-super + @space
-    rofi -show combi -modes combi -combi-modes "drun,run"
+# window hotkeys --------------------------------------------------------
 
 # close and kill
 super + {_,shift +} w
     bspc node -{c,k}
 
-# window state ----------------------------------------------------------
 super + {t,shift + t,s,f}
     bspc node -t {tiled,pseudo_tiled,floating,fullscreen}
 
@@ -38,25 +19,6 @@ super + {_,shift +} {h,j,k,l}
 super + {_,shift +} c
     bspc node -f {next,prev}.local.!hidden.window
 
-# focus the next/previous desktop in the current monitor
-super + bracket{left,right}
-    bspc desktop -f {prev,next}.local
-
-# send the node to next/previous desktop in the current monitor
-super + shift + bracket{left,right}
-    bspc node -d {prev,next}.local --follow
-
-# focus the last node/desktop
-super + {grave,Tab}
-    bspc {node,desktop} -f last
-
-# focus or send to the given desktop
-super + {1-9,0}
-    bspc desktop -f '^{1-9,10}'
-super + shift + {1-9,0}
-    bspc node -d '^{1-9,10}' --follow
-
-# move/resize -----------------------------------------------------------
 # move a floating window
 super + {Left,Down,Up,Right}
     bspc node -v {-20 0,0 20,0 -20,20 0}
@@ -69,26 +31,44 @@ super + shift + {Left,Down,Up,Right}
 super + ctrl + shift + {Left,Down,Up,Right}
     bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}
 
-# misc ------------------------------------------------------------------
-# set the node flags
-super + ctrl + {m,x,y,z}
-    bspc node -g {marked,locked,sticky,private}
+# desktop hotkeys -------------------------------------------------------
 
-# cancel the preselection for the focused node
-super + ctrl + space
-    bspc node -p cancel
+# focus the next/previous desktop in the current monitor
+super + bracket{left,right}
+    bspc desktop -f {prev,next}.local
 
-# preselect the direction
-super + ctrl + {h,j,k,l}
-    bspc node -p {west,south,north,east}
+# send the node to next/previous desktop in the current monitor
+super + shift + bracket{left,right}
+    bspc node -d {prev,next}.local --follow
 
-# preselect the ratio
-super + ctrl + {1-9}
-    bspc node -o 0.{1-9}
+# focus or send to the given desktop
+super + {1-9,0}
+    bspc desktop -f '^{1-9,10}'
 
-Print
-    flameshot screen -p ~/Pictures
+super + shift + {1-9,0}
+    bspc node -d '^{1-9,10}' --follow
 
-shift + Print
-    flameshot gui
+# focus the last desktop
+super + Tab
+    bspc desktop -f last
 
+# other hotkeys ---------------------------------------------------------
+
+# terminal emulator
+super + Return
+    alacritty
+
+# program launcher
+super + @space
+    rofi -show combi -modes combi -combi-modes "drun,run"
+
+# quit/restart bspwm
+super + ctrl + r
+    bspc wm -r
+
+# sxhkd reload configuration
+super + Escape
+    pkill -USR1 -x sxhkd
+
+super + ctrl + q
+    loginctl lock-session
