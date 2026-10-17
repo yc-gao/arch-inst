@@ -28,6 +28,8 @@
     rm -rf $HOME/Workdir/arch-inst && git clone git@github.com:yc-gao/arch-inst $HOME/Workdir/arch-inst
 
 6. autorandr setup
+    xrandr --output `xrandr | grep ' connected' | cut -d ' ' -f1` --mode 2560x1440 --rate 144
+    autorandr -s main
 7. fcitx5 setup
 8. docker-apps setup
     cat /mnt/edisk/images/mllab.docker.tar | podman import -

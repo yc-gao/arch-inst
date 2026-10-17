@@ -1,5 +1,3 @@
-# xrandr --output `xrandr | grep ' connected' | cut -d ' ' -f1` --mode 2560x1440 --rate 144
-# autorandr -s main
 autorandr --change
 
 # Disable DPMS and prevent screen from blanking
