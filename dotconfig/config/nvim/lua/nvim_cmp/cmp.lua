@@ -38,6 +38,7 @@ cmp.setup({
                 fallback()
             end
         end,
+        ['<C-e>'] = cmp.mapping.abort(),
         ['<CR>'] = function(fallback)
             if cmp.visible() and cmp.get_active_entry() then
                 cmp.confirm()
