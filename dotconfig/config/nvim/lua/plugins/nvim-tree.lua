@@ -56,6 +56,8 @@ return {
             end,
 
         })
-        vim.keymap.set('n', '<leader>dr', '<cmd>NvimTreeToggle<cr>')
     end,
+    keys = {
+        { 'dr', '<cmd>NvimTreeToggle<cr>' },
+    },
 }
