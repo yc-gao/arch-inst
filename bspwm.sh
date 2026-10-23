@@ -66,20 +66,18 @@ podman() {
 }
 
 custom() {
-    git clone https://github.com/ohmyzsh/ohmyzsh.git "$HOME"/.oh-my-zsh
-    cp "$HOME"/.oh-my-zsh/templates/zshrc.zsh-template "$HOME"/.zshrc
-    cat "${script_dir}"/dotconfig/zshrc >>"$HOME"/.zshrc
-
-    cat "${script_dir}"/dotconfig/xprofile >"$HOME"/.xprofile
-
-    mkdir -p "$HOME"/Pictures
-    cp -rf "${script_dir}"/dotconfig/Pictures/* "$HOME"/Pictures/
-
     mkdir -p "$HOME"/.local/bin
     ln -sfT "$(which nvim)" "$HOME"/.local/bin/vim
     ln -sfT "$(which ranger)" "$HOME"/.local/bin/ra
 
+    mkdir -p "$HOME"/Pictures
+    cp -rf "${script_dir}"/dotconfig/Pictures/* "$HOME"/Pictures/
+
     ln -sft "$HOME/.config/" "${script_dir}"/dotconfig/config/*
+    cp "${script_dir}"/dotconfig/xprofile "$HOME"/.xprofile
+
+    git clone https://github.com/ohmyzsh/ohmyzsh.git "$HOME"/.oh-my-zsh
+    cp "${script_dir}"/dotconfig/zshrc "$HOME"/.zshrc
 
     mkdir -p ~/.software
     curl -fsSL https://nodejs.org/dist/v24.22.1/node-v24.22.1-linux-x64.tar.xz \
