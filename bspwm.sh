@@ -43,7 +43,7 @@ desktop() {
         xss-lock i3lock \
         fcitx5-im fcitx5-configtool fcitx5-chinese-addons \
         notification-daemon libnotify \
-        bspwm sxhkd alacritty polybar feh rofi picom \
+        bspwm sxhkd alacritty polybar feh rofi picom fastfetch \
         ueberzug ffmpegthumbnailer ranger \
         adobe-source-han-serif-cn-fonts adobe-source-han-sans-cn-fonts wqy-microhei wqy-zenhei \
         xdotool xclip \
