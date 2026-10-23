@@ -81,7 +81,10 @@ custom() {
 
     ln -sft "$HOME/.config/" "${script_dir}"/dotconfig/config/*
 
-    mkdir -p "$HOME"/{Workdir,Tmp}
+    mkdir -p ~/.software
+    curl -fsSL https://nodejs.org/dist/v24.22.1/node-v24.22.1-linux-x64.tar.xz \
+        | tar -xJ -C ~/.software
+    echo 'add_local "$HOME/.software/node-v24.22.1-linux-x64"' >>~/.zshrc
 }
 
 main() {
