@@ -37,7 +37,7 @@ do_install() {
     mkinitcpio -P
 
     # nvidia
-    pacman -S --noconfirm nvidia-open-lts
+    pacman -S --noconfirm nvidia-open
 
     # network
     pacman -S --noconfirm networkmanager
@@ -78,7 +78,7 @@ prepare() {
 
     pacstrap "${targetfs}" \
         base base-devel \
-        linux-lts linux-firmware \
+        linux linux-firmware \
         btrfs-progs exfatprogs
     cp "${script_dir}/${script_name}" "${targetfs}/root/"
     arch-chroot "${targetfs}" "/root/${script_name}" do_install
