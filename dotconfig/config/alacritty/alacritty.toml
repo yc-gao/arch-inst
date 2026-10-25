@@ -4,6 +4,12 @@ TERMCMD = "alacritty"
 
 [keyboard]
 bindings = [
-    { mods = "Control", key = "n", action = "SpawnNewInstance" }
+    { mods = "Control", key = "n", action = "SpawnNewInstance" },
+
+    { mods = "Shift", key = "PageUp", action = "ScrollPageUp" },
+    { mods = "Shift", key = "PageDown", action = "ScrollPageDown" },
+
+    { mods = "Shift", key = "Home", action = "ScrollToTop" },
+    { mods = "Shift", key = "End", action = "ScrollToBottom" },
 ]
 
